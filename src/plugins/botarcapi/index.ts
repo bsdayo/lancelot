@@ -163,8 +163,8 @@ export default {
           )
           let b30Text =
             `${best30.account_info.name} (${formatPtt(best30.account_info.rating)})\n` +
-            `Best30 均值: ${best30.best30_avg.toFixed(2)}\n` +
-            `Recent10 均值: ${best30.recent10_avg.toFixed(2)}`
+            `Best30 均值: ${best30.best30_avg.toFixed(4)}\n` +
+            `Recent10 均值: ${best30.recent10_avg.toFixed(4)}`
           
           return segment.quote(session?.messageId!) + b30Text
         } catch (err) {
