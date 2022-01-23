@@ -1,7 +1,14 @@
 import { App } from 'koishi'
 import path from 'path'
+import fs from 'fs'
 import config from './config'
 import botarcapi from './plugins/botarcapi'
+
+// 创建临时目录
+if (!fs.existsSync(path.resolve(__dirname, '..', 'temp')))
+  fs.mkdirSync(path.resolve(__dirname, '..', 'temp'))
+if (!fs.existsSync(path.resolve(__dirname, '..', 'cache')))
+  fs.mkdirSync(path.resolve(__dirname, '..', 'cache'))
 
 const app = new App({
   host: config.app.host ?? '127.0.0.1',

@@ -13,10 +13,14 @@
     "@koishijs/plugin-adapter-onebot": "^4.0.0",
     "@koishijs/plugin-database-sqlite": "^1.0.0",
     "@koishijs/plugin-echo": "^1.0.0",
-    "botarcapi_lib": "^1.1.1",
-    "koishi": "^4.0.1"
+    "better-sqlite3": "^7.5.0",
+    "botarcapi_lib": "^1.1.2",
+    "canvas": "^2.9.0",
+    "koishi": "^4.0.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   }

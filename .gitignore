@@ -1,7 +1,12 @@
 node_modules
+*.log
 
 # Config file
 config.ts
+
+# Temp file
+temp/
+cache/
 
 # Database
 *.db
