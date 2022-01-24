@@ -82,7 +82,8 @@ export async function drawScoreCard(
       getDifficultyByRating(realrating) +
       ` [${(realrating / 10).toFixed(1)}]`,
     x + 320 + 191 + 15,
-    y + 15 + 46
+    y + 15 + 46,
+    typeof rank === 'number' ? 339 : 444
   )
   ctx.font = '60px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
