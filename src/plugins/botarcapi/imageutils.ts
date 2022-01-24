@@ -1,6 +1,5 @@
 import { BotArcApiScore, BotArcApiSonginfoV5, formatScore } from 'botarcapi_lib'
 import { CanvasRenderingContext2D, loadImage } from 'canvas'
-import { Logger } from 'koishi'
 import {
   getSongCoverPath,
   getColorByDifficulty,

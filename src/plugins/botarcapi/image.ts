@@ -8,7 +8,6 @@ import {
   BotArcApiSonginfoV5,
 } from 'botarcapi_lib'
 import { getTempFilePath, getNowDateTime } from '../../utils'
-import { getPartnerImgPath } from './utils'
 
 registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
   family: 'Titillium Web SemiBold',
@@ -152,7 +151,6 @@ export async function generateBest30Image(
   const filepath = getTempFilePath('botarcapi', 'jpg')
 
   await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
-
-  // return path.relative(__dirname, filepath)
+  
   return filepath
 }
