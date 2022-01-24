@@ -34,15 +34,19 @@ export async function generateBest30Image(
   ctx.font = '128px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
   ctx.fillText(
-    `${best30Data.account_info.name} (${(
-      best30Data.account_info.rating / 100
-    ).toFixed(2)})`,
+    `${best30Data.account_info.name} (${
+      best30Data.account_info.rating < 0
+        ? '?'
+        : (best30Data.account_info.rating / 100).toFixed(2)
+    })`,
     330,
     265
   )
   ctx.font = '62px "Titillium Web SemiBold"'
   ctx.fillText(
-    `B30Avg / ${best30Data.best30_avg.toFixed(4)}   R10Avg / ${best30Data.recent10_avg.toFixed(4)}`,
+    `B30Avg / ${best30Data.best30_avg.toFixed(
+      4
+    )}   R10Avg / ${best30Data.recent10_avg.toFixed(4)}`,
     330,
     375
   )
@@ -151,6 +155,6 @@ export async function generateBest30Image(
   const filepath = getTempFilePath('botarcapi', 'jpg')
 
   await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
-  
+
   return filepath
 }
