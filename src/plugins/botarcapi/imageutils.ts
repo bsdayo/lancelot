@@ -87,7 +87,7 @@ export async function drawScoreCard(
   ctx.font = '60px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
   ctx.fillText(songInfo.title_localized.en, x + 320 + 15, y + 15 + 46 + 75, 635)
-  ctx.font = '97px "Titillium Web SemiBold"'
+  ctx.font = '97px "Titillium Web Regular"'
   ctx.fillText(
     formatScore(scoreData.score),
     x + 320 + 15,
