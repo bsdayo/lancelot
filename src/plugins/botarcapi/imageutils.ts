@@ -7,6 +7,7 @@ import {
   getDifficultyByRating,
 } from './utils'
 
+// 绘制圆角矩形
 export function drawFilledRoundedRect(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -26,20 +27,23 @@ export function drawFilledRoundedRect(
   ctx.fill()
 }
 
+// 绘制分数卡片 (1000x320)
 export async function drawScoreCard(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
   scoreData: BotArcApiScore,
   songInfo: BotArcApiSonginfoV5,
-  rank?: number
+  rank?: number // 排名
 ) {
   const songCoverPath = await getSongCoverPath(scoreData.song_id)
   const songCoverImage = await loadImage(songCoverPath)
   const { color, colorDark } = getColorByDifficulty(scoreData.difficulty)
+  // 卡片主体
   drawFilledRoundedRect(ctx, x, y, 1000, 320, 20)
   ctx.drawImage(songCoverImage, x + 15, y + 15, 290, 290)
 
+  // 若传递 rank 参数则绘制排名
   if (typeof rank === 'number') {
     ctx.font = '45px "Titillium Web SemiBold"'
     let rectColor = '#ddd'
@@ -57,7 +61,7 @@ export async function drawScoreCard(
     ctx.fillText('#' + (rank + 1), x + 320 + 575, y + 15 + 46)
   }
 
-  // 难度
+  // 难度条
   drawFilledRoundedRect(
     ctx,
     x + 320,
@@ -67,27 +71,35 @@ export async function drawScoreCard(
     10,
     colorDark
   )
-  drawFilledRoundedRect(ctx, x + 320, y + 15, 191, 60, 10, color)
-
   const realrating = songInfo.difficulties.find((val) => {
     return val.ratingClass === scoreData.difficulty
-  })!.realrating
+  })!.realrating          // 定数
   ctx.fillStyle = '#fff'
-  ctx.font = '45px "Titillium Web SemiBold"'
-  ctx.fillText(scoreData.rating.toFixed(4), x + 320 + 15, y + 15 + 46)
   ctx.font = '45px "Titillium Web Regular"'
-  ctx.fillText(
+  const difficultyText =
     getDifficultyClassName(scoreData.difficulty) +
-      ' ' +
-      getDifficultyByRating(realrating) +
-      ` [${(realrating / 10).toFixed(1)}]`,
+    ' ' +
+    getDifficultyByRating(realrating) +
+    ` [${(realrating / 10).toFixed(1)}]`
+  ctx.fillText(
+    difficultyText,
     x + 320 + 191 + 15,
     y + 15 + 46,
     typeof rank === 'number' ? 339 : 444
   )
+
+  // 获得 ptt
+  drawFilledRoundedRect(ctx, x + 320, y + 15, 191, 60, 10, color)
+  ctx.font = '45px "Titillium Web SemiBold"'
+  ctx.fillStyle = '#fff'
+  ctx.fillText(scoreData.rating.toFixed(4), x + 320 + 15, y + 15 + 46)
+
+  // 曲名
   ctx.font = '60px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
   ctx.fillText(songInfo.title_localized.en, x + 320 + 15, y + 15 + 46 + 75, 635)
+  
+  // 得分
   ctx.font = '97px "Titillium Web Regular"'
   ctx.fillText(
     formatScore(scoreData.score),
@@ -95,6 +107,8 @@ export async function drawScoreCard(
     y + 15 + 46 + 75 + 100,
     635
   )
+
+  // Pure/Far/Lost 信息
   ctx.font = '40px "Titillium Web Regular"'
   ctx.fillText(
     `Pure / ${scoreData.perfect_count} (${scoreData.shiny_perfect_count})   Far / ${scoreData.near_count}   Lost / ${scoreData.miss_count}`,

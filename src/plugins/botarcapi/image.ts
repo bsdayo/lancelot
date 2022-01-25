@@ -8,6 +8,7 @@ import {
   BotArcApiSonginfoV5,
 } from 'botarcapi_lib'
 import { getTempFilePath, getNowDateTime } from '../../utils'
+import { formatPtt } from './utils'
 
 registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
   family: 'Titillium Web SemiBold',
@@ -23,7 +24,7 @@ export async function generateBest30Image(
     best30_overflow_songinfo: BotArcApiSonginfoV5[]
   }
 ) {
-  // 分数卡片宽 1000px, 高 320px
+  // 背景图
   const backgroundImage = await loadImage(
     path.resolve(__dirname, 'assets', 'best30Background.jpg')
   )
@@ -31,17 +32,20 @@ export async function generateBest30Image(
   const ctx = canvas.getContext('2d')
   ctx.drawImage(backgroundImage, 0, 0)
 
+  // 账号信息
   ctx.font = '128px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
   ctx.fillText(
     `${best30Data.account_info.name} (${
       best30Data.account_info.rating < 0
         ? '?'
-        : (best30Data.account_info.rating / 100).toFixed(2)
+        : formatPtt(best30Data.account_info.rating)
     })`,
     330,
     265
   )
+
+  // Best30/Recent10 均值
   ctx.font = '62px "Titillium Web SemiBold"'
   ctx.fillText(
     `B30Avg / ${best30Data.best30_avg.toFixed(
@@ -51,6 +55,7 @@ export async function generateBest30Image(
     375
   )
 
+  // 底部时间
   ctx.font = '121px "Titillium Web SemiBold"'
   ctx.fillStyle = '#fff'
   ctx.fillText(getNowDateTime(), 383, 6582)
@@ -153,7 +158,6 @@ export async function generateBest30Image(
   await Promise.all(drawTask)
 
   const filepath = getTempFilePath('botarcapi', 'jpg')
-
   await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
 
   return filepath

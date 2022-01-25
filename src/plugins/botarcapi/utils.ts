@@ -21,6 +21,7 @@ const api = new BotArcApiV5({
   },
 })
 
+// 获取数据库中的绑定信息
 export async function getUserBinding(ctx: Context, session: Session) {
   return await ctx.database.get('arcaeaid', {
     platform: session?.platform,
@@ -28,10 +29,12 @@ export async function getUserBinding(ctx: Context, session: Session) {
   })
 }
 
+// 格式化 potential
 export function formatPtt(rating: number) {
   return (rating / 100).toFixed(2)
 }
 
+// 获取曲绘路径，不存在则缓存
 export async function getSongCoverPath(songid: string) {
   const filename = 'song-' + songid + '.jpg'
   const cachePath = getCacheFilePath('botarcapi', filename)
@@ -41,16 +44,7 @@ export async function getSongCoverPath(songid: string) {
   } else return cachePath
 }
 
-export async function getPartnerImgPath(partnerid: number, awakened: boolean) {
-  const filename = 'char-' + partnerid + '.jpg'
-  const cachePath = getCacheFilePath('botarcapi', filename)
-  if (!cachePath) {
-    const data = await api.assets.char(partnerid, awakened)
-    return await createCache('botarcapi', filename, data)
-  } else return cachePath
-}
-
-
+// 获取各难度对应的颜色
 export function getColorByDifficulty(difficulty: number) {
   if (difficulty === 0) return { color: colorPST, colorDark: colorPSTDark}
   else if (difficulty === 1) return { color: colorPRS, colorDark: colorPRSDark}
@@ -58,6 +52,7 @@ export function getColorByDifficulty(difficulty: number) {
   else return { color: colorBYD, colorDark: colorBYDDark}
 }
 
+// 获取各难度的名称
 export function getDifficultyClassName(difficulty: number) {
   if (difficulty === 0) return 'Past'
   if (difficulty === 1) return 'Present'
@@ -66,6 +61,7 @@ export function getDifficultyClassName(difficulty: number) {
   else return 'UnknownDifficulty: ' + difficulty
 }
 
+// 转换 rating(eg. 99) 为难度描述 (eg.9+)
 export function getDifficultyByRating(rating: number) {
   const str = (rating / 10).toFixed(1)
   if (rating > 90 && parseInt(str.split('.')[1]) >= 7) {
