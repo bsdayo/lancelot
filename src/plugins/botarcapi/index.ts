@@ -147,6 +147,7 @@ export default {
     rootCmd
       .subcommand('.b30 [usercode]')
       .shortcut('查b30')
+      .shortcut('/b30')
       .usage('/arc b30 [要查询的ArcaeaID]')
       .example('/arc b30 114514191')
       .example('查b30 191981011')
