@@ -35,10 +35,21 @@ export function formatPtt(rating: number) {
 }
 
 // 获取曲绘路径，不存在则缓存
-export async function getSongCoverPath(songid: string) {
-  const filename = 'song-' + songid + '.jpg'
-  const cachePath = getCacheFilePath('botarcapi', filename)
+export async function getSongCoverPath(
+  songid: string,
+  beyond?: boolean
+): Promise<string> {
+  const filename = `song-${songid}.jpg`
+  const filenameBYD = `song-${songid}-beyond.jpg`
+
+  const cachePath = getCacheFilePath(
+    'botarcapi',
+    config.plugins.botarcapi.enableBeyondCover && beyond
+      ? filenameBYD
+      : filename
+  )
   if (!cachePath) {
+    if (beyond) return await getSongCoverPath(songid, false)
     const data = await api.assets.song(songid, false)
     return await createCache('botarcapi', filename, data)
   } else return cachePath
@@ -46,10 +57,10 @@ export async function getSongCoverPath(songid: string) {
 
 // 获取各难度对应的颜色
 export function getColorByDifficulty(difficulty: number) {
-  if (difficulty === 0) return { color: colorPST, colorDark: colorPSTDark}
-  else if (difficulty === 1) return { color: colorPRS, colorDark: colorPRSDark}
-  else if (difficulty === 2) return { color: colorFTR, colorDark: colorFTRDark}
-  else return { color: colorBYD, colorDark: colorBYDDark}
+  if (difficulty === 0) return { color: colorPST, colorDark: colorPSTDark }
+  else if (difficulty === 1) return { color: colorPRS, colorDark: colorPRSDark }
+  else if (difficulty === 2) return { color: colorFTR, colorDark: colorFTRDark }
+  else return { color: colorBYD, colorDark: colorBYDDark }
 }
 
 // 获取各难度的名称

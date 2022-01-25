@@ -36,8 +36,8 @@ export async function createCache(
   return filepath
 }
 
-export function getNowDateTime() {
-  const now = new Date()
+export function getDateTime(timestamp?: number) {
+  const now = typeof timestamp === 'number' ? new Date(timestamp) : new Date()
   const year = now.getFullYear()
   const month = (now.getMonth() + 1).toFixed().padStart(2, '0')
   const date = now.getDate().toFixed().padStart(2, '0')
@@ -45,4 +45,9 @@ export function getNowDateTime() {
   const minute = now.getMinutes().toFixed().padStart(2, '0')
   const second = now.getSeconds().toFixed().padStart(2, '0')
   return `${year}.${month}.${date} ${hour}:${minute}:${second}`
+}
+
+export function getPastDays(timestamp: number) {
+  const now = new Date().getTime()
+  return Math.round((now - timestamp) / 86400000)
 }

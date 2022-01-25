@@ -1,7 +1,7 @@
-import { BotArcApiV5 } from 'botarcapi_lib'
+import { BotArcApiRecent, BotArcApiV5 } from 'botarcapi_lib'
 import { getUserBinding, formatPtt } from './utils'
 import { Context, segment } from 'koishi'
-import { generateBest30Image } from './image'
+import { generateBest30Image, generateRecentScoreImage } from './image'
 import fs from 'fs/promises'
 
 // 插件配置
@@ -70,6 +70,10 @@ export default {
           session?.execute(
             `arc.b30 ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
           )
+        } else if (subcmd === 'recent') {
+          session?.execute(
+            `arc.recent ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : '1'}`
+          )
         } else {
           return (
             segment.quote(session?.messageId!) +
@@ -97,7 +101,8 @@ export default {
             `为用户 ${session?.platform}:${session?.userId} 绑定 ArcaeaID ${usercode}`
           )
           const accountInfo = (await api.user.info(usercode)).account_info
-          const rating = formatPtt(accountInfo.rating)
+          const rating =
+            accountInfo.rating < 0 ? '?' : formatPtt(accountInfo.rating)
           await ctx.database.create('arcaeaid', {
             platform: session?.platform,
             userid: session?.userId,
@@ -106,7 +111,7 @@ export default {
           })
           return (
             segment.quote(session?.messageId!) +
-            `已为您绑定 Arcaea 账号 ${accountInfo.name}(${rating})`
+            `已为您绑定 Arcaea 账号 ${accountInfo.name} (${rating})`
           )
         }
       })
@@ -187,7 +192,65 @@ export default {
           logger.error(
             `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的 Best30 成绩查询失败：${err}`
           )
-          session?.send(`发生错误：${(err as Error).message}`)
+          return `发生错误：${(err as Error).message}`
+        }
+      })
+
+    // 最近成绩查询
+    rootCmd
+      .subcommand('.recent [number]')
+      .shortcut('查最近', { args: ['1'] })
+      .usage('/arc recent [要查询的数量]')
+      .example('/arc recent 3')
+      .action(async ({ session }, number: string) => {
+        const num = parseInt(number)
+        if (Number.isNaN(num) || num > 7 || num < 1) {
+          return (
+            segment.quote(session?.messageId!) +
+            `请输入正确的数量，范围为 1 ~ 7`
+          )
+        }
+        const result = await getUserBinding(ctx, session!)
+        if (result.length === 0) {
+          // 若未查询到绑定数据
+          return (
+            segment.quote(session?.messageId!) +
+            `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /arc b30 -h 查看）`
+          )
+        }
+        logger.info(
+          `正在查询用户 ${result[0].arcname} [${result[0].arcid}] 的最近 ${num} 条成绩...`
+        )
+        session?.send(
+          `正在查询用户 ${result[0].arcname} [${result[0].arcid}] 的最近 ${num} 条成绩...`
+        )
+        try {
+          const recent = await api.user.info(
+            result[0].arcid,
+            false,
+            num as BotArcApiRecent,
+            true
+          )
+          logger.success(
+            `用户 ${result[0].arcname} [${result[0].arcid}] 的 Recent 成绩查询成功`
+          )
+          logger.info(
+            `正在为用户 ${result[0].arcname} [${result[0].arcid}] 生成 Recent 图片...`
+          )
+          const imgPath = await generateRecentScoreImage(recent, num)
+          logger.success(
+            `用户 ${result[0].arcname} [${result[0].arcid}] 的 Recent 图片生成成功，文件为 ${imgPath}`
+          )
+
+          return (
+            segment.quote(session?.messageId!) +
+            segment.image(await fs.readFile(imgPath))
+          )
+        } catch (err) {
+          logger.error(
+            `用户 ${session?.platform}:${result[0].arcname} [${result[0].arcid}] 的 Recent 成绩查询失败：${err}`
+          )
+          return `发生错误：${err}`
         }
       })
   },

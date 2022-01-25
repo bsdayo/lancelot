@@ -1,5 +1,6 @@
 import { BotArcApiScore, BotArcApiSonginfoV5, formatScore } from 'botarcapi_lib'
 import { CanvasRenderingContext2D, loadImage } from 'canvas'
+import { getDateTime, getPastDays } from '../../utils'
 import {
   getSongCoverPath,
   getColorByDifficulty,
@@ -36,7 +37,10 @@ export async function drawScoreCard(
   songInfo: BotArcApiSonginfoV5,
   rank?: number // 排名
 ) {
-  const songCoverPath = await getSongCoverPath(scoreData.song_id)
+  const songCoverPath = await getSongCoverPath(
+    scoreData.song_id,
+    scoreData.difficulty === 3
+  )
   const songCoverImage = await loadImage(songCoverPath)
   const { color, colorDark } = getColorByDifficulty(scoreData.difficulty)
   // 卡片主体
@@ -73,7 +77,7 @@ export async function drawScoreCard(
   )
   const realrating = songInfo.difficulties.find((val) => {
     return val.ratingClass === scoreData.difficulty
-  })!.realrating          // 定数
+  })!.realrating // 定数
   ctx.fillStyle = '#fff'
   ctx.font = '45px "Titillium Web Regular"'
   const difficultyText =
@@ -98,7 +102,7 @@ export async function drawScoreCard(
   ctx.font = '60px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
   ctx.fillText(songInfo.title_localized.en, x + 320 + 15, y + 15 + 46 + 75, 635)
-  
+
   // 得分
   ctx.font = '97px "Titillium Web Regular"'
   ctx.fillText(
@@ -115,5 +119,26 @@ export async function drawScoreCard(
     x + 320 + 15,
     y + 15 + 46 + 75 + 100 + 60,
     635
+  )
+}
+
+export async function drawRecentScoreCard(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  scoreData: BotArcApiScore,
+  songInfo: BotArcApiSonginfoV5
+) {
+  drawFilledRoundedRect(ctx, x, y, 1000, 380, 20, '#ddd')
+  drawScoreCard(ctx, x, y, scoreData, songInfo)
+  ctx.fillStyle = '#333'
+  ctx.font = '45px "Titillium Web Regular"'
+  const pastDays = getPastDays(scoreData.time_played)
+  ctx.fillText(
+    `${getDateTime(scoreData.time_played)}   ${
+      pastDays > 0 ? '(' + pastDays + ' days ago)' : ''
+    }`,
+    x + 15,
+    y + 320 + 46
   )
 }
