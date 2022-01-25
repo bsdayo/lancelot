@@ -44,7 +44,7 @@ export async function getSongCoverPath(
 
   const cachePath = getCacheFilePath(
     'botarcapi',
-    config.plugins.botarcapi.enableBeyondCover && beyond
+    (config.plugins.botarcapi.enableBeyondCover ?? false) && beyond
       ? filenameBYD
       : filename
   )
