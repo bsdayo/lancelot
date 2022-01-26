@@ -13,12 +13,17 @@ export function enableBest30(
   // Best30查询
   rootCmd
     .subcommand('.b30 [usercode]')
-    .shortcut('查b30')
+    .shortcut('查b30', { fuzzy: true })
     .alias('b30')
     .usage('/arc b30 [要查询的ArcaeaID]')
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session }, usercode: string) => {
+      if (usercode.length !== 9)
+        return (
+          segment.quote(session?.messageId!) +
+          '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'
+        )
       const arcObj = { id: usercode, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖
       if (!usercode) {
         // 若没有输入 usercode 参数

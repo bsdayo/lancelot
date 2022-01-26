@@ -72,6 +72,10 @@ export default {
           session?.execute(
             `arc.recent ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : '1'}`
           )
+        } else if (subcmd === 'rating') {
+          session?.execute(
+            `arc.rating ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
+          )
         } else {
           return (
             segment.quote(session?.messageId!) +
@@ -84,5 +88,6 @@ export default {
     commands.enableUnbind(rootCmd, ctx, logger)
     commands.enableBest30(rootCmd, ctx, logger, api)
     commands.enableRecent(rootCmd, ctx, logger, api)
+    commands.enableRating(rootCmd, api)
   },
 }
