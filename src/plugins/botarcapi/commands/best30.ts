@@ -19,7 +19,7 @@ export function enableBest30(
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session }, usercode: string) => {
-      if (usercode.length !== 9)
+      if (usercode && parseInt(usercode).toString().length !== 9)
         return (
           segment.quote(session?.messageId!) +
           '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'
