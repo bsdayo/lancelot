@@ -1,4 +1,4 @@
-import { BotArcApiRecent, BotArcApiV5 } from 'botarcapi_lib'
+import { BotArcApiV5 } from 'botarcapi_lib'
 import { Context, segment } from 'koishi'
 import * as commands from './commands'
 

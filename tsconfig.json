@@ -2,12 +2,16 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "rootDir": "./src",
     "allowJs": true,
     "outDir": "./dist",
+    "resolveJsonModule": true,
     "noEmitOnError": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true
-  }
+  },
+  "include": [
+    "./src/**/*",
+    "./package.json"
+  ]
 }
