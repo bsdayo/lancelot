@@ -3,6 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import config from './config'
 import botarcapi from './plugins/botarcapi'
+import info from './plugins/info'
 
 // 创建临时目录
 if (!fs.existsSync(path.resolve(__dirname, '..', 'temp')))
@@ -22,5 +23,6 @@ app
     path: path.resolve(__dirname, '..', 'database.db'),
   })
   .plugin(botarcapi, config.plugins.botarcapi)
+  .plugin(info)
   .plugin('echo')
   .start()
