@@ -14,7 +14,7 @@ export default {
           'Powered by Koishi.js v4\n\n' +
           //
           '本项目遵循 AGPL v3 协议开源\n' +
-          'GitHub仓库: https://github.com/b1acksoil/lancelot\n'
+          'GitHub仓库: https://github.com/b1acksoil/lancelot'
         )
       })
   },
