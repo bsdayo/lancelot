@@ -4,12 +4,12 @@ import fs from 'fs'
 import config from './config'
 import botarcapi from './plugins/botarcapi'
 import info from './plugins/info'
+import { initDir } from './utils'
 
-// 创建临时目录
-if (!fs.existsSync(path.resolve(__dirname, '..', 'temp')))
-  fs.mkdirSync(path.resolve(__dirname, '..', 'temp'))
-if (!fs.existsSync(path.resolve(__dirname, '..', 'cache')))
-  fs.mkdirSync(path.resolve(__dirname, '..', 'cache'))
+// 创建目录
+initDir('temp')
+initDir('cache')
+initDir('log')
 
 const app = new App({
   host: config.app.host ?? '127.0.0.1',

@@ -10,6 +10,13 @@ export function getTempFilePath(namespace: string, ext: string) {
   return path.resolve(__dirname, '..', 'temp', `${namespace}-${v1()}.${ext}`)
 }
 
+export function initDir(name: string) {
+  const dirPath = path.resolve(__dirname, '..', name)
+  if (!fsSync.existsSync(dirPath)) {
+    fsSync.mkdirSync(dirPath)
+  }
+}
+
 export function getCacheFilePath(namespace: string, filename: string) {
   const filepath = path.resolve(
     __dirname,
