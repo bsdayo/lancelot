@@ -72,9 +72,9 @@ export default {
           session?.execute(
             `arc.recent ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : '1'}`
           )
-        } else if (subcmd === 'rating') {
+        } else if (subcmd === 'info' || subcmd === 'rating') {
           session?.execute(
-            `arc.rating ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
+            `arc.info ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
           )
         } else {
           return (
@@ -88,6 +88,6 @@ export default {
     commands.enableUnbind(rootCmd, ctx, logger)
     commands.enableBest30(rootCmd, ctx, logger, api)
     commands.enableRecent(rootCmd, ctx, logger, api)
-    commands.enableRating(rootCmd, api)
+    commands.enableInfo(rootCmd, api)
   },
 }

@@ -1,9 +1,8 @@
 import { App } from 'koishi'
 import path from 'path'
-import fs from 'fs'
 import config from './config'
 import botarcapi from './plugins/botarcapi'
-import info from './plugins/info'
+import status from './plugins/status'
 import { initDir } from './utils'
 
 // 创建目录
@@ -22,7 +21,7 @@ app
   .plugin('database-sqlite', {
     path: path.resolve(__dirname, '..', 'database.db'),
   })
+  .plugin(status)
   .plugin(botarcapi, config.plugins.botarcapi)
-  .plugin(info)
   .plugin('echo')
   .start()
