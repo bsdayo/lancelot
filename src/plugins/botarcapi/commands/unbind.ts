@@ -4,7 +4,7 @@ import { getUserBinding } from '../utils'
 export function enableUnbind(rootCmd: Command, ctx: Context, logger: Logger) {
   // 取消绑定ArcaeaID
   rootCmd
-    .subcommand('.unbind')
+    .subcommand('.unbind', '取消绑定ArcaeaID')
     .usage('/arc unbind')
     .action(async ({ session }) => {
       // 查询数据库中是否已有绑定信息

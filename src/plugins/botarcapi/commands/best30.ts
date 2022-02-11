@@ -12,7 +12,7 @@ export function enableBest30(
 ) {
   // Best30查询
   rootCmd
-    .subcommand('.b30 [usercode]')
+    .subcommand('.b30 [usercode]', '查询用户Best30成绩')
     .shortcut('查b30', { fuzzy: true })
     .alias('b30')
     .usage('/arc b30 [要查询的ArcaeaID]')

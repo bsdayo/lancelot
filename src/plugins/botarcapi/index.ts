@@ -52,7 +52,7 @@ export default {
     })
     // 根命令
     const rootCmd = ctx
-      .command('arc [subcmd] [...subcmdargs]')
+      .command('arc [subcmd] [...subcmdargs]', 'Arcaea相关功能')
       .alias('arcaea', 'a')
       .action(async ({ session }, subcmd: string, ...subcmdargs: string[]) => {
         if (!subcmd) {

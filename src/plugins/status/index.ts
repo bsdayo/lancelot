@@ -6,7 +6,7 @@ export default {
   name: 'status',
   apply(ctx: Context) {
     ctx
-      .command('status')
+      .command('status', '查询Bot运行状态')
       .shortcut('状态')
       .action(({ session }) => {
         const uptimeSeconds = Math.floor(process.uptime())

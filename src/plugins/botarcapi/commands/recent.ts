@@ -13,10 +13,11 @@ export function enableRecent(
 ) {
   {
     rootCmd
-      .subcommand('.recent [number]')
+      .subcommand('.recent [number]', '查询用户最近成绩')
       .shortcut('查最近', { fuzzy: true })
       .usage('/arc recent [要查询的数量]')
       .example('/arc recent 3')
+      .example('查最近')
       .action(async ({ session }, number: string) => {
         let num = parseInt(number)
         if (Number.isNaN(num)) {

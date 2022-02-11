@@ -16,8 +16,11 @@ export function enableBest(
 ) {
   // 最高成绩查询
   rootCmd
-    .subcommand('.best <songname> [difficulty]')
+    .subcommand('.best <songname> [difficulty]', '查询用户单曲最高分')
     .shortcut('查最高', { fuzzy: true })
+    .usage('/arc best <曲目名称> [难度，默认FTR]')
+    .example('/arc best xanatos')
+    .example('/arc best heavensdoor byd')
     .action(async ({ session }, songname: string, difficulty: string) => {
       if (!songname)
         return segment.quote(session?.messageId!) + '请输入需要查询的曲名'

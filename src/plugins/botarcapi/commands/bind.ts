@@ -10,7 +10,7 @@ export function enableBind(
 ) {
   // 绑定ArcaeaID
   rootCmd
-    .subcommand('.bind <usercode>')
+    .subcommand('.bind <usercode>', '绑定ArcaeaID')
     .usage('/arc bind <你的ArcaeaID>')
     .example('/arc bind 114514191')
     .action(async ({ session }, usercode: string) => {
