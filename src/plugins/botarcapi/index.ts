@@ -95,6 +95,12 @@ export default {
           )
         } else if (subcmd === 'connect') {
           session?.execute('arc.connect')
+        } else if (subcmd === 'alias') {
+          session?.execute(
+            `arc.alias ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
+            }`
+          )
         } else {
           return (
             segment.quote(session?.messageId!) +
@@ -110,5 +116,6 @@ export default {
     commands.enableRecent(rootCmd, ctx, logger, api)
     commands.enableInfo(rootCmd, api)
     commands.enableConnect(rootCmd, api)
+    commands.enableAlias(rootCmd, api)
   },
 }
