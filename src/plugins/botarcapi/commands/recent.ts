@@ -14,12 +14,14 @@ export function enableRecent(
   {
     rootCmd
       .subcommand('.recent [number]')
-      .shortcut('查最近', { args: ['1'] })
+      .shortcut('查最近', { fuzzy: true })
       .usage('/arc recent [要查询的数量]')
       .example('/arc recent 3')
       .action(async ({ session }, number: string) => {
-        const num = parseInt(number)
-        if (Number.isNaN(num) || num > 7 || num < 1) {
+        let num = parseInt(number)
+        if (Number.isNaN(num)) {
+          num = 1
+        } else if (num > 7 || num < 1) {
           return (
             segment.quote(session?.messageId!) +
             `请输入正确的数量，范围为 1 ~ 7`
@@ -36,8 +38,8 @@ export function enableRecent(
         logger.info(
           `正在查询用户 ${result[0].arcname} [${result[0].arcid}] 的最近 ${num} 条成绩...`
         )
-        session?.send(
-          `正在查询用户 ${result[0].arcname} [${result[0].arcid}] 的最近 ${num} 条成绩...`
+        await session?.send(
+          `正在查询用户 ${result[0].arcname} 的最近 ${num} 条成绩...`
         )
         try {
           const recent = await api.user.info(
@@ -52,7 +54,7 @@ export function enableRecent(
           logger.info(
             `正在为用户 ${result[0].arcname} [${result[0].arcid}] 生成 Recent 图片...`
           )
-          const imgPath = await generateRecentScoreImage(recent, num)
+          const imgPath = await generateRecentScoreImage(recent)
           logger.success(
             `用户 ${result[0].arcname} [${result[0].arcid}] 的 Recent 图片生成成功，文件为 ${imgPath}`
           )

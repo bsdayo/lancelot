@@ -1,15 +1,27 @@
 import { createCanvas, loadImage, registerFont } from 'canvas'
 import path from 'path'
 import fs from 'fs/promises'
-import { drawScoreCard, drawRecentScoreCard } from './imageutils'
+import {
+  drawScoreCard,
+  drawRecentScoreCard,
+  drawFilledRoundedRect,
+} from './imageutils'
 import {
   BotArcApiUserbest30,
   BotArcApiUserinfoV5,
   BotArcApiSonginfoV5,
   BotArcApiScore,
+  formatScore,
 } from 'botarcapi_lib'
 import { getTempFilePath, getDateTime } from '../../utils'
-import { formatPtt } from './utils'
+import {
+  formatPtt,
+  getCharPath,
+  getColorByDifficulty,
+  getDifficultyByRating,
+  getDifficultyClassName,
+  getSongCoverPath,
+} from './utils'
 
 registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
   family: 'Titillium Web SemiBold',
@@ -17,6 +29,15 @@ registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
 registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-Regular.ttf'), {
   family: 'Titillium Web Regular',
 })
+
+const clearImages = [
+  'clearFail.png',
+  'clearNormal.png',
+  'clearFull.png',
+  'clearPure.png',
+  'clearNormal.png',
+  'clearNormal.png',
+]
 
 export async function generateBest30Image(
   best30Data: BotArcApiUserbest30 & {
@@ -27,7 +48,7 @@ export async function generateBest30Image(
 ) {
   // 背景图
   const backgroundImage = await loadImage(
-    path.resolve(__dirname, 'assets', 'best30Background.jpg')
+    path.resolve(__dirname, 'assets/best30Background.jpg')
   )
   const canvas = createCanvas(backgroundImage.width, backgroundImage.height)
   const ctx = canvas.getContext('2d')
@@ -164,23 +185,142 @@ export async function generateBest30Image(
   return filepath
 }
 
-export async function generateRecentScoreImage(
-  recentData: {
-    account_info: BotArcApiUserinfoV5
-    recent_score: BotArcApiScore[]
-    songinfo: BotArcApiSonginfoV5[]
-  },
-  num: number
-) {
+export async function generateBestImage(bestData: {
+  account_info: BotArcApiUserinfoV5
+  record: BotArcApiScore
+  songinfo: BotArcApiSonginfoV5[]
+}) {
   // 背景图
   const backgroundImage = await loadImage(
-    path.resolve(__dirname, 'assets', 'recentBackground.jpg')
+    path.resolve(__dirname, 'assets/bestBackground.jpg')
+  )
+  const canvas = createCanvas(backgroundImage.width, backgroundImage.height)
+  const ctx = canvas.getContext('2d')
+  // 底图
+  ctx.drawImage(backgroundImage, 0, 0)
+
+  // 账号信息
+  ctx.font = '60px "Titillium Web SemiBold"'
+  ctx.fillStyle = '#fff'
+  ctx.fillText(
+    `${bestData.account_info.name} (${
+      bestData.account_info.rating < 0
+        ? '?'
+        : formatPtt(bestData.account_info.rating)
+    })`,
+    124,
+    150
+  )
+
+  ctx.font = '79px "Titillium Web SemiBold"'
+  ctx.fillText(bestData.songinfo[0].title_localized.en, 124, 330)
+
+  // 立绘
+  const charPath = await getCharPath(
+    bestData.account_info.character,
+    bestData.account_info.is_char_uncapped &&
+      !bestData.account_info.is_char_uncapped_override
+  )
+  const charImage = await loadImage(charPath)
+  ctx.drawImage(charImage, 798, 0, 1650, 1650)
+
+  // 曲绘白底和半透明背景
+  drawFilledRoundedRect(ctx, 103, 365, 1144, 542, 25, 'rgba(0, 0, 0, 0.5)')
+  drawFilledRoundedRect(ctx, 103, 365, 542, 542, 25)
+
+  // 曲绘
+  const songCoverPath = await getSongCoverPath(
+    bestData.record.song_id,
+    bestData.record.difficulty === 3
+  )
+  const songCoverImage = await loadImage(songCoverPath)
+  ctx.drawImage(songCoverImage, 124, 386, 500, 500)
+
+  // 得分
+  ctx.font = '90px "Titillium Web Regular"'
+  ctx.fillText(formatScore(bestData.record.score), 731, 474)
+
+  const clearImage = await loadImage(
+    path.resolve(__dirname, 'assets', clearImages[bestData.record.clear_type])
+  )
+  if (clearImage.height > 77) {
+    // FR/PM
+    ctx.drawImage(clearImage, 646, 510, 601, 74)
+  } else {
+    // TC/TL
+    ctx.drawImage(clearImage, 646, 518, 601, (601 / clearImage.width) * 74)
+  }
+
+  ctx.font = '37px "Titillium Web Regular"'
+  ctx.fillText(
+    `Pure / ${bestData.record.perfect_count} (+${bestData.record.shiny_perfect_count})`,
+    678,
+    638
+  )
+  ctx.fillText(`Far / ${bestData.record.near_count}`, 678, 694)
+  ctx.fillText(`Lost / ${bestData.record.miss_count}`, 678, 749)
+
+  // 难度条
+  const { color, colorDark } = getColorByDifficulty(bestData.record.difficulty)
+  drawFilledRoundedRect(ctx, 663, 799, 561, 52, 10, colorDark)
+
+  const realrating = bestData.songinfo[0].difficulties.find((val) => {
+    return val.ratingClass === bestData.record.difficulty
+  })!.realrating // 定数
+  ctx.fillStyle = '#fff'
+  const difficultyText =
+    getDifficultyClassName(bestData.record.difficulty) +
+    ' ' +
+    getDifficultyByRating(realrating) +
+    ` [${(realrating / 10).toFixed(1)}]`
+  ctx.fillText(difficultyText, 843, 837)
+
+  // 获得 ptt
+  drawFilledRoundedRect(ctx, 663, 799, 162, 52, 10, color)
+  ctx.fillStyle = '#fff'
+  ctx.font = '37px "Titillium Web SemiBold"'
+  ctx.fillText(bestData.record.rating.toFixed(4), 675, 837)
+
+  // 日期
+  ctx.font = '30px "Titillium Web SemiBold"'
+  ctx.fillText(
+    `Played at ${getDateTime(bestData.record.time_played)}`,
+    663,
+    889
+  )
+
+  const filepath = getTempFilePath('botarcapi-best', 'png')
+  await fs.writeFile(filepath, canvas.toBuffer('image/png'))
+
+  return filepath
+}
+
+export async function generateRecentScoreImage(recentData: {
+  account_info: BotArcApiUserinfoV5
+  recent_score: BotArcApiScore[]
+  songinfo: BotArcApiSonginfoV5[]
+}) {
+  const num = recentData.recent_score.length
+
+  if (num === 1) {
+    return await generateBestImage({
+      account_info: recentData.account_info,
+      record: recentData.recent_score[0],
+      songinfo: recentData.songinfo
+    })
+  }
+
+  // 背景图
+  const backgroundImage = await loadImage(
+    path.resolve(__dirname, 'assets/recentBackground.jpg')
   )
   const height = 300 + num * 460 + 80
   const canvas = createCanvas(backgroundImage.width, height)
   const ctx = canvas.getContext('2d')
+  // 底图
   ctx.drawImage(backgroundImage, 0, height - backgroundImage.height)
-  ctx.font = ctx.font = '121px "Titillium Web SemiBold"'
+
+  ctx.font = '121px "Titillium Web SemiBold"'
   ctx.fillStyle = num >= 5 ? '#333' : '#fff'
   ctx.fillText('Recent Score', 280, 190)
 

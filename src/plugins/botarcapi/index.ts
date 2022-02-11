@@ -56,26 +56,45 @@ export default {
       .alias('arcaea', 'a')
       .action(async ({ session }, subcmd: string, ...subcmdargs: string[]) => {
         if (!subcmd) {
-          /* TODO 查询最近分数 */
-          session?.execute(`arc -h`)
+          session?.execute(
+            `arc.recent ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : '1'
+            }`
+          )
         } else if (subcmd === 'bind') {
           session?.execute(
-            `arc.bind ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
+            `arc.bind ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
+            }`
           )
         } else if (subcmd === 'unbind') {
-          session?.execute(`arc.unbind`)
+          session?.execute('arc.unbind')
         } else if (subcmd === 'b30') {
           session?.execute(
-            `arc.b30 ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
+            `arc.b30 ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
+            }`
+          )
+        } else if (subcmd === 'best') {
+          session?.execute(
+            `arc.best ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
+            }`
           )
         } else if (subcmd === 'recent') {
           session?.execute(
-            `arc.recent ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : '1'}`
+            `arc.recent ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : '1'
+            }`
           )
         } else if (subcmd === 'info' || subcmd === 'rating') {
           session?.execute(
-            `arc.info ${subcmdargs && subcmdargs[0] ? subcmdargs[0] : ''}`
+            `arc.info ${
+              subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
+            }`
           )
+        } else if (subcmd === 'connect') {
+          session?.execute('arc.connect')
         } else {
           return (
             segment.quote(session?.messageId!) +
@@ -87,7 +106,9 @@ export default {
     commands.enableBind(rootCmd, ctx, logger, api)
     commands.enableUnbind(rootCmd, ctx, logger)
     commands.enableBest30(rootCmd, ctx, logger, api)
+    commands.enableBest(rootCmd, ctx, logger, api)
     commands.enableRecent(rootCmd, ctx, logger, api)
     commands.enableInfo(rootCmd, api)
+    commands.enableConnect(rootCmd, api)
   },
 }

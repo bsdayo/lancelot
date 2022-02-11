@@ -1,4 +1,3 @@
-node_modules
 *.log
 
 # Config file
@@ -10,3 +9,8 @@ cache/
 
 # Database
 *.db
+
+# Node
+node_modules
+package-lock.json
+yarn.lock

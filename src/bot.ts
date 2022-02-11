@@ -8,7 +8,6 @@ import { initDir } from './utils'
 // 创建目录
 initDir('temp')
 initDir('cache')
-initDir('log')
 
 const app = new App({
   host: config.app.host ?? '127.0.0.1',

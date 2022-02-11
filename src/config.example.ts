@@ -18,7 +18,6 @@ export default {
       baseURL: '<BotArcAPI URL>',
       userAgent: '<自定义User-Agent>',
       timeout: 60000,
-      enableBeyondCover: true,
     }
   },
 }

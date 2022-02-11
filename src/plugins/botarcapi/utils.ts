@@ -44,14 +44,29 @@ export async function getSongCoverPath(
 
   const cachePath = getCacheFilePath(
     'botarcapi',
-    (config.plugins.botarcapi.enableBeyondCover ?? false) && beyond
-      ? filenameBYD
-      : filename
+    beyond ? filenameBYD : filename
   )
   if (!cachePath) {
-    if (beyond) return await getSongCoverPath(songid, false)
-    const data = await api.assets.song(songid, false)
-    return await createCache('botarcapi', filename, data)
+    const data = await api.assets.song(songid, false, beyond)
+    return await createCache('botarcapi', beyond ? filenameBYD : filename, data)
+  } else return cachePath
+}
+
+// 获取角色立绘路径，不存在则缓存
+export async function getCharPath(
+  charid: number,
+  awakened?: boolean
+): Promise<string> {
+  const filename = `char-${charid}.jpg`
+  const filenameAwakened = `char-${charid}-awakened.jpg`
+
+  const cachePath = getCacheFilePath(
+    'botarcapi',
+    awakened ? filenameAwakened : filename
+  )
+  if (!cachePath) {
+    const data = await api.assets.char(charid, awakened)
+    return await createCache('botarcapi', awakened ? filenameAwakened : filename, data)
   } else return cachePath
 }
 
@@ -63,13 +78,21 @@ export function getColorByDifficulty(difficulty: number) {
   else return { color: colorBYD, colorDark: colorBYDDark }
 }
 
+// 获取各难度的序号
+export function getDifficultyIndex(difficulty: number | string) {
+  difficulty = difficulty.toString().toLowerCase()
+  if (['0', 'pst', 'past'].includes(difficulty)) return 0
+  if (['1', 'prs', 'present'].includes(difficulty)) return 1
+  if (['2', 'ftr', 'future'].includes(difficulty)) return 2
+  if (['3', 'byd', 'byn', 'beyond'].includes(difficulty)) return 3
+  return 4
+}
+
 // 获取各难度的名称
-export function getDifficultyClassName(difficulty: number) {
-  if (difficulty === 0) return 'Past'
-  if (difficulty === 1) return 'Present'
-  if (difficulty === 2) return 'Future'
-  if (difficulty === 3) return 'Beyond'
-  else return 'UnknownDifficulty: ' + difficulty
+export function getDifficultyClassName(difficulty: 0 | 1 | 2 | 3 | string) {
+  if (typeof difficulty === 'string')
+    return ['Past', 'Present', 'Future', 'Beyond', 'Unknown'][getDifficultyIndex(difficulty)]
+  else return ['Past', 'Present', 'Future', 'Beyond'][difficulty]
 }
 
 // 转换 rating(eg. 99) 为难度描述 (eg.9+)

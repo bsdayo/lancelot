@@ -130,7 +130,7 @@ export async function drawRecentScoreCard(
   songInfo: BotArcApiSonginfoV5
 ) {
   drawFilledRoundedRect(ctx, x, y, 1000, 380, 20, '#ddd')
-  drawScoreCard(ctx, x, y, scoreData, songInfo)
+  await drawScoreCard(ctx, x, y, scoreData, songInfo)
   ctx.fillStyle = '#333'
   ctx.font = '45px "Titillium Web Regular"'
   const pastDays = getPastDays(scoreData.time_played)

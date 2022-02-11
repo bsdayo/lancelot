@@ -41,8 +41,8 @@ export function enableBest30(
       logger.info(
         `正在查询用户 ${arcObj.name} [${arcObj.id}] 的 Best30 成绩...`
       )
-      session?.send(
-        `正在查询用户 ${arcObj.name} [${arcObj.id}] 的 Best30 成绩...`
+      await session?.send(
+        `正在查询用户 ${arcObj.name} 的 Best30 成绩...`
       )
       try {
         const best30 = await api.user.best30(arcObj.id, false, true, 9)
