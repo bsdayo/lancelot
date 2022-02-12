@@ -18,9 +18,9 @@ export function enableAlias(rootCmd: Command, api: BotArcApiV5) {
         return (
           segment.quote(session?.messageId!) +
           '查询到的别名有：\n' +
-          aliasContent.alias.join('\n')
+          (aliasContent as unknown as string[]).join('\n')
         )
-      } catch {
+      } catch(e) {
         return segment.quote(session?.messageId!) + '未找到曲目：' + songname
       }
     })
