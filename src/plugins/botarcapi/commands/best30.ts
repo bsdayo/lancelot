@@ -19,7 +19,8 @@ export function enableBest30(
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session }, usercode: string) => {
-      usercode = usercode.padStart(9, '0')
+      if (usercode)
+        usercode = usercode.padStart(9, '0')
       if (usercode && !validateUsercode(usercode))
         return (
           segment.quote(session?.messageId!) +

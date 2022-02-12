@@ -14,9 +14,9 @@ export function enableBind(
     .usage('/arc bind <你的ArcaeaID>')
     .example('/arc bind 114514191')
     .action(async ({ session }, usercode: string) => {
-      usercode = usercode.padStart(9, '0')
       if (!usercode)
-        return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
+      return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
+      usercode = usercode.padStart(9, '0')
       if (!validateUsercode(usercode))
         return (
           segment.quote(session?.messageId!) +
