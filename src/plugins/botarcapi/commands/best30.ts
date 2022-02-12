@@ -35,7 +35,7 @@ export function enableBest30(
         } else
           return (
             segment.quote(session?.messageId!) +
-            `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /arc b30 -h 查看）`
+            `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /help arc.b30 查看）`
           )
       }
       logger.info(

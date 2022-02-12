@@ -104,7 +104,7 @@ export default {
         } else {
           return (
             segment.quote(session?.messageId!) +
-            `未知子指令: ${subcmd}\n请使用 /arc -h 查看使用说明`
+            `未知子指令: ${subcmd}\n请使用 /help arc 查看使用说明`
           )
         }
       })
