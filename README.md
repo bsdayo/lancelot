@@ -2,9 +2,10 @@
 
 # lancelot
 
-b1acksoil's personal bot made with :heart:  
-Powered by [koishi.js](https://koishi.js.org/) v4
+A cross-platform bot made with :heart:  
+Powered by [Koishi.js](https://koishi.js.org/) v4
 
+交流群 lancelot Cafe / [883632773](./QQGroupQRCode.jpg)
 </div>
 
 ## 使用 / Usage
