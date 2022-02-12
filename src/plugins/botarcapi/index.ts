@@ -69,7 +69,7 @@ export default {
           )
         } else if (subcmd === 'unbind') {
           session?.execute('arc.unbind')
-        } else if (subcmd === 'b30') {
+        } else if (subcmd === 'b30' || subcmd === 'best30') {
           session?.execute(
             `arc.b30 ${
               subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
