@@ -3,6 +3,7 @@ import path from 'path'
 import config from './config'
 import botarcapi from './plugins/botarcapi'
 import status from './plugins/status'
+import whitelist from './plugins/whitelist'
 import { initDir } from './utils'
 
 // 创建目录
@@ -20,6 +21,7 @@ app
   .plugin('database-sqlite', {
     path: path.resolve(__dirname, '..', 'database.db'),
   })
+  .plugin(whitelist)
   .plugin(status)
   .plugin(botarcapi, config.plugins.botarcapi)
   .plugin('echo')

@@ -1,5 +1,4 @@
 import path from 'path'
-import { v1 } from 'uuid'
 import fsSync from 'fs'
 import fs from 'fs/promises'
 import { Logger } from 'koishi'
@@ -7,7 +6,7 @@ import { Logger } from 'koishi'
 const logger = new Logger('utils')
 
 export function getTempFilePath(namespace: string, ext: string) {
-  return path.resolve(__dirname, '..', 'temp', `${namespace}-${v1()}.${ext}`)
+  return path.resolve(__dirname, '..', 'temp', `${namespace}-${Date.now()}.${ext}`)
 }
 
 export function initDir(name: string) {
