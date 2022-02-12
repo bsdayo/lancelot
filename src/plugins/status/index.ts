@@ -36,7 +36,9 @@ export default {
           `运行平台：${os.type()} ${os.release()} ${os.arch()}\n` +
           `进程内存：${processUsedmemMb.toFixed()}M (${processUsedMemRate}%)\n` +
           `系统内存：${totalUsedmemMb.toFixed()}M / ${totalmemMb.toFixed()}M (${totalUsedMemRate}%)\n` +
-          `Node版本：${process.version}`
+          `Node版本：${process.version}` +
+          // 
+          `Bot反馈群：883632773`
         )
       })
   },
