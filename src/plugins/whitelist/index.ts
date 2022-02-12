@@ -6,7 +6,7 @@ export default {
   apply(ctx: Context) {
     ctx.on('guild-request', async (session) => {
       try {
-        await session.bot.handleGuildRequest(session.guildId!, true)
+        await session.bot.handleGuildRequest(session.messageId!, true)
       } catch {}
       await session.bot.sendMessage(
         session.channelId!,
