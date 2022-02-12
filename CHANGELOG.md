@@ -1,6 +1,13 @@
 # 更新日志 / Changelog
 
----
+## 1.0.0 (Release) 2022.2.12
+### plugin/botarcapi
+- 添加指令帮助文本
+- 添加 `/arc alias` 指令
+
+### plugin/status
+- 添加指令帮助文本
+
 
 ## 0.2.0 (Internal Dev Version) 2022.2.12
 ### plugin/status
