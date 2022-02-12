@@ -1,6 +1,15 @@
 # 更新日志 / Changelog
 
-## 1.0.0 (Release) 2022.2.12
+## 1.0.1 - 2022.2.13
+### plugin/botarcapi
+- 优化指令反馈
+
+### plugin/whitelist
+- 添加退群指令 `/dismiss <groupid>`，要求权限为 3 级
+- 添加自动接收群邀请
+
+
+## 1.0.0 - 2022.2.12
 ### plugin/botarcapi
 - 添加指令帮助文本
 - 添加 `/arc alias` 指令
@@ -9,7 +18,7 @@
 - 添加指令帮助文本
 
 
-## 0.2.0 (Internal Dev Version) 2022.2.12
+## 0.2.0 (Internal Dev Version) - 2022.2.12
 ### plugin/status
 - 添加 `/status` 指令
 
@@ -20,7 +29,7 @@
 - 优化查询时的反馈，不再附带账号 ID
 
 
-## 0.1.0 (Internal Dev Version) 2022.2.6
+## 0.1.0 (Internal Dev Version) - 2022.2.6
 ### core
 - 完成核心部分
 
