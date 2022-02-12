@@ -66,7 +66,11 @@ export async function getCharPath(
   )
   if (!cachePath) {
     const data = await api.assets.char(charid, awakened)
-    return await createCache('botarcapi', awakened ? filenameAwakened : filename, data)
+    return await createCache(
+      'botarcapi',
+      awakened ? filenameAwakened : filename,
+      data
+    )
   } else return cachePath
 }
 
@@ -91,7 +95,9 @@ export function getDifficultyIndex(difficulty: number | string) {
 // 获取各难度的名称
 export function getDifficultyClassName(difficulty: 0 | 1 | 2 | 3 | string) {
   if (typeof difficulty === 'string')
-    return ['Past', 'Present', 'Future', 'Beyond', 'Unknown'][getDifficultyIndex(difficulty)]
+    return ['Past', 'Present', 'Future', 'Beyond', 'Unknown'][
+      getDifficultyIndex(difficulty)
+    ]
   else return ['Past', 'Present', 'Future', 'Beyond'][difficulty]
 }
 
@@ -101,4 +107,15 @@ export function getDifficultyByRating(rating: number) {
   if (rating > 90 && parseInt(str.split('.')[1]) >= 7) {
     return str.split('.')[0] + '+'
   } else return str.split('.')[0]
+}
+
+// 验证好友代码格式
+export function validateUsercode(usercode: string) {
+  if (
+    usercode &&
+    usercode.length === parseInt(usercode).toString().padStart(9, '0').length &&
+    usercode.length === 9
+  )
+    return true
+  else return false
 }

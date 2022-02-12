@@ -1,8 +1,9 @@
 import { Command, Context, Logger, segment } from 'koishi'
 import { generateBest30Image } from '../image'
-import { getUserBinding } from '../utils'
+import { getUserBinding, validateUsercode } from '../utils'
 import fs from 'fs/promises'
 import { BotArcApiV5 } from 'botarcapi_lib'
+import { parse } from 'uuid'
 
 export function enableBest30(
   rootCmd: Command,
@@ -12,14 +13,15 @@ export function enableBest30(
 ) {
   // Best30查询
   rootCmd
-    .subcommand('.b30 [usercode]', '查询用户Best30成绩')
+    .subcommand('.b30 [usercode:string]', '查询用户Best30成绩')
     .shortcut('查b30', { fuzzy: true })
     .alias('b30')
     .usage('/arc b30 [要查询的ArcaeaID]')
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session }, usercode: string) => {
-      if (usercode && parseInt(usercode).toString().length !== 9)
+      usercode = usercode.padStart(9, '0')
+      if (usercode && !validateUsercode(usercode))
         return (
           segment.quote(session?.messageId!) +
           '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'

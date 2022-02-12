@@ -1,6 +1,6 @@
 import { BotArcApiV5 } from 'botarcapi_lib'
 import { Command, Context, Logger, segment } from 'koishi'
-import { formatPtt, getUserBinding } from '../utils'
+import { formatPtt, getUserBinding, validateUsercode } from '../utils'
 
 export function enableBind(
   rootCmd: Command,
@@ -10,12 +10,18 @@ export function enableBind(
 ) {
   // 绑定ArcaeaID
   rootCmd
-    .subcommand('.bind <usercode>', '绑定ArcaeaID')
+    .subcommand('.bind <usercode:string>', '绑定ArcaeaID')
     .usage('/arc bind <你的ArcaeaID>')
     .example('/arc bind 114514191')
     .action(async ({ session }, usercode: string) => {
+      usercode = usercode.padStart(9, '0')
       if (!usercode)
         return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
+      if (!validateUsercode(usercode))
+        return (
+          segment.quote(session?.messageId!) +
+          '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'
+        )
       // 查询数据库中是否已有绑定信息
       const result = await getUserBinding(ctx, session!)
       if (result.length !== 0) {
