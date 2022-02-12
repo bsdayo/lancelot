@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "ts-node ./src/bot.ts",
-    "build": "tsc .",
+    "build": "tsc",
     "tools:arcsongassets": "ts-node ./src/tools/arcsongassets.ts"
   },
   "dependencies": {
