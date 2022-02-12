@@ -3,7 +3,6 @@ import { generateBest30Image } from '../image'
 import { getUserBinding, validateUsercode } from '../utils'
 import fs from 'fs/promises'
 import { BotArcApiV5 } from 'botarcapi_lib'
-import { parse } from 'uuid'
 
 export function enableBest30(
   rootCmd: Command,
