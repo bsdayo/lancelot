@@ -71,7 +71,7 @@ export function enableBest30(
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的 Best30 成绩查询失败：${err}`
         )
-        return `发生错误：${(err as Error).message}`
+        return `发生错误：${err}`
       }
     })
 }
