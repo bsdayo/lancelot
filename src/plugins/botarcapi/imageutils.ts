@@ -16,7 +16,8 @@ export function drawFilledRoundedRect(
   width: number,
   height: number,
   radius: number,
-  color: string = 'white'
+  color: string = 'white',
+  shadow?: boolean
 ) {
   ctx.fillStyle = color
   ctx.beginPath()
@@ -25,7 +26,13 @@ export function drawFilledRoundedRect(
   ctx.arcTo(x + width, y + height, x, y + height, radius)
   ctx.arcTo(x, y + height, x, y, radius)
   ctx.arcTo(x, y, x + radius, y, radius)
+  if (shadow) {
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)'
+    ctx.shadowBlur = 35
+  }
   ctx.fill()
+  ctx.shadowColor = 'rgba(0, 0, 0, 0)'
+  ctx.shadowBlur = 0
 }
 
 // 绘制分数卡片 (1000x320)
@@ -44,7 +51,7 @@ export async function drawScoreCard(
   const songCoverImage = await loadImage(songCoverPath)
   const { color, colorDark } = getColorByDifficulty(scoreData.difficulty)
   // 卡片主体
-  drawFilledRoundedRect(ctx, x, y, 1000, 320, 20)
+  drawFilledRoundedRect(ctx, x, y, 1000, 320, 20, '#fff', true)
   ctx.drawImage(songCoverImage, x + 15, y + 15, 290, 290)
 
   // 若传递 rank 参数则绘制排名
@@ -99,12 +106,27 @@ export async function drawScoreCard(
   ctx.fillText(scoreData.rating.toFixed(4), x + 320 + 15, y + 15 + 46)
 
   // 曲名
-  ctx.font = '60px "Titillium Web SemiBold"'
+  ctx.font = '60px "Titillium Web SemiBold",sans-serif'
   ctx.fillStyle = '#333'
   ctx.fillText(songInfo.title_localized.en, x + 320 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
   ctx.font = '97px "Titillium Web Regular"'
+  // 理论值？
+  if (
+    scoreData.shiny_perfect_count === scoreData.perfect_count &&
+    scoreData.near_count === 0 &&
+    scoreData.miss_count === 0
+  ) {
+    ctx.fillStyle = '#7fdfff'
+    ctx.fillText(
+      formatScore(scoreData.score),
+      x + 320 + 20,
+      y + 15 + 46 + 75 + 105,
+      635
+      )
+    }
+  ctx.fillStyle = '#333'
   ctx.fillText(
     formatScore(scoreData.score),
     x + 320 + 15,

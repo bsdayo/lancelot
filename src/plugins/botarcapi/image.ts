@@ -30,6 +30,9 @@ registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
 registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-Regular.ttf'), {
   family: 'Titillium Web Regular',
 })
+registerFont(path.resolve(__dirname, 'assets', 'Ubuntu-M.ttf'), {
+  family: 'Ubuntu Medium',
+})
 
 const clearImages = [
   'clearFail.png',
@@ -215,7 +218,7 @@ export async function generateBestImage(bestData: {
     150
   )
 
-  ctx.font = '79px "Titillium Web SemiBold"'
+  ctx.font = '79px "Titillium Web SemiBold",sans-serif'
   ctx.fillText(bestData.songinfo[0].title_localized.en, 124, 330)
 
   // 立绘
