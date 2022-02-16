@@ -15,6 +15,7 @@ import {
 } from 'botarcapi_lib'
 import { getTempFilePath, getDateTime } from '../../utils'
 import {
+  calculateMaxPtt,
   formatPtt,
   getCharPath,
   getColorByDifficulty,
@@ -63,17 +64,19 @@ export async function generateBest30Image(
         ? '?'
         : formatPtt(best30Data.account_info.rating)
     })`,
-    330,
+    295,
     265
   )
 
-  // Best30/Recent10 均值
+  // Best30/Recent10 均值  最大ptt
   ctx.font = '62px "Titillium Web SemiBold"'
   ctx.fillText(
     `B30Avg / ${best30Data.best30_avg.toFixed(
       4
-    )}   R10Avg / ${best30Data.recent10_avg.toFixed(4)}`,
-    330,
+    )}   R10Avg / ${best30Data.recent10_avg.toFixed(
+      4
+    )}   MaxPtt / ${calculateMaxPtt(best30Data)}`,
+    295,
     375
   )
 
@@ -306,7 +309,7 @@ export async function generateRecentScoreImage(recentData: {
     return await generateBestImage({
       account_info: recentData.account_info,
       record: recentData.recent_score[0],
-      songinfo: recentData.songinfo
+      songinfo: recentData.songinfo,
     })
   }
 

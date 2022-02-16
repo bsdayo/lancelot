@@ -1,6 +1,6 @@
 import { Context, Session } from 'koishi'
 import config from '../../config'
-import { BotArcApiV5 } from 'botarcapi_lib'
+import { BotArcApiSonginfoV5, BotArcApiUserbest30, BotArcApiUserinfoV5, BotArcApiV5 } from 'botarcapi_lib'
 import { createCache, getCacheFilePath } from '../../utils'
 
 export const colorPST = '#51a9c8'
@@ -118,4 +118,18 @@ export function validateUsercode(usercode: string) {
   )
     return true
   else return false
+}
+
+export function calculateMaxPtt(best30Data: BotArcApiUserbest30 & {
+  account_info: BotArcApiUserinfoV5
+  best30_songinfo: BotArcApiSonginfoV5[]
+  best30_overflow_songinfo: BotArcApiSonginfoV5[]
+}) {
+  let best10Total = 0
+  for (let i = 0; i < 10; i++) {
+    if (best30Data.best30_list[i])
+      best10Total += best30Data.best30_list[i].rating ?? 0
+    else break
+  }
+  return ((best10Total + 30 * best30Data.best30_avg) / 40).toFixed(4)
 }
