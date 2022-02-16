@@ -30,9 +30,6 @@ registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
 registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-Regular.ttf'), {
   family: 'Titillium Web Regular',
 })
-registerFont(path.resolve(__dirname, 'assets', 'Ubuntu-M.ttf'), {
-  family: 'Ubuntu Medium',
-})
 
 const clearImages = [
   'clearFail.png',
