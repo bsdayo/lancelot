@@ -244,6 +244,16 @@ export async function generateBestImage(bestData: {
 
   // 得分
   ctx.font = '90px "Titillium Web Regular"'
+  // 理论值？
+  if (
+    bestData.record.shiny_perfect_count === bestData.record.perfect_count &&
+    bestData.record.near_count === 0 &&
+    bestData.record.miss_count === 0
+  ) {
+    ctx.fillStyle = '#7fdfff'
+    ctx.fillText(formatScore(bestData.record.score), 736, 479)
+  }
+  ctx.fillStyle = '#fff'
   ctx.fillText(formatScore(bestData.record.score), 731, 474)
 
   const clearImage = await loadImage(
