@@ -25,8 +25,8 @@ for (let item of files) {
   if (item.startsWith('dl_')) sid = item.substring(3)
   else sid = item
 
-  const filename = `botarcapi-song-${sid}.jpg`
-  const filenameBYD = `botarcapi-song-${sid}-beyond.jpg`
+  const filename = `arcaea-song-${sid}.jpg`
+  const filenameBYD = `arcaea-song-${sid}-beyond.jpg`
 
   fs.copyFileSync(
     path.resolve(songDir, item, 'base.jpg'),

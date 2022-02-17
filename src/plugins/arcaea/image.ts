@@ -182,7 +182,7 @@ export async function generateBest30Image(
   }
   await Promise.all(drawTask)
 
-  const filepath = getTempFilePath('botarcapi-best30', 'jpg')
+  const filepath = getTempFilePath('arcaea-best30', 'jpg')
   await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
 
   return filepath
@@ -215,7 +215,7 @@ export async function generateBestImage(bestData: {
     150
   )
 
-  ctx.font = '79px "Titillium Web SemiBold",sans-serif'
+  ctx.font = 'normal 79px "Titillium Web SemiBold",sans-serif'
   ctx.fillText(bestData.songinfo[0].title_localized.en, 124, 330)
 
   // 立绘
@@ -302,7 +302,7 @@ export async function generateBestImage(bestData: {
     889
   )
 
-  const filepath = getTempFilePath('botarcapi-best', 'png')
+  const filepath = getTempFilePath('arcaea-best', 'png')
   await fs.writeFile(filepath, canvas.toBuffer('image/png'))
 
   return filepath
@@ -351,7 +351,7 @@ export async function generateRecentScoreImage(recentData: {
   }
   await Promise.all(drawTask)
 
-  const filepath = getTempFilePath('botarcapi-recent', 'jpg')
+  const filepath = getTempFilePath('arcaea-recent', 'jpg')
   await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
 
   return filepath

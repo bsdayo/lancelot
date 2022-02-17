@@ -106,7 +106,7 @@ export async function drawScoreCard(
   ctx.fillText(scoreData.rating.toFixed(4), x + 320 + 15, y + 15 + 46)
 
   // 曲名
-  ctx.font = '60px "Titillium Web SemiBold",sans-serif'
+  ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
   ctx.fillStyle = '#333'
   ctx.fillText(songInfo.title_localized.en, x + 320 + 15, y + 15 + 46 + 75, 635)
 

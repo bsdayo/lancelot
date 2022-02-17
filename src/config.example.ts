@@ -13,11 +13,12 @@ export default {
       endpoint: 'ws://127.0.0.1:6700',
     },
 
-    botarcapi: {
+    arcaea: {
       // 如果不使用此功能，可以在 bot.ts 中注释掉相关的 plugin 导入
       baseURL: '<BotArcAPI URL>',
       userAgent: '<自定义User-Agent>',
       timeout: 60000,
+      limitedAPIToken: '<Arcaea Limited API Token>'
     }
   },
 }

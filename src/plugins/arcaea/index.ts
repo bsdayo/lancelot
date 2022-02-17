@@ -26,7 +26,7 @@ declare module 'koishi' {
 }
 
 export default {
-  name: 'botarcapi',
+  name: 'arcaea',
   apply(ctx: Context, config: BotArcApiConfig) {
     // 日志
     const logger = ctx.logger(this.name)

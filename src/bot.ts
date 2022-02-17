@@ -1,7 +1,7 @@
 import { App } from 'koishi'
 import path from 'path'
 import config from './config'
-import botarcapi from './plugins/botarcapi'
+import arcaea from './plugins/arcaea'
 import status from './plugins/status'
 import whitelist from './plugins/whitelist'
 import { initDir } from './utils'
@@ -23,6 +23,6 @@ app
   })
   .plugin(whitelist)
   .plugin(status)
-  .plugin(botarcapi, config.plugins.botarcapi)
+  .plugin(arcaea, config.plugins.arcaea)
   .plugin('echo')
   .start()

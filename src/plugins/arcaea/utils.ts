@@ -14,10 +14,10 @@ export const colorBYDDark = '#962336'
 
 // BotArcAPI配置
 const api = new BotArcApiV5({
-  baseURL: config.plugins.botarcapi.baseURL,
-  timeout: config.plugins.botarcapi.timeout,
+  baseURL: config.plugins.arcaea.baseURL,
+  timeout: config.plugins.arcaea.timeout,
   headers: {
-    'User-Agent': config.plugins.botarcapi.userAgent,
+    'User-Agent': config.plugins.arcaea.userAgent,
   },
 })
 
@@ -43,12 +43,12 @@ export async function getSongCoverPath(
   const filenameBYD = `song-${songid}-beyond.jpg`
 
   const cachePath = getCacheFilePath(
-    'botarcapi',
+    'arcaea',
     beyond ? filenameBYD : filename
   )
   if (!cachePath) {
     const data = await api.assets.song(songid, false, beyond)
-    return await createCache('botarcapi', beyond ? filenameBYD : filename, data)
+    return await createCache('arcaea', beyond ? filenameBYD : filename, data)
   } else return cachePath
 }
 
@@ -61,13 +61,13 @@ export async function getCharPath(
   const filenameAwakened = `char-${charid}-awakened.jpg`
 
   const cachePath = getCacheFilePath(
-    'botarcapi',
+    'arcaea',
     awakened ? filenameAwakened : filename
   )
   if (!cachePath) {
     const data = await api.assets.char(charid, awakened)
     return await createCache(
-      'botarcapi',
+      'arcaea',
       awakened ? filenameAwakened : filename,
       data
     )
