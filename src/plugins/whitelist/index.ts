@@ -4,14 +4,22 @@ import { Context, segment } from 'koishi'
 export default {
   name: 'whitelist',
   apply(ctx: Context) {
+    const logger = ctx.logger(this.name)
+
     ctx.on('guild-request', async (session) => {
       try {
-        await session.bot.handleGuildRequest(session.messageId!, true)
+        await session.bot.handleGuildRequest(session?.messageId!, true)
       } catch {}
+      logger.info(`已接受群 ${session?.channelId!} 的邀请`)
       await session.bot.sendMessage(
         session.channelId!,
         '欢迎使用 lancelot.bot！\n请使用 /help 指令获取帮助。'
       )
+    })
+
+    ctx.on('friend-request', async (session) => {
+      await session.bot.handleFriendRequest(session?.messageId!, true)
+      logger.info(`已接受来自 ${session?.userId!} 的好友申请`)
     })
 
     ctx
