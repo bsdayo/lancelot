@@ -6,6 +6,7 @@ config.ts
 # Temp file
 temp/
 cache/
+test/
 
 # Database
 *.db
