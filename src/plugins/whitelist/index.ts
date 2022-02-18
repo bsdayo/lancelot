@@ -11,10 +11,6 @@ export default {
         await session.bot.handleGuildRequest(session?.messageId!, true)
       } catch {}
       logger.info(`已接受群 ${session?.channelId!} 的邀请`)
-      await session.bot.sendMessage(
-        session.channelId!,
-        '欢迎使用 lancelot.bot！\n请使用 /help 指令获取帮助。'
-      )
     })
 
     ctx.on('friend-request', async (session) => {
