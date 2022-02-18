@@ -21,17 +21,21 @@ export function enableBest(
     .usage('/arc best <曲目名称> [难度，默认FTR]')
     .example('/arc best xanatos')
     .example('/arc best heavensdoor byd')
-    .action(async ({ session }, songname: string, difficulty: string) => {
+    .action(async ({ session }, ...songname: string[]) => {
       if (!songname)
         return segment.quote(session?.messageId!) + '请输入需要查询的曲名'
 
-      let songDifficulty: 0 | 1 | 2 | 3 | 4 // 4: Unknown
-      if (difficulty) {
-        difficulty = difficulty.toString().toLowerCase()
-        songDifficulty = getDifficultyIndex(difficulty)
-        if (songDifficulty === 4)
-          return segment.quote(session?.messageId!) + '请输入正确的难度'
-      } else songDifficulty = 2
+      let haveDifficultyParam = false
+
+      let songDifficulty: 0 | 1 | 2 | 3 | 4 = getDifficultyIndex(
+        songname[songname.length - 1]
+      )
+      if (songDifficulty === 4) songDifficulty = 2
+      else haveDifficultyParam = true
+
+      const songnameStr = haveDifficultyParam
+        ? songname.slice(0, -1).join(' ')
+        : songname.join(' ')
 
       // 查询绑定信息
       const result = await getUserBinding(ctx, session!)
@@ -49,7 +53,7 @@ export function enableBest(
       logger.info(
         `正在查询用户 ${arcObj.name} [${
           arcObj.id
-        }] 的 ${songname}<${getDifficultyClassName(
+        }] 的 ${songnameStr}<${getDifficultyClassName(
           songDifficulty
         )}> 最高成绩...`
       )
@@ -57,7 +61,7 @@ export function enableBest(
         const bestScore = await api.user.best(
           arcObj.id,
           false,
-          songname,
+          songnameStr,
           songDifficulty,
           true
         )
