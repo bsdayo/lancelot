@@ -22,7 +22,7 @@ export function enableBest(
     .example('/arc best xanatos')
     .example('/arc best heavensdoor byd')
     .action(async ({ session }, ...songname: string[]) => {
-      if (!songname)
+      if (songname.length === 0)
         return segment.quote(session?.messageId!) + '请输入需要查询的曲名'
 
       let haveDifficultyParam = false
