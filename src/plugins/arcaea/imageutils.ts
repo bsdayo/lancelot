@@ -124,8 +124,8 @@ export async function drawScoreCard(
       x + 320 + 20,
       y + 15 + 46 + 75 + 105,
       635
-      )
-    }
+    )
+  }
   ctx.fillStyle = '#333'
   ctx.fillText(
     formatScore(scoreData.score),
@@ -139,6 +139,80 @@ export async function drawScoreCard(
   ctx.fillText(
     `Pure / ${scoreData.perfect_count} (${scoreData.shiny_perfect_count})   Far / ${scoreData.near_count}   Lost / ${scoreData.miss_count}`,
     x + 320 + 15,
+    y + 15 + 46 + 75 + 100 + 60,
+    635
+  )
+}
+
+export async function drawSimpleScoreCard(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  scoreData: BotArcApiScore,
+  songInfo: BotArcApiSonginfoV5,
+  rank?: number // 排名
+) {
+  ctx.fillStyle = '#000'
+  // 若传递 rank 参数则绘制排名
+  if (typeof rank === 'number') {
+    ctx.font = '45px "Titillium Web SemiBold"'
+    ctx.fillText('#' + (rank + 1), x + 585, y + 15 + 46)
+  }
+
+  // 难度条
+  const realrating = songInfo.difficulties.find((val) => {
+    return val.ratingClass === scoreData.difficulty
+  })!.realrating // 定数
+  ctx.font = '45px "Titillium Web Regular"'
+  const difficultyText =
+    getDifficultyClassName(scoreData.difficulty) +
+    ' ' +
+    getDifficultyByRating(realrating) +
+    ` [${(realrating / 10).toFixed(1)}]`
+  ctx.fillText(
+    difficultyText,
+    x + 30 + 185 + 15,
+    y + 15 + 46,
+    typeof rank === 'number' ? 339 : 444
+  )
+
+  // 获得 ptt
+  ctx.font = '45px "Titillium Web SemiBold"'
+  ctx.fillText(scoreData.rating.toFixed(4), x + 30 + 15, y + 15 + 46)
+
+  // 曲名
+  ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
+  ctx.fillText(songInfo.title_localized.en, x + 30 + 15, y + 15 + 46 + 75, 635)
+
+  // 得分
+  ctx.font = '97px "Titillium Web Regular"'
+  // 理论值？
+  if (
+    scoreData.shiny_perfect_count === scoreData.perfect_count &&
+    scoreData.near_count === 0 &&
+    scoreData.miss_count === 0
+  ) {
+    ctx.fillStyle = '#ddd'
+    ctx.fillText(
+      formatScore(scoreData.score),
+      x + 30 + 20,
+      y + 15 + 46 + 75 + 105,
+      635
+      )
+    }
+  ctx.fillStyle = '#000'
+  ctx.fillText(
+    formatScore(scoreData.score),
+    x + 30 + 15,
+    y + 15 + 46 + 75 + 100,
+    635
+  )
+
+  // Pure/Far/Lost 信息
+  ctx.font = '40px "Titillium Web Regular"'
+  ctx.fillText(
+    `Pure / ${scoreData.perfect_count} (${scoreData.shiny_perfect_count})   Far / ${scoreData.near_count}   Lost / ${scoreData.miss_count}`,
+    x + 30 + 15,
     y + 15 + 46 + 75 + 100 + 60,
     635
   )
