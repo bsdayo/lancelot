@@ -109,17 +109,6 @@ export function getDifficultyByRating(rating: number) {
   } else return str.split('.')[0]
 }
 
-// 验证好友代码格式
-export function validateUsercode(usercode: string) {
-  if (
-    usercode &&
-    usercode.length === parseInt(usercode).toString().padStart(9, '0').length &&
-    usercode.length === 9
-  )
-    return true
-  else return false
-}
-
 export function calculateMaxPtt(best30Data: BotArcApiUserbest30 & {
   account_info: BotArcApiUserinfoV5
   best30_songinfo: BotArcApiSonginfoV5[]
