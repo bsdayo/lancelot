@@ -17,7 +17,6 @@ export function enableRecommend(
     .shortcut('推荐曲目')
     .usage('根据玩家PTT推荐曲目，范围为ptt-1.75至ptt-0.50(向下取整)')
     .example('推荐曲目')
-    .example('今日arc')
     .action(async ({ session }) => {
       const result = await getUserBinding(ctx, session!)
       if (result.length === 0)
