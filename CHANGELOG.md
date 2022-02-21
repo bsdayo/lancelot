@@ -1,5 +1,15 @@
 # 更新日志 / Changelog
 
+## 1.2.0 - 2022.2.21
+### plugin/arcaea
+- 新增了 /arc random 指令
+- 新增了 /arc recommend 指令
+- 新增了 /arc b30 simple 指令，提供极简式界面
+- 移除了 /arc connect 指令，因为解锁风暴不再需要
+- 现在支持在 /arc best 指令的曲名中输入空格
+- 优化了部分指令回复
+
+
 ## 1.1.0 - 2022.2.16
 ### plugin/botarcapi
 - 在 B30 图中添加理论最高ptt显示

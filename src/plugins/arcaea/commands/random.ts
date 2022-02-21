@@ -28,6 +28,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
     .example('/arc random')
     .example('/arc random 11')
     .example('随机曲目 9+ 10+')
+    .example('随机选曲 10.3 10.6')
     .action(async ({ session }, start?: string, end?: string) => {
       if (start) {
         start = start.replace('+', 'p')
