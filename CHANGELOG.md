@@ -9,6 +9,15 @@
 - 现在支持在 /arc best 指令的曲名中输入空格
 - 优化了部分指令回复
 
+> 注：新增指令的帮助可用 `/help arc.指令名` 查看，如 `/help arc.random`
+
+### plugin/botarcapi
+- 更名为 `plugin/arcaea`
+
+### plugin/whitelist
+- 添加自动接受好友申请
+- 移除入群欢迎消息
+
 
 ## 1.1.0 - 2022.2.16
 ### plugin/botarcapi
