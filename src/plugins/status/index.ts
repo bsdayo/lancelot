@@ -1,5 +1,5 @@
 import { Context, segment } from 'koishi'
-import packageJson from '../../../package.json'
+import { VERSION } from '../../bot'
 import os from 'os'
 
 export default {
@@ -29,7 +29,7 @@ export default {
 
         return (
           segment.quote(session?.messageId!) +
-          `lancelot.bot ver.${packageJson.version}\n` +
+          `lancelot.bot ver.${VERSION}\n` +
           'Powered by Koishi.js v4\n\n' +
           //
           `运行时间：${uptimeStr}\n` +

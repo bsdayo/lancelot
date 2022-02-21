@@ -6,8 +6,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "ts-node ./src/bot.ts",
+    "dev": "ts-node ./src/bot.ts",
     "build": "tsc",
+    "prod": "tsc && node ./dist/bot.js",
     "tools:arcsongassets": "ts-node ./src/tools/arcsongassets.ts"
   },
   "dependencies": {

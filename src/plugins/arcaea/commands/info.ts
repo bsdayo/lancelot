@@ -13,8 +13,14 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
     .action(async ({ session }, songname: string) => {
       try {
         const songinfo = await api.song.info(songname, true)
+
         let str = songinfo.title_localized.en
+        if (songinfo.set_friendly) {
+          str += `\n(${songinfo.set_friendly})`
+        }
+
         let isHaveBeyond = false
+
         for (let diff of songinfo.difficulties) {
           let diffClass = ['Past', 'Present', 'Future', 'Beyond'][
             diff.ratingClass
@@ -25,6 +31,7 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
             diff.realrating
           )} [${rating}]`
         }
+
         return (
           segment.quote(session?.messageId!) +
           segment.image(

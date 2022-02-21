@@ -25,6 +25,13 @@ declare module 'koishi' {
   }
 }
 
+// 修复
+declare module 'botarcapi_lib' {
+  interface BotArcApiSonginfoV5 {
+    set_friendly: string
+  }
+}
+
 export default {
   name: 'arcaea',
   apply(ctx: Context, config: BotArcApiConfig) {
@@ -93,8 +100,10 @@ export default {
               subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
             }`
           )
-        } else if (subcmd === 'connect') {
-          session?.execute('arc.connect')
+        } else if (subcmd === 'random') {
+          session?.execute(`arc.random ${
+            subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
+          }`)
         } else if (subcmd === 'alias') {
           session?.execute(
             `arc.alias ${
@@ -117,5 +126,6 @@ export default {
     commands.enableInfo(rootCmd, api)
     commands.enableConnect(rootCmd, api)
     commands.enableAlias(rootCmd, api)
+    commands.enableRandom(rootCmd, api)
   },
 }

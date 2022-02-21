@@ -14,7 +14,7 @@ import {
   BotArcApiScore,
   formatScore,
 } from 'botarcapi_lib'
-import { getTempFilePath, getDateTime } from '../../utils'
+import { getTempFilePath, getDateTime, getAssetFilePath } from '../../utils'
 import {
   calculateMaxPtt,
   formatPtt,
@@ -25,10 +25,10 @@ import {
   getSongCoverPath,
 } from './utils'
 
-registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-SemiBold.ttf'), {
+registerFont(getAssetFilePath('arcaea', 'TitilliumWeb-SemiBold.ttf'), {
   family: 'Titillium Web SemiBold',
 })
-registerFont(path.resolve(__dirname, 'assets', 'TitilliumWeb-Regular.ttf'), {
+registerFont(getAssetFilePath('arcaea', 'TitilliumWeb-Regular.ttf'), {
   family: 'Titillium Web Regular',
 })
 
@@ -50,7 +50,7 @@ export async function generateBest30Image(
 ) {
   // 背景图
   const backgroundImage = await loadImage(
-    path.resolve(__dirname, 'assets/best30Background.jpg')
+    getAssetFilePath('arcaea', 'best30Background.jpg')
   )
   const canvas = createCanvas(backgroundImage.width, backgroundImage.height)
   const ctx = canvas.getContext('2d')
@@ -345,7 +345,7 @@ export async function generateBestImage(bestData: {
 }) {
   // 背景图
   const backgroundImage = await loadImage(
-    path.resolve(__dirname, 'assets/bestBackground.jpg')
+    getAssetFilePath('arcaea', 'bestBackground.jpg')
   )
   const canvas = createCanvas(backgroundImage.width, backgroundImage.height)
   const ctx = canvas.getContext('2d')
@@ -404,7 +404,7 @@ export async function generateBestImage(bestData: {
   ctx.fillText(formatScore(bestData.record.score), 731, 474)
 
   const clearImage = await loadImage(
-    path.resolve(__dirname, 'assets', clearImages[bestData.record.clear_type])
+    getAssetFilePath('arcaea', clearImages[bestData.record.clear_type])
   )
   if (clearImage.height > 77) {
     // FR/PM
@@ -475,7 +475,7 @@ export async function generateRecentScoreImage(recentData: {
 
   // 背景图
   const backgroundImage = await loadImage(
-    path.resolve(__dirname, 'assets/recentBackground.jpg')
+    getAssetFilePath('arcaea', 'recentBackground.jpg')
   )
   const height = 300 + num * 460 + 80
   const canvas = createCanvas(backgroundImage.width, height)

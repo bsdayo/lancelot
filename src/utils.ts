@@ -6,7 +6,11 @@ import { Logger } from 'koishi'
 const logger = new Logger('utils')
 
 export function getTempFilePath(namespace: string, ext: string) {
-  return path.resolve(__dirname, '..', 'temp', `${namespace}-${Date.now()}.${ext}`)
+  return path.resolve(
+    __dirname,
+    '../temp',
+    `${namespace}-${Date.now()}.${ext}`
+  )
 }
 
 export function initDir(name: string) {
@@ -19,8 +23,7 @@ export function initDir(name: string) {
 export function getCacheFilePath(namespace: string, filename: string) {
   const filepath = path.resolve(
     __dirname,
-    '..',
-    'cache',
+    '../cache',
     `${namespace}-${filename}`
   )
   if (!fsSync.existsSync(filepath)) {
@@ -28,6 +31,10 @@ export function getCacheFilePath(namespace: string, filename: string) {
   } else {
     return filepath
   }
+}
+
+export function getAssetFilePath(namespace: string, filename: string) {
+  return path.resolve(__dirname, '../assets', namespace, filename)
 }
 
 export async function createCache(

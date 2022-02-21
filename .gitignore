@@ -8,6 +8,9 @@ temp/
 cache/
 test/
 
+# Dist
+dist/
+
 # Database
 *.db
 
