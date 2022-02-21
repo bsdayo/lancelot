@@ -21,7 +21,7 @@ const difficultyRange = [
 
 export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
   rootCmd
-    .subcommand('.random [start:string] [end:string]')
+    .subcommand('.random [start:string] [end:string]', '随机曲目')
     .shortcut('随机曲目', { fuzzy: true })
     .shortcut('随机选曲', { fuzzy: true })
     .usage('/arc random [起始难度] [最高难度]')
@@ -29,18 +29,21 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
     .example('/arc random 11')
     .example('随机曲目 9+ 10+')
     .action(async ({ session }, start?: string, end?: string) => {
-      console.log(`${start} ${end}`)
       if (start) {
         start = start.replace('+', 'p')
-        console.log('start: ' + start)
-        if (!difficultyRange.includes(start))
-          return segment.quote(session?.messageId!) + '请输入正确的起始难度'
+        if (!difficultyRange.includes(start)) {
+          if (parseFloat(start) >= 11 || parseFloat(start) <= 1)
+            return segment.quote(session?.messageId!) + '请输入正确的起始难度'
+          else start = parseFloat(start).toFixed(1)
+        }
       }
       if (end) {
         end = end.replace('+', 'p')
-        console.log('end: ' + end)
-        if (!difficultyRange.includes(end))
-          return segment.quote(session?.messageId!) + '请输入正确的最高难度'
+        if (!difficultyRange.includes(end)) {
+          if (parseFloat(end) >= 11 || parseFloat(end) <= 1)
+            return segment.quote(session?.messageId!) + '请输入正确的最高难度'
+          else end = parseFloat(end).toFixed(1)
+        }
       }
 
       try {
@@ -67,8 +70,12 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
 
         return (
           segment.quote(session?.messageId!) +
-          '随机推荐曲目：\n' + 
-          segment.image(await fs.readFile(await getSongCoverPath(random.id, random.ratingClass === 3))) +
+          '随机推荐曲目：\n' +
+          segment.image(
+            await fs.readFile(
+              await getSongCoverPath(random.id, random.ratingClass === 3)
+            )
+          ) +
           str
         )
       } catch (err) {

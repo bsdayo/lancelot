@@ -110,6 +110,8 @@ export default {
               subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
             }`
           )
+        } else if (subcmd === 'recommend') {
+          session?.execute('arc.recommend')
         } else {
           return (
             segment.quote(session?.messageId!) +
@@ -127,5 +129,6 @@ export default {
     commands.enableConnect(rootCmd, api)
     commands.enableAlias(rootCmd, api)
     commands.enableRandom(rootCmd, api)
+    commands.enableRecommend(rootCmd, ctx, api)
   },
 }
