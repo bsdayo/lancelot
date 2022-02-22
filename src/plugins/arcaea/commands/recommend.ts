@@ -30,10 +30,11 @@ export function enableRecommend(
         let userRating = userinfo.account_info.rating
 
         if (userRating >= 1205) {
-          if (userRating >= 1245) {
-            userRating = 1245
+          if (userRating >= 1225) {
+            userRating = 1225
           } else userRating = 1205
         }
+
         let low: number | string = userRating - 175
         let high: number | string = userRating - 50
 
