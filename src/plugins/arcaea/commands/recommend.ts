@@ -27,13 +27,20 @@ export function enableRecommend(
 
       try {
         const userinfo = await api.user.info(result[0].arcid, false)
-        let low: number | string = userinfo.account_info.rating - 175
-        let high: number | string = userinfo.account_info.rating - 50
+        let userRating = userinfo.account_info.rating
+
+        if (userRating >= 1205) {
+          if (userRating >= 1245) {
+            userRating = 1245
+          } else userRating = 1205
+        }
+        let low: number | string = userRating - 175
+        let high: number | string = userRating - 50
 
         if (low < 100) low = '1'
         else if (low > 1100) low = '11'
         else low = (low / 100).toFixed(1)
-        
+
         if (high < 100) high = '1'
         else if (high > 1100) high = '11'
         else high = (high / 100).toFixed(1)
