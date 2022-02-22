@@ -28,21 +28,16 @@ export function enableRecommend(
       try {
         const userinfo = await api.user.info(result[0].arcid, false)
         let userRating = userinfo.account_info.rating
-
-        console.log(userRating)
         
         if (userRating >= 1205) {
           if (userRating >= 1225) {
             userRating = 1225
           } else userRating = 1205
         }
-        console.log(userRating)
         
         let low: number | string = userRating - 175
         let high: number | string = userRating - 50
 
-        console.log(low, high)
-        
         if (low < 100) low = '1'
         else if (low > 1100) low = '11'
         else low = (low / 100).toFixed(1)
@@ -50,9 +45,7 @@ export function enableRecommend(
         if (high < 100) high = '1'
         else if (high > 1100) high = '11'
         else high = (high / 100).toFixed(1)
-        
-        console.log(low, high)
-        
+
         const random = await api.song.random(
           low as BotArcApiDifficultyRange,
           high as BotArcApiDifficultyRange,
