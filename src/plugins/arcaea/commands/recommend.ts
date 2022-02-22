@@ -29,12 +29,14 @@ export function enableRecommend(
         const userinfo = await api.user.info(result[0].arcid, false)
         let userRating = userinfo.account_info.rating
         
+        // 调整下限，12.05-12.25 -> 12.05, 12.25+ -> 12.25
         if (userRating >= 1205) {
           if (userRating >= 1225) {
             userRating = 1225
           } else userRating = 1205
         }
         
+        // 范围：ptt - 1.75 至 ptt - 0.50
         let low: number | string = userRating - 175
         let high: number | string = userRating - 50
 

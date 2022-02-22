@@ -26,6 +26,7 @@ export function enableBest30(
       // 判断 simple
       if (usercode.length !== 0) {
         if (usercode.length === 1) {
+          // 只带一个参数
           if (usercode[0].toLowerCase() === 'simple') {
             simpleFlag = true
             readBindingFlag = true
@@ -33,7 +34,9 @@ export function enableBest30(
             usercodeStr = usercode[0].padStart(9, '0')
             readBindingFlag = false
           }
+
         } else if (usercode.length > 1) {
+          // 带两个以上参数
           readBindingFlag = false
           if (usercode[0].toLowerCase() === 'simple') {
             simpleFlag = true
