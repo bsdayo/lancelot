@@ -69,7 +69,7 @@ export default {
     const rootCmd = ctx
       .command('arc [subcmd] [...subcmdargs]', 'Arcaea相关功能')
       .alias('arcaea', 'a')
-      .before(async ({ session }, subcmd?: string) => {
+      .before(({ session }, subcmd?: string) => {
         if (!subcmd) return session?.execute('arc.recent')
       })
 
