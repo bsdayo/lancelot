@@ -7,14 +7,14 @@
 
 > 常见问题
 > 
-> Q: ArcaeaLimitedAPI（以下简称ALA） 与 ArcaeaUnlimitedAPI（以下简称AUA） 有什么区别？
+> Q: ArcaeaLimitedAPI（以下简称ALA） 与 ArcaeaUnlimitedAPI（以下简称AUA） 有什么区别？  
 > A: ALA 为官方提供的 API，需要自行写邮件向616申请，并且存在限额、数据少的问题，但优点在于稳定、版本更新期间也能正常使用，还可以查询 shadowbanned 用户（排行榜封禁）；
 > AUA 为面向 Bot 开发者提供的一套全量的 API，数据、功能丰富，几年来一直为各大 arcbot 提供上游服务，但由于非官方的性质，经常受到616的打压（如封掉查分器IP）。
 >
-> Q: ALA 的具体限额是多少？
+> Q: ALA 的具体限额是多少？  
 > A: 每24h限制查询100名用户，但每名用户可以多次查询；120次请求/min，2000次请求/24h。
 >
-> Q: 我应该在什么时候使用 ALA？
+> Q: 我应该在什么时候使用 ALA？  
 > A: Bot 默认使用 AUA 查分（如 `/arc b30`），如果要使用 ALA 查分必须带上 `--official` 选项。ALA 不返回 Recent10 均值、Overflow 数据。如果遇到 AUA 不稳定的情况（如频繁报错524），或版本更新期间，可以使用 ALA。
 
 ## 1.2.0 - 2022.2.21
