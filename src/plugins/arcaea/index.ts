@@ -69,66 +69,10 @@ export default {
     const rootCmd = ctx
       .command('arc [subcmd] [...subcmdargs]', 'Arcaea相关功能')
       .alias('arcaea', 'a')
-      // .action(async ({ session }, subcmd: string, ...subcmdargs: string[]) => {
-      //   if (!subcmd) {
-      //     session?.execute(
-      //       `arc.recent ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : '1'
-      //       }`
-      //     )
-      //   } else if (subcmd === 'bind') {
-      //     session?.execute(
-      //       `arc.bind ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
-      //       }`
-      //     )
-      //   } else if (subcmd === 'unbind') {
-      //     session?.execute('arc.unbind')
-      //   } else if (subcmd === 'b30' || subcmd === 'best30') {
-      //     session?.execute(
-      //       `arc.b30 ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
-      //       }`
-      //     )
-      //   } else if (subcmd === 'best') {
-      //     session?.execute(
-      //       `arc.best ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
-      //       }`
-      //     )
-      //   } else if (subcmd === 'recent') {
-      //     session?.execute(
-      //       `arc.recent ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : '1'
-      //       }`
-      //     )
-      //   } else if (subcmd === 'info' || subcmd === 'rating') {
-      //     session?.execute(
-      //       `arc.info ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
-      //       }`
-      //     )
-      //   } else if (subcmd === 'random') {
-      //     session?.execute(
-      //       `arc.random ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
-      //       }`
-      //     )
-      //   } else if (subcmd === 'alias') {
-      //     session?.execute(
-      //       `arc.alias ${
-      //         subcmdargs && subcmdargs.length >= 1 ? subcmdargs.join(' ') : ''
-      //       }`
-      //     )
-      //   } else if (subcmd === 'recommend') {
-      //     session?.execute('arc.recommend')
-      //   } else {
-      //     return (
-      //       segment.quote(session?.messageId!) +
-      //       `未知子指令: ${subcmd}\n请使用 /help arc 查看使用说明`
-      //     )
-      //   }
-      // })
+      .before(async ({ session }, subcmd?: string) => {
+        if (!subcmd) return session?.execute('arc.recent')
+      })
+
 
     commands.enableBind(rootCmd, ctx, logger, api)
     commands.enableUnbind(rootCmd, ctx, logger)
