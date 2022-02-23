@@ -84,11 +84,9 @@ export function enableBest30(
         } [${arcObj.id}] 的 Best30 成绩`
       )
       await session?.send(
-        `正在${options?.official ? '使用官方提供的 LimitedAPI ' : ''}查询用户${
+        `正在${options?.official ? '使用官方 LimitedAPI ' : ''}查询用户${
           arcObj.name ? ' ' + arcObj.name + ' ' : ''
-        }的 Best30 成绩${
-          options?.official ? '，由于每日请求数量限制，请尽量节约使用。' : '...'
-        }`
+        }的 Best30 成绩...`
       )
       try {
         let best30Data: BotArcApiUserbest30 & {
