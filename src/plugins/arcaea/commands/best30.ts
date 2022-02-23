@@ -1,53 +1,69 @@
 import { Command, Context, Logger, segment } from 'koishi'
 import { generateBest30Image, generateSimpleBest30Image } from '../image'
-import { getUserBinding } from '../utils'
+import {
+  convertALAScoreToBAA,
+  convertALAUserInfoToBAA,
+  getSongInfoFromDatabase,
+  getUserBinding,
+} from '../utils'
 import fs from 'fs/promises'
-import { BotArcApiV5 } from 'botarcapi_lib'
+import {
+  BotArcApiScore,
+  BotArcApiSonginfoV5,
+  BotArcApiUserbest30,
+  BotArcApiUserinfoV5,
+  BotArcApiV5,
+} from 'botarcapi_lib'
+import ArcaeaLimitedAPI from '../limitedapi'
 
 export function enableBest30(
   rootCmd: Command,
   ctx: Context,
   logger: Logger,
-  api: BotArcApiV5
+  api: BotArcApiV5,
+  officialApi: ArcaeaLimitedAPI
 ) {
   // Best30查询
   rootCmd
     .subcommand('.b30 [usercode:string]', '查询用户Best30成绩')
+    .option('simple', '-s')
+    .option('official', '-o')
     .shortcut('查b30', { fuzzy: true })
     .alias('b30')
     .usage('/arc b30 [要查询的ArcaeaID]')
     .example('/arc b30 114514191')
     .example('查b30 191981011')
-    .action(async ({ session }, ...usercode: string[]) => {
-      let simpleFlag = false
-      let readBindingFlag = false
-      let usercodeStr: string | undefined = undefined
+    .action(async ({ session, options }, usercode: string) => {
+      if (usercode) usercode = usercode.toString().padStart(9, '0')
+      // let simpleFlag = false
+      // let readBindingFlag = false
+      // let usercodeStr: string | undefined = undefined
 
-      // 判断 simple
-      if (usercode.length !== 0) {
-        if (usercode.length === 1) {
-          // 只带一个参数
-          if (usercode[0].toLowerCase() === 'simple') {
-            simpleFlag = true
-            readBindingFlag = true
-          } else {
-            usercodeStr = usercode[0].padStart(9, '0')
-            readBindingFlag = false
-          }
+      // // 判断 simple
+      // if (usercode.length !== 0) {
+      //   if (usercode.length === 1) {
+      //     // 只带一个参数
+      //     if (usercode[0].toLowerCase() === 'simple') {
+      //       simpleFlag = true
+      //       readBindingFlag = true
+      //     } else {
+      //       usercodeStr = usercode[0].padStart(9, '0')
+      //       readBindingFlag = false
+      //     }
 
-        } else if (usercode.length > 1) {
-          // 带两个以上参数
-          readBindingFlag = false
-          if (usercode[0].toLowerCase() === 'simple') {
-            simpleFlag = true
-            usercodeStr = usercode[1].padStart(9, '0')
-          } else usercodeStr = usercode[0].padStart(9, '0')
-        }
-      } else {
-        readBindingFlag = true
-      }
+      //   } else if (usercode.length > 1) {
+      //     // 带两个以上参数
+      //     readBindingFlag = false
+      //     if (usercode[0].toLowerCase() === 'simple') {
+      //       simpleFlag = true
+      //       usercodeStr = usercode[1].padStart(9, '0')
+      //     } else usercodeStr = usercode[0].padStart(9, '0')
+      //   }
+      // } else {
+      //   readBindingFlag = true
+      // }
 
-      const arcObj = { id: usercodeStr, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖
+      const arcObj = { id: usercode, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖
 
       if (!arcObj.id) {
         // 若没有输入 usercode 参数
@@ -63,26 +79,61 @@ export function enableBest30(
           )
       }
       logger.info(
-        `正在查询用户${arcObj.name ? ' ' + arcObj.name : ''} [${
-          arcObj.id
-        }] 的 Best30 成绩...`
+        `正在${options?.official ? '使用 LimitedAPI ' : ''}查询用户${
+          arcObj.name ? ' ' + arcObj.name : ''
+        } [${arcObj.id}] 的 Best30 成绩`
       )
       await session?.send(
-        `正在查询用户${
+        `正在${options?.official ? '使用官方提供的 LimitedAPI ' : ''}查询用户${
           arcObj.name ? ' ' + arcObj.name + ' ' : ''
-        }的 Best30 成绩...`
+        }的 Best30 成绩${
+          options?.official ? '，由于每日请求数量限制，请尽量节约使用。' : '...'
+        }`
       )
       try {
-        const best30 = await api.user.best30(arcObj.id, false, true, 9)
+        let best30Data: BotArcApiUserbest30 & {
+          account_info: BotArcApiUserinfoV5
+          best30_songinfo: BotArcApiSonginfoV5[]
+          best30_overflow_songinfo: BotArcApiSonginfoV5[]
+        }
+
+        if (options?.official) {
+          const best30 = await officialApi.best30(arcObj.id)
+          const best30UserInfo = convertALAUserInfoToBAA(
+            await officialApi.userinfo(arcObj.id)
+          )
+          let best30Score: BotArcApiScore[] = []
+          let best30SongInfo: BotArcApiSonginfoV5[] = []
+          let best30Ptt = 0
+          for (let score of best30) {
+            best30Score.push(convertALAScoreToBAA(score))
+            best30SongInfo.push(getSongInfoFromDatabase(score.song_id))
+            best30Ptt += score.potential_value
+          }
+          const best30Avg = best30Ptt / 30
+
+          best30Data = {
+            best30_avg: best30Avg,
+            recent10_avg: 0,
+            best30_list: best30Score,
+            best30_overflow: [],
+            best30_songinfo: best30SongInfo,
+            account_info: best30UserInfo,
+            best30_overflow_songinfo: [],
+          }
+        } else {
+          best30Data = await api.user.best30(arcObj.id, false, true, 9)
+        }
+
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 成绩查询成功`
         )
         logger.info(
           `正在为用户 ${arcObj.name} [${arcObj.id}] 生成 Best30 图片...`
         )
-        const imgPath = simpleFlag
-          ? await generateSimpleBest30Image(best30)
-          : await generateBest30Image(best30)
+        const imgPath = options?.simple
+          ? await generateSimpleBest30Image(best30Data)
+          : await generateBest30Image(best30Data, options?.official)
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`
         )

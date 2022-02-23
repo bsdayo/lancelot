@@ -46,7 +46,8 @@ export async function generateBest30Image(
     account_info: BotArcApiUserinfoV5
     best30_songinfo: BotArcApiSonginfoV5[]
     best30_overflow_songinfo: BotArcApiSonginfoV5[]
-  }
+  },
+  official?: boolean
 ) {
   // 背景图
   const backgroundImage = await loadImage(
@@ -182,6 +183,13 @@ export async function generateBest30Image(
     }
   }
   await Promise.all(drawTask)
+
+  // Official Overflow
+  if (official) {
+    ctx.font = '128px "Titillium Web SemiBold"'
+    ctx.fillStyle = '#fff'
+    ctx.fillText('The Limited API does not provide overflow data.', 415, 5750)
+  }
 
   const filepath = getTempFilePath('arcaea-best30', 'jpg')
   await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
