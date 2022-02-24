@@ -35,34 +35,8 @@ export function enableBest30(
     .example('查b30 191981011')
     .action(async ({ session, options }, usercode: string) => {
       if (usercode) usercode = usercode.toString().padStart(9, '0')
-      // let simpleFlag = false
-      // let readBindingFlag = false
-      // let usercodeStr: string | undefined = undefined
 
-      // // 判断 simple
-      // if (usercode.length !== 0) {
-      //   if (usercode.length === 1) {
-      //     // 只带一个参数
-      //     if (usercode[0].toLowerCase() === 'simple') {
-      //       simpleFlag = true
-      //       readBindingFlag = true
-      //     } else {
-      //       usercodeStr = usercode[0].padStart(9, '0')
-      //       readBindingFlag = false
-      //     }
-
-      //   } else if (usercode.length > 1) {
-      //     // 带两个以上参数
-      //     readBindingFlag = false
-      //     if (usercode[0].toLowerCase() === 'simple') {
-      //       simpleFlag = true
-      //       usercodeStr = usercode[1].padStart(9, '0')
-      //     } else usercodeStr = usercode[0].padStart(9, '0')
-      //   }
-      // } else {
-      //   readBindingFlag = true
-      // }
-
+      console.log(JSON.stringify(options))
       const arcObj = { id: usercode, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖
 
       if (!arcObj.id) {
@@ -109,10 +83,12 @@ export function enableBest30(
             best30Ptt += score.potential_value
           }
           const best30Avg = best30Ptt / 30
+          const recent10Avg =
+            ((best30UserInfo.rating / 100) * 40 - best30Ptt) / 10
 
           best30Data = {
             best30_avg: best30Avg,
-            recent10_avg: 0,
+            recent10_avg: recent10Avg,
             best30_list: best30Score,
             best30_overflow: [],
             best30_songinfo: best30SongInfo,

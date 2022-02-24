@@ -16,7 +16,7 @@ export function enableBind(
     .action(async ({ session }, usercode: string) => {
       if (!usercode)
         return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
-      usercode = usercode.padStart(9, '0')
+      usercode = usercode.toString().padStart(9, '0')
 
       // 查询数据库中是否已有绑定信息
       const result = await getUserBinding(ctx, session!)
