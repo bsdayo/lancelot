@@ -21,7 +21,7 @@ export interface ArcaeaLimitedAPIScore {
 
 export interface ArcaeaLimitedAPIUserInfo {
   display_name: string
-  potential: number
+  potential: number | null
   partner: {
     partner_id: number
     is_awakened: boolean

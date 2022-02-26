@@ -229,11 +229,19 @@ export function convertALAUserInfoToBAA(alaUserInfo: ArcaeaLimitedAPIUserInfo) {
     name: alaUserInfo.display_name,
     character: alaUserInfo.partner.partner_id,
     join_date: -1,
-    rating: alaUserInfo.potential,
+    rating: alaUserInfo.potential ?? -1,
     is_skill_sealed: false,
     is_char_uncapped: alaUserInfo.partner.is_awakened,
     is_char_uncapped_override: false,
     is_mutual: false,
   }
   return baaUserInfo
+}
+
+export function validateUsercode(usercode: string) {
+  if (usercode.length !== 9) return false
+  for (let i = 0; i < 9; i++) {
+    if (Number.isNaN(parseInt(usercode.charAt(i)))) return false
+  }
+  return true
 }

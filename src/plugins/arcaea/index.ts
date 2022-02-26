@@ -74,7 +74,7 @@ export default {
       })
 
 
-    commands.enableBind(rootCmd, ctx, logger, api)
+    commands.enableBind(rootCmd, ctx, logger, api, officialApi)
     commands.enableUnbind(rootCmd, ctx, logger)
     commands.enableBest30(rootCmd, ctx, logger, api, officialApi)
     commands.enableBest(rootCmd, ctx, logger, api)

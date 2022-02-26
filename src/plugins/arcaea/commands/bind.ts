@@ -1,12 +1,19 @@
-import { BotArcApiV5 } from 'botarcapi_lib'
+import { BotArcApiUserinfoV5, BotArcApiV5 } from 'botarcapi_lib'
 import { Command, Context, Logger, segment } from 'koishi'
-import { formatPtt, getUserBinding } from '../utils'
+import ArcaeaLimitedAPI from '../limitedapi'
+import {
+  convertALAUserInfoToBAA,
+  formatPtt,
+  getUserBinding,
+  validateUsercode,
+} from '../utils'
 
 export function enableBind(
   rootCmd: Command,
   ctx: Context,
   logger: Logger,
-  api: BotArcApiV5
+  api: BotArcApiV5,
+  officialApi: ArcaeaLimitedAPI
 ) {
   // 绑定ArcaeaID
   rootCmd
@@ -18,18 +25,46 @@ export function enableBind(
         return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
       usercode = usercode.toString().padStart(9, '0')
 
-      // 查询数据库中是否已有绑定信息
-      const result = await getUserBinding(ctx, session!)
-      if (result.length !== 0) {
+      if (usercode === '000000001')
         return (
-          segment.quote(session?.messageId!) + '数据库中已存在您的绑定信息！'
+          segment.quote(session?.messageId!) +
+          '绑定该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
         )
-      } else {
-        logger.info(
-          `为用户 ${session?.platform}:${session?.userId} 绑定 ArcaeaID ${usercode}`
+      if (usercode === '000000002')
+        return (
+          segment.quote(session?.messageId!) +
+          '绑定该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
         )
-        try {
-          const accountInfo = (await api.user.info(usercode)).account_info
+
+      if (validateUsercode(usercode)) {
+        // 查询数据库中是否已有绑定信息
+        const result = await getUserBinding(ctx, session!)
+        if (result.length !== 0) {
+          return (
+            segment.quote(session?.messageId!) + '数据库中已存在您的绑定信息！'
+          )
+        } else {
+          let accountInfo: BotArcApiUserinfoV5
+
+          try {
+            accountInfo = (await api.user.info(usercode)).account_info
+          } catch (err1) {
+            try {
+              accountInfo = convertALAUserInfoToBAA(
+                await officialApi.userinfo(usercode)
+              )
+            } catch (err2) {
+              return (
+                segment.quote(session?.messageId!) +
+                `未知错误：\n(1) ${err1}\n(2) ${err2}`
+              )
+            }
+          }
+
+          logger.info(
+            `为用户 ${session?.platform}:${session?.userId} 绑定 ArcaeaID ${usercode}`
+          )
+
           const rating =
             accountInfo.rating < 0 ? '?' : formatPtt(accountInfo.rating)
           await ctx.database.create('arcaeaid', {
@@ -42,13 +77,12 @@ export function enableBind(
             segment.quote(session?.messageId!) +
             `已为您绑定 Arcaea 账号 ${accountInfo.name} (${rating})`
           )
-
-        } catch {
-          return (
-            segment.quote(session?.messageId!) +
-            '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'
-          )
         }
+      } else {
+        return (
+          segment.quote(session?.messageId!) +
+          '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'
+        )
       }
     })
 }

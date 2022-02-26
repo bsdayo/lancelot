@@ -51,7 +51,7 @@ export function enableBest(
         )
 
       logger.info(
-        `正在查询用户 ${arcObj.name} [${
+        `正在查询 ${arcObj.name} [${
           arcObj.id
         }] 的 ${songnameStr}<${getDifficultyClassName(
           songDifficulty

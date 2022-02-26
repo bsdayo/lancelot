@@ -5,6 +5,7 @@ import {
   convertALAUserInfoToBAA,
   getSongInfoFromDatabase,
   getUserBinding,
+  validateUsercode,
 } from '../utils'
 import fs from 'fs/promises'
 import {
@@ -34,7 +35,18 @@ export function enableBest30(
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session, options }, usercode: string) => {
-      if (usercode) usercode = usercode.toString().padStart(9, '0')
+      if (usercode && validateUsercode(usercode)) usercode = usercode.toString().padStart(9, '0')
+
+      if (usercode === '000000001')
+        return (
+          segment.quote(session?.messageId!) +
+          '查询该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
+        )
+      if (usercode === '000000002')
+        return (
+          segment.quote(session?.messageId!) +
+          '查询该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
+        )
 
       console.log(JSON.stringify(options))
       const arcObj = { id: usercode, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖
@@ -53,12 +65,12 @@ export function enableBest30(
           )
       }
       logger.info(
-        `正在${options?.official ? '使用 LimitedAPI ' : ''}查询用户${
+        `正在${options?.official ? '使用 LimitedAPI ' : ''}查询${
           arcObj.name ? ' ' + arcObj.name : ''
         } [${arcObj.id}] 的 Best30 成绩`
       )
       await session?.send(
-        `正在${options?.official ? '使用官方 LimitedAPI ' : ''}查询用户${
+        `正在${options?.official ? '使用官方 LimitedAPI ' : ''}查询${
           arcObj.name ? ' ' + arcObj.name + ' ' : ''
         }的 Best30 成绩...`
       )
