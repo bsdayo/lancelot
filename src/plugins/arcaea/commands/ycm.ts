@@ -52,6 +52,9 @@ export function enableYCM(rootCmd: Command, ycmApi: YCMAPI) {
             }
           }
         } catch (e) {
+          if ((e as Error).toString() === 'invalid room_id') {
+            return segment.quote(session?.messageId!) + `房间号格式错误！`
+          }
           return segment.quote(session?.messageId!) + `${e}`
         }
       }
