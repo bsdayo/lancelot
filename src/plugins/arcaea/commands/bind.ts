@@ -25,12 +25,12 @@ export function enableBind(
         return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
       usercode = usercode.toString().padStart(9, '0')
 
-      if (usercode === '000000001')
+      if (parseInt(usercode) === 1)
         return (
           segment.quote(session?.messageId!) +
           '绑定该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
         )
-      if (usercode === '000000002')
+      else if (parseInt(usercode) === 2)
         return (
           segment.quote(session?.messageId!) +
           '绑定该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
@@ -41,7 +41,7 @@ export function enableBind(
         const result = await getUserBinding(ctx, session!)
         if (result.length !== 0) {
           return (
-            segment.quote(session?.messageId!) + '数据库中已存在您的绑定信息！'
+            segment.quote(session?.messageId!) + '数据库中已存在您的绑定信息！\n（可使用 /arc unbind 解绑）'
           )
         } else {
           let accountInfo: BotArcApiUserinfoV5

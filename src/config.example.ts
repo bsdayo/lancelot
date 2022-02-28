@@ -18,7 +18,8 @@ export default {
       baseURL: '<BotArcAPI URL>',
       userAgent: '<自定义User-Agent>',
       timeout: 60000,
-      limitedAPIToken: '<Arcaea Limited API Token>'
+      limitedAPIToken: '<Arcaea Limited API Token>',
+      ycmToken: '<YCM Token>'
     }
   },
 }

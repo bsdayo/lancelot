@@ -1,5 +1,13 @@
 # 更新日志 / Changelog
 
+## 1.2.2 - 2022.3.1
+### plugin/arcaea
+- 新增指令 `/arc ycm`，实现 Link Play 查车、发车操作
+> 注：查车、发车使用公共源，与软糖酱、chieri等 arcbot 的类似功能共享
+- 新增重复绑定账号时解绑指令的提示
+- 修复推荐曲目中潜力值区间错误（如给 ptt11.51 推荐风暴byd）
+- 修复部分回复文本错误
+
 ## 1.2.1 - 2022.2.23
 ### plugin/arcaea
 - 新增了指令 `/arc b30` 的 `--official` 选项，可以使用官方 ArcaeaLimitedAPI 查分。（示例：`/arc b30 --official`）

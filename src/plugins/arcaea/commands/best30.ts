@@ -34,19 +34,22 @@ export function enableBest30(
     .usage('/arc b30 [要查询的ArcaeaID]')
     .example('/arc b30 114514191')
     .example('查b30 191981011')
-    .action(async ({ session, options }, usercode: string) => {
-      if (usercode && validateUsercode(usercode)) usercode = usercode.toString().padStart(9, '0')
+    .action(async ({ session, options }, usercode: string | undefined) => {
+      if (usercode && validateUsercode(usercode))
+        usercode = usercode.toString().padStart(9, '0')
 
-      if (usercode === '000000001')
-        return (
-          segment.quote(session?.messageId!) +
-          '查询该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
-        )
-      if (usercode === '000000002')
-        return (
-          segment.quote(session?.messageId!) +
-          '查询该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
-        )
+      if (usercode) {
+        if (parseInt(usercode) === 1)
+          return (
+            segment.quote(session?.messageId!) +
+            '查询该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
+          )
+        else if (parseInt(usercode) === 2)
+          return (
+            segment.quote(session?.messageId!) +
+            '查询该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
+          )
+      }
 
       console.log(JSON.stringify(options))
       const arcObj = { id: usercode, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖

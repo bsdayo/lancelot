@@ -1,7 +1,8 @@
 import { BotArcApiV5 } from 'botarcapi_lib'
-import { Context, segment } from 'koishi'
+import { Context } from 'koishi'
 import * as commands from './commands'
 import ArcaeaLimitedAPI from './limitedapi'
+import YCMAPI from './ycm'
 
 // 插件配置
 export interface ArcaeaConfig {
@@ -9,6 +10,7 @@ export interface ArcaeaConfig {
   userAgent: string
   timeout: number
   limitedAPIToken: string
+  ycmToken: string
 }
 
 // 数据表结构
@@ -65,6 +67,13 @@ export default {
       token: config.limitedAPIToken,
       timeout: config.timeout,
     })
+
+    // YCM API 配置
+    const ycmApi = new YCMAPI({
+      token: config.ycmToken,
+      timeout: config.timeout,
+    })
+
     // 根命令
     const rootCmd = ctx
       .command('arc [subcmd] [...subcmdargs]', 'Arcaea相关功能')
@@ -73,16 +82,16 @@ export default {
         if (!subcmd) return session?.execute('arc.recent')
       })
 
-
     commands.enableBind(rootCmd, ctx, logger, api, officialApi)
     commands.enableUnbind(rootCmd, ctx, logger)
     commands.enableBest30(rootCmd, ctx, logger, api, officialApi)
     commands.enableBest(rootCmd, ctx, logger, api)
     commands.enableRecent(rootCmd, ctx, logger, api)
     commands.enableInfo(rootCmd, api)
-    commands.enableConnect(rootCmd, api)
+    // commands.enableConnect(rootCmd, api)
     commands.enableAlias(rootCmd, api)
     commands.enableRandom(rootCmd, api)
     commands.enableRecommend(rootCmd, ctx, api)
+    commands.enableYCM(rootCmd, ycmApi)
   },
 }

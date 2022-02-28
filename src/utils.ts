@@ -61,6 +61,11 @@ export function getDateTime(timestamp?: number) {
 }
 
 export function getPastDays(timestamp: number) {
-  const now = new Date().getTime()
+  const now = Date.now()
   return Math.round((now - timestamp) / 86400000)
+}
+
+export function getPastMinutes(timestamp: number) {
+  const now = Date.now()
+  return Math.round((now / 1000 - timestamp) / 60)
 }

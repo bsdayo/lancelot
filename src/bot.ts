@@ -6,7 +6,7 @@ import status from './plugins/status'
 import whitelist from './plugins/whitelist'
 import { initDir } from './utils'
 
-export const VERSION = '1.2.0'
+export const VERSION = '1.2.2'
 
 // 创建目录
 initDir('temp')
