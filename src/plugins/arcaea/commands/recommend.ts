@@ -41,11 +41,11 @@ export function enableRecommend(
         let high: number | string = userRating - 50
 
         if (low < 100) low = '1'
-        else if (low > 1100) low = '11'
+        else if (low > 1150) low = '11.5'
         else low = (low / 100).toFixed(1)
         
         if (high < 100) high = '1'
-        else if (high > 1100) high = '11'
+        else if (high > 1150) high = '11.5'
         else high = (high / 100).toFixed(1)
 
         const random = await api.song.random(

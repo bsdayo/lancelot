@@ -71,8 +71,8 @@ export function enableBest30(
       )
       await session?.send(
         `正在${options?.official ? '使用官方 LimitedAPI ' : ''}查询${
-          arcObj.name ? ' ' + arcObj.name + ' ' : ''
-        }的 Best30 成绩...`
+          arcObj.name ? ' ' + arcObj.name + ' 的' : ''
+        } Best30 成绩...`
       )
       try {
         let best30Data: BotArcApiUserbest30 & {
