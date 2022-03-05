@@ -238,7 +238,8 @@ export function convertALAUserInfoToBAA(alaUserInfo: ArcaeaLimitedAPIUserInfo) {
   return baaUserInfo
 }
 
-export function validateUsercode(usercode: string) {
+export function validateUsercode(usercode: string | undefined) {
+  if (!usercode) return false
   usercode = usercode.toString()
   if (usercode.length !== 9) return false
   if (usercode === 'undefined') return false
