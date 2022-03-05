@@ -35,10 +35,8 @@ export function enableBest30(
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session, options }, usercode: string | undefined) => {
-      if (usercode && validateUsercode(usercode))
-        usercode = usercode.toString().padStart(9, '0')
-
       if (usercode) {
+        usercode = usercode.toString().padStart(9, '0')
         if (parseInt(usercode) === 1)
           return (
             segment.quote(session?.messageId!) +
@@ -51,8 +49,10 @@ export function enableBest30(
           )
       }
 
-      console.log(JSON.stringify(options))
-      const arcObj = { id: usercode, name: '' } // 用对象包装一层确保值可以被内层代码块覆盖
+      const arcObj = {
+        id: validateUsercode(usercode!) ? usercode : null,
+        name: '',
+      } // 用对象包装一层确保值可以被内层代码块覆盖
 
       if (!arcObj.id) {
         // 若没有输入 usercode 参数

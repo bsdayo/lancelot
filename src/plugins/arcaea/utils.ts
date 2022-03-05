@@ -239,7 +239,9 @@ export function convertALAUserInfoToBAA(alaUserInfo: ArcaeaLimitedAPIUserInfo) {
 }
 
 export function validateUsercode(usercode: string) {
+  usercode = usercode.toString()
   if (usercode.length !== 9) return false
+  if (usercode === 'undefined') return false
   for (let i = 0; i < 9; i++) {
     if (Number.isNaN(parseInt(usercode.charAt(i)))) return false
   }
