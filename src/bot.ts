@@ -4,6 +4,7 @@ import config from './config'
 import arcaea from './plugins/arcaea'
 import status from './plugins/status'
 import whitelist from './plugins/whitelist'
+import poke from './plugins/poke'
 import { initDir } from './utils'
 
 export const VERSION = '1.2.2'
@@ -26,5 +27,6 @@ app
   .plugin(whitelist)
   .plugin(status)
   .plugin(arcaea, config.plugins.arcaea)
+  .plugin(poke)
   .plugin('echo')
   .start()
