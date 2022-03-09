@@ -2,7 +2,7 @@ import { Context, segment } from 'koishi'
 import { getAssetFilePath } from '../../utils'
 import fs from 'fs/promises'
 
-const imgCount = 11
+const imgCount = 12
 const gifIndexes = [5, 6]
 
 export default {
