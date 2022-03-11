@@ -19,13 +19,15 @@ export function enableAlias(rootCmd: Command, api: BotArcApiV5) {
         const sid = getSongIdFuzzy(songname)
         if (sid === '') throw Error
         const alias = getAlias(sid)
+        if (alias.length === 0)
+          return segment.quote(session?.messageId!) + '该曲目没有已录入的别名！'
         return (
           segment.quote(session?.messageId!) +
           '查询到的别名有：\n' +
           // (aliasContent as any as string[]).join('\n')
           alias.join('\n')
         )
-      } catch(e) {
+      } catch (e) {
         return segment.quote(session?.messageId!) + '未找到曲目：' + songname
       }
     })
