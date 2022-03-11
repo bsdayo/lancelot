@@ -169,8 +169,7 @@ export function getRandomSong(
       upperlimit
     )
 
-  const randomNum = Math.floor(Math.random() * (songRows.length - 1) - 0.01)
-  const randomSongRow = songRows[randomNum]
+  const randomSongRow = songRows[randomInt(0, songRows.length - 1)]
   const randomDifficulties = []
   if (
     lowerlimit <= randomSongRow.rating_pst &&
