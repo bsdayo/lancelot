@@ -7,7 +7,7 @@ import whitelist from './plugins/whitelist'
 import poke from './plugins/poke'
 import { initDir } from './utils'
 
-export const VERSION = '1.2.2'
+export const VERSION = '1.3.0'
 
 // 创建目录
 initDir('temp')

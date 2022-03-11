@@ -35,6 +35,8 @@ export function enableBest30(
     .example('/arc b30 114514191')
     .example('查b30 191981011')
     .action(async ({ session, options }, usercode: string | undefined) => {
+      let officialFlag = false
+      if (usercode === 'official') officialFlag = true
       if (usercode) {
         usercode = usercode.toString().padStart(9, '0')
         if (parseInt(usercode) === 1)
@@ -68,12 +70,12 @@ export function enableBest30(
           )
       }
       logger.info(
-        `正在${options?.official ? '使用 LimitedAPI ' : ''}查询${
+        `正在${options?.official || officialFlag ? '使用 LimitedAPI ' : ''}查询${
           arcObj.name ? ' ' + arcObj.name : ''
         } [${arcObj.id}] 的 Best30 成绩`
       )
       await session?.send(
-        `正在${options?.official ? '使用官方 LimitedAPI ' : ''}查询${
+        `正在${options?.official || officialFlag ? '使用官方 LimitedAPI ' : ''}查询${
           arcObj.name ? ' ' + arcObj.name + ' 的' : ''
         } Best30 成绩...`
       )
@@ -84,7 +86,7 @@ export function enableBest30(
           best30_overflow_songinfo: BotArcApiSonginfoV5[]
         }
 
-        if (options?.official) {
+        if (options?.official || officialFlag) {
           const best30 = await officialApi.best30(arcObj.id)
           const best30UserInfo = convertALAUserInfoToBAA(
             await officialApi.userinfo(arcObj.id)
@@ -122,7 +124,7 @@ export function enableBest30(
         )
         const imgPath = options?.simple
           ? await generateSimpleBest30Image(best30Data)
-          : await generateBest30Image(best30Data, options?.official)
+          : await generateBest30Image(best30Data, options?.official || officialFlag)
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`
         )
