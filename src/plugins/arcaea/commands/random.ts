@@ -67,6 +67,8 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         }
       }
 
+      console.log(start, end)
+
       try {
         // const random = await api.song.random(
         //   start as BotArcApiDifficultyRange,
@@ -75,7 +77,8 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         // )
 
         const lowerlimit = convertToArcaeaRange(start ?? '1.0')
-        const upperlimit = convertToArcaeaRange(end ?? '11.5')
+        const upperlimit = convertToArcaeaRange(end ?? (start ?? '11.5'))
+        console.log(lowerlimit, upperlimit)
         const random = getRandomSong(lowerlimit[0], upperlimit[1])
 
         let str = random.songinfo.title_localized.en + '\n'
