@@ -1,5 +1,6 @@
 import { BotArcApiV5 } from 'botarcapi_lib'
 import { Command, segment } from 'koishi'
+import { getAlias, getSongIdFuzzy } from '../utils'
 
 export function enableAlias(rootCmd: Command, api: BotArcApiV5) {
   rootCmd
@@ -14,11 +15,15 @@ export function enableAlias(rootCmd: Command, api: BotArcApiV5) {
       }
 
       try {
-        const aliasContent = await api.song.alias(songname, true)
+        // const aliasContent = await api.song.alias(songname, true)
+        const sid = getSongIdFuzzy(songname)
+        if (sid === '') throw Error
+        const alias = getAlias(sid)
         return (
           segment.quote(session?.messageId!) +
           '查询到的别名有：\n' +
-          (aliasContent as unknown as string[]).join('\n')
+          // (aliasContent as any as string[]).join('\n')
+          alias.join('\n')
         )
       } catch(e) {
         return segment.quote(session?.messageId!) + '未找到曲目：' + songname

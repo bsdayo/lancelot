@@ -77,7 +77,7 @@ export function enableBest(
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的最高成绩查询失败：${err}`
         )
-        return segment.quote(session?.messageId!) + '你还没有打过这首歌！'
+        return segment.quote(session?.messageId!) + `发生错误，可能是你还没有打过这首歌。\n(${err})`
       }
     })
 }

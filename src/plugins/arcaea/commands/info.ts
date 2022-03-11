@@ -1,7 +1,12 @@
 import { BotArcApiV5 } from 'botarcapi_lib'
 import { Command, segment } from 'koishi'
 import fs from 'fs/promises'
-import { getDifficultyByRating, getSongCoverPath } from '../utils'
+import {
+  getDifficultyByRating,
+  getSongCoverPath,
+  getSongIdFuzzy,
+  getSongInfoFromDatabase,
+} from '../utils'
 
 export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
   rootCmd
@@ -12,7 +17,10 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
     .example('查定数 对立削苹果')
     .action(async ({ session }, songname: string) => {
       try {
-        const songinfo = await api.song.info(songname, true)
+        const sid = getSongIdFuzzy(songname)
+        if (sid === '') throw Error('no result')
+        const songinfo = getSongInfoFromDatabase(sid)
+        // const songinfo = await api.song.info(songname, true)
 
         let str = songinfo.title_localized.en
         if (songinfo.set_friendly) {
@@ -44,10 +52,11 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
             : '') +
           str
         )
-      } catch {
+      } catch (err) {
+        console.log(err)
         return (
           segment.quote(session?.messageId!) +
-          '关键词过于模糊，请使用更为具体的曲名查询'
+          `查询失败，可能是关键词过于模糊。(${err})`
         )
       }
     })

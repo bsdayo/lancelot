@@ -1,5 +1,5 @@
 import { Context, segment } from 'koishi'
-import { getAssetFilePath } from '../../utils'
+import { getAssetFilePath, randomInt } from '../../utils'
 import fs from 'fs/promises'
 
 const imgCount = 12
@@ -14,7 +14,7 @@ export default {
       if (randomPokeBack < 0.3) {
         return await session.send(segment('poke', { qq: session.userId! }))
       } else {
-        const random = Math.round(Math.random() * (imgCount - 1)) + 1
+        const random = randomInt(1, imgCount)
         const imgPath = getAssetFilePath(
           'poke',
           `${random}.${gifIndexes.indexOf(random) !== -1 ? 'gif' : 'jpg'}`

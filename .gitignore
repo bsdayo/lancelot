@@ -13,7 +13,6 @@ dist/
 
 # Database
 *.db
-!assets/arcaea/arcsong.db
 
 # Node
 node_modules

@@ -8,19 +8,10 @@ import {
   BotArcApiV5,
 } from 'botarcapi_lib'
 import { createCache, getAssetFilePath, getCacheFilePath } from '../../utils'
-import Database from 'better-sqlite3'
 import { ArcaeaLimitedAPIScore, ArcaeaLimitedAPIUserInfo } from './limitedapi'
+import Database from 'better-sqlite3'
 
 const songdb = new Database(getAssetFilePath('arcaea', 'arcsong.db'))
-
-export const colorPST = '#51a9c8'
-export const colorPRS = '#a8c96b'
-export const colorFTR = '#8a4876'
-export const colorBYD = '#bb2b43'
-export const colorPSTDark = '#4188a1'
-export const colorPRSDark = '#87a256'
-export const colorFTRDark = '#6f3a5f'
-export const colorBYDDark = '#962336'
 
 // BotArcAPI配置
 const api = new BotArcApiV5({
@@ -79,14 +70,6 @@ export async function getCharPath(
       data
     )
   } else return cachePath
-}
-
-// 获取各难度对应的颜色
-export function getColorByDifficulty(difficulty: number) {
-  if (difficulty === 0) return { color: colorPST, colorDark: colorPSTDark }
-  else if (difficulty === 1) return { color: colorPRS, colorDark: colorPRSDark }
-  else if (difficulty === 2) return { color: colorFTR, colorDark: colorFTRDark }
-  else return { color: colorBYD, colorDark: colorBYDDark }
 }
 
 // 获取各难度的序号
@@ -247,4 +230,52 @@ export function validateUsercode(usercode: string | undefined) {
     if (Number.isNaN(parseInt(usercode.charAt(i)))) return false
   }
   return true
+}
+
+export function getAbbreviation(source: string) {
+  let str = source[0]
+  for (let i = 0; i < source.length - 1; i++) {
+    if (source[i] === ' ') str += source[i + 1]
+  }
+  return str
+}
+
+export function getSongIdFuzzy(source: string): string {
+  if (source.trim() === '') return ''
+
+  source = source.replaceAll(' ', '').toLowerCase()
+
+  // 别名
+  const aliasRow = songdb
+    .prepare('SELECT sid FROM alias WHERE alias = ?')
+    .get(source)
+  if (aliasRow) return aliasRow.sid
+
+  // 曲名
+  const songRow = songdb.prepare('SELECT sid, name_en FROM songs').all()
+
+  const song = songRow.find((s) => {
+    const songname: string = s.name_en.replaceAll(' ', '').toLowerCase()
+
+    return (
+      getAbbreviation(s.name_en.toLowerCase()) === source ||
+      songname === source ||
+      s.sid === source ||
+      (source.length > 4 && songname.includes(source))
+    )
+  })
+
+  if (song) return song.sid
+
+  return ''
+}
+
+export function getAlias(songid: string) {
+  const alias: string[] = []
+  const aliasRows = songdb
+    .prepare('SELECT alias FROM alias WHERE sid = ?')
+    .all(songid)
+  for (let aliasRow of aliasRows)
+    alias.push(aliasRow.alias)
+  return alias
 }

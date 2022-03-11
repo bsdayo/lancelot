@@ -6,6 +6,7 @@ import {
   getUserBinding,
 } from '../utils'
 import fs from 'fs/promises'
+import { convertToArcaeaRange, getRandomSong } from './random'
 
 export function enableRecommend(
   rootCmd: Command,
@@ -28,14 +29,14 @@ export function enableRecommend(
       try {
         const userinfo = await api.user.info(result[0].arcid, false)
         let userRating = userinfo.account_info.rating
-        
+
         // 调整下限，12.05-12.25 -> 12.05, 12.25+ -> 12.25
         if (userRating >= 1205) {
           if (userRating >= 1225) {
             userRating = 1225
           } else userRating = 1205
         }
-        
+
         // 范围：ptt - 1.75 至 ptt - 0.50
         let low: number | string = userRating - 175
         let high: number | string = userRating - 50
@@ -43,15 +44,20 @@ export function enableRecommend(
         if (low < 100) low = '1'
         else if (low > 1150) low = '11.5'
         else low = (low / 100).toFixed(1)
-        
+
         if (high < 100) high = '1'
         else if (high > 1150) high = '11.5'
         else high = (high / 100).toFixed(1)
 
-        const random = await api.song.random(
-          low as BotArcApiDifficultyRange,
-          high as BotArcApiDifficultyRange,
-          true
+        // const random = await api.song.random(
+        //   low as BotArcApiDifficultyRange,
+        //   high as BotArcApiDifficultyRange,
+        //   true
+        // )
+
+        const random = getRandomSong(
+          convertToArcaeaRange(low)[0],
+          convertToArcaeaRange(high)[1]
         )
 
         let str = random.songinfo.title_localized.en + '\n'

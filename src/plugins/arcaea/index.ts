@@ -93,5 +93,7 @@ export default {
     commands.enableRandom(rootCmd, api)
     commands.enableRecommend(rootCmd, ctx, api)
     commands.enableYCM(rootCmd, ycmApi)
+    // commands.enableTest(rootCmd)
+    commands.enableAddAlias(rootCmd)
   },
 }

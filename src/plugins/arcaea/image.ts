@@ -6,6 +6,7 @@ import {
   drawRecentScoreCard,
   drawFilledRoundedRect,
   drawSimpleScoreCard,
+  getColorByDifficulty,
 } from './imageutils'
 import {
   BotArcApiUserbest30,
@@ -19,7 +20,6 @@ import {
   calculateMaxPtt,
   formatPtt,
   getCharPath,
-  getColorByDifficulty,
   getDifficultyByRating,
   getDifficultyClassName,
   getSongCoverPath,

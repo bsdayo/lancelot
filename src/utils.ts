@@ -69,3 +69,7 @@ export function getPastMinutes(timestamp: number) {
   const now = Date.now()
   return Math.round((now / 1000 - timestamp) / 60)
 }
+
+export function randomInt(low: number, high: number) {
+  return Math.round(Math.random() * (high - low) + low)
+}

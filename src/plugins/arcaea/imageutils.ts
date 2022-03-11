@@ -3,10 +3,26 @@ import { CanvasRenderingContext2D, loadImage } from 'canvas'
 import { getDateTime, getPastDays } from '../../utils'
 import {
   getSongCoverPath,
-  getColorByDifficulty,
   getDifficultyClassName,
   getDifficultyByRating,
 } from './utils'
+
+export const colorPST = '#51a9c8'
+export const colorPRS = '#a8c96b'
+export const colorFTR = '#8a4876'
+export const colorBYD = '#bb2b43'
+export const colorPSTDark = '#4188a1'
+export const colorPRSDark = '#87a256'
+export const colorFTRDark = '#6f3a5f'
+export const colorBYDDark = '#962336'
+
+// 获取各难度对应的颜色
+export function getColorByDifficulty(difficulty: number) {
+  if (difficulty === 0) return { color: colorPST, colorDark: colorPSTDark }
+  else if (difficulty === 1) return { color: colorPRS, colorDark: colorPRSDark }
+  else if (difficulty === 2) return { color: colorFTR, colorDark: colorFTRDark }
+  else return { color: colorBYD, colorDark: colorBYDDark }
+}
 
 // 绘制圆角矩形
 export function drawFilledRoundedRect(
