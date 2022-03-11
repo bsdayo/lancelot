@@ -53,7 +53,6 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
           str
         )
       } catch (err) {
-        console.log(err)
         return (
           segment.quote(session?.messageId!) +
           `查询失败，可能是关键词过于模糊。(${err})`

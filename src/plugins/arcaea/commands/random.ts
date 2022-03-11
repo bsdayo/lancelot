@@ -74,8 +74,6 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         //   true
         // )
 
-        console.log(start, end)
-
         const lowerlimit = convertToArcaeaRange(start ?? '1.0')
         const upperlimit = convertToArcaeaRange(end ?? '11.5')
         const random = getRandomSong(lowerlimit[0], upperlimit[1])
