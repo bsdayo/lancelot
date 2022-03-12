@@ -7,6 +7,7 @@ export default {
     const logger = ctx.logger(this.name)
 
     ctx.on('guild-request', async (session) => {
+      if (session.selfId === '3591970931') return
       try {
         await session.bot.handleGuildRequest(session?.messageId!, true)
       } catch {}
