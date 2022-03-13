@@ -13,11 +13,13 @@ export const VERSION = '1.3.0'
 initDir('temp')
 initDir('cache')
 
-const app = new App({
-  host: config.app.host ?? '127.0.0.1',
-  port: config.app.port ?? 8080,
-  prefix: config.app.prefix ?? '/',
-})
+const defaultAppConfig = {
+  host: '127.0.0.1',
+  port: 8080,
+  prefix: '/',
+}
+
+const app = new App(Object.assign(defaultAppConfig, config.app))
 
 app
   .plugin('adapter-onebot', config.plugins['adapter-onebot'])
