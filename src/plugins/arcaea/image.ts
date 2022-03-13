@@ -53,9 +53,9 @@ export async function generateBest30Image(
   const backgroundImage = await loadImage(
     getAssetFilePath('arcaea', 'best30Background.jpg')
   )
-  const canvas = createCanvas(backgroundImage.width, backgroundImage.height)
+  const canvas = createCanvas(3400, 6600)
   const ctx = canvas.getContext('2d')
-  ctx.drawImage(backgroundImage, 0, 0)
+  ctx.drawImage(backgroundImage, 0, -60)
 
   // 账号信息
   ctx.font = '128px "Titillium Web SemiBold"'
