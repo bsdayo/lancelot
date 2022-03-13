@@ -67,7 +67,7 @@ export async function generateBest30Image(
         : formatPtt(best30Data.account_info.rating)
     })`,
     295,
-    265
+    205
   )
 
   // Best30/Recent10 均值  最大ptt
@@ -79,13 +79,13 @@ export async function generateBest30Image(
       4
     )}   MaxPtt / ${calculateMaxPtt(best30Data)}`,
     295,
-    375
+    315
   )
 
   // 底部时间
   ctx.font = '121px "Titillium Web SemiBold"'
   ctx.fillStyle = '#fff'
-  ctx.fillText(getDateTime(), 383, 6582)
+  ctx.fillText(getDateTime(), 383, 6522)
 
   const drawTask = []
 
@@ -97,7 +97,7 @@ export async function generateBest30Image(
         drawScoreCard(
           ctx,
           100,
-          825 + i * 400,
+          765 + i * 400,
           best30Data.best30_list[i],
           best30Data.best30_songinfo[i],
           i
@@ -110,7 +110,7 @@ export async function generateBest30Image(
         drawScoreCard(
           ctx,
           100 + 1000 + 100,
-          825 + (i - 10) * 400,
+          765 + (i - 10) * 400,
           best30Data.best30_list[i],
           best30Data.best30_songinfo[i],
           i
@@ -123,7 +123,7 @@ export async function generateBest30Image(
         drawScoreCard(
           ctx,
           100 + 2 * (1000 + 100),
-          825 + (i - 20) * 400,
+          765 + (i - 20) * 400,
           best30Data.best30_list[i],
           best30Data.best30_songinfo[i],
           i
@@ -141,7 +141,7 @@ export async function generateBest30Image(
           drawScoreCard(
             ctx,
             100,
-            5225 + (i - 30) * 400,
+            5165 + (i - 30) * 400,
             best30Data.best30_overflow[i - 30],
             best30Data.best30_overflow_songinfo[i - 30],
             i
@@ -157,7 +157,7 @@ export async function generateBest30Image(
           drawScoreCard(
             ctx,
             100 + 1000 + 100,
-            5225 + (i - 33) * 400,
+            5165 + (i - 33) * 400,
             best30Data.best30_overflow[i - 30],
             best30Data.best30_overflow_songinfo[i - 30],
             i
@@ -173,7 +173,7 @@ export async function generateBest30Image(
           drawScoreCard(
             ctx,
             100 + 1000 + 100 + 1000 + 100,
-            5225 + (i - 36) * 400,
+            5165 + (i - 36) * 400,
             best30Data.best30_overflow[i - 30],
             best30Data.best30_overflow_songinfo[i - 30],
             i
@@ -188,7 +188,7 @@ export async function generateBest30Image(
   if (official) {
     ctx.font = '128px "Titillium Web SemiBold"'
     ctx.fillStyle = '#fff'
-    ctx.fillText('The Limited API does not provide overflow data.', 415, 5750)
+    ctx.fillText('The Limited API does not provide overflow data.', 415, 5690)
   }
 
   const filepath = getTempFilePath('arcaea-best30', 'jpg')
