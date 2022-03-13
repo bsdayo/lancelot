@@ -21,6 +21,7 @@ const app = new App({
 
 app
   .plugin('adapter-onebot', config.plugins['adapter-onebot'])
+  .plugin('adapter-telegram', config.plugins['adapter-telegram'])
   .plugin('database-sqlite', {
     path: path.resolve(__dirname, '..', 'database.db'),
   })

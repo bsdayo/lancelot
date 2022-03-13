@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@koishijs/plugin-adapter-onebot": "^4.0.0",
+    "@koishijs/plugin-adapter-telegram": "^2.1.2",
     "@koishijs/plugin-database-sqlite": "^1.0.0",
     "@koishijs/plugin-echo": "^1.0.0",
     "axios": "^0.26.0",
