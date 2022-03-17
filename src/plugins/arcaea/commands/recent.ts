@@ -24,7 +24,9 @@ export function enableRecent(
           num = 1
         } else if (num > 7 || num < 1) {
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             `请输入正确的数量，范围为 1 ~ 7`
           )
         }
@@ -32,7 +34,9 @@ export function enableRecent(
         if (result.length === 0) {
           // 若未查询到绑定数据
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             `请使用 /arc bind <你的ArcaeaID> 绑定你的账号\n（更多信息请使用 /help arc.recent 查看）`
           )
         }
@@ -61,7 +65,9 @@ export function enableRecent(
           )
 
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             segment.image(await fs.readFile(imgPath))
           )
         } catch (err) {

@@ -11,7 +11,11 @@ export function enableAlias(rootCmd: Command, api: BotArcApiV5) {
     .example('查别名 射日如桃花')
     .action(async ({ session }, songname: string) => {
       if (!songname) {
-        return segment.quote(session?.messageId!) + '请输入需要查询的曲目名称'
+        return (
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) + '请输入需要查询的曲目名称'
+        )
       }
 
       try {
@@ -20,15 +24,27 @@ export function enableAlias(rootCmd: Command, api: BotArcApiV5) {
         if (sid === '') throw Error
         const alias = getAlias(sid)
         if (alias.length === 0)
-          return segment.quote(session?.messageId!) + '该曲目没有已录入的别名！'
+          return (
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '该曲目没有已录入的别名！'
+          )
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) +
           '查询到的别名有：\n' +
           // (aliasContent as any as string[]).join('\n')
           alias.join('\n')
         )
       } catch (e) {
-        return segment.quote(session?.messageId!) + '未找到曲目：' + songname
+        return (
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) +
+          '未找到曲目：' +
+          songname
+        )
       }
     })
 }

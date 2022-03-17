@@ -28,7 +28,9 @@ export default {
         const processUsedMemRate = ((processUsedmemMb / totalmemMb) * 100).toFixed(2)
 
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           `lancelot.bot ver.${VERSION}\n` +
           'Powered by Koishi.js v4\n\n' +
           //

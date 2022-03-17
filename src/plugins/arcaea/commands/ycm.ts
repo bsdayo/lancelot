@@ -22,7 +22,9 @@ export function enableYCM(rootCmd: Command, ycmApi: YCMAPI) {
             roomId = roomId.toString()
             if (roomId.length !== 6)
               return (
-                segment.quote(session?.messageId!) +
+                (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
                 '请输入正确的Link Play房间号！'
               )
             const ycmResp = await ycmApi.addCar(
@@ -32,15 +34,21 @@ export function enableYCM(rootCmd: Command, ycmApi: YCMAPI) {
               description
             )
             if (ycmResp) {
-              return segment.quote(session?.messageId!) + '该车车已存在！'
+              return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '该车车已存在！'
             } else {
-              return segment.quote(session?.messageId!) + '发车成功！'
+              return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '发车成功！'
             }
           } else {
             // 没有发送 roomId 参数
             const ycmResp = await ycmApi.getCar('arc')
             if (ycmResp.cars.length === 0)
-              return segment.quote(session?.messageId!) + 'myc'
+              return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + 'myc'
             else {
               let str = '找到的车车：'
               for (let car of ycmResp.cars) {
@@ -48,14 +56,20 @@ export function enableYCM(rootCmd: Command, ycmApi: YCMAPI) {
                   car.add_time
                 )}分钟前`
               }
-              return segment.quote(session?.messageId!) + str
+              return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + str
             }
           }
         } catch (e) {
           if ((e as Error).toString() === 'invalid room_id') {
-            return segment.quote(session?.messageId!) + `房间号格式错误！`
+            return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + `房间号格式错误！`
           }
-          return segment.quote(session?.messageId!) + `${e}`
+          return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + `${e}`
         }
       }
     )

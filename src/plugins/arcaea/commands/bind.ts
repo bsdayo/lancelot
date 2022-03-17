@@ -22,17 +22,23 @@ export function enableBind(
     .example('/arc bind 114514191')
     .action(async ({ session }, usercode: string) => {
       if (!usercode)
-        return segment.quote(session?.messageId!) + '请输入需要绑定的用户ID'
+        return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '请输入需要绑定的用户ID'
       usercode = usercode.toString().padStart(9, '0')
 
       if (parseInt(usercode) === 1)
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           '绑定该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
         )
       else if (parseInt(usercode) === 2)
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           '绑定该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
         )
 
@@ -41,7 +47,9 @@ export function enableBind(
         const result = await getUserBinding(ctx, session!)
         if (result.length !== 0) {
           return (
-            segment.quote(session?.messageId!) + '数据库中已存在您的绑定信息！\n（可使用 /arc unbind 解绑）'
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '数据库中已存在您的绑定信息！\n（可使用 /arc unbind 解绑）'
           )
         } else {
           let accountInfo: BotArcApiUserinfoV5
@@ -55,7 +63,9 @@ export function enableBind(
               )
             } catch (err2) {
               return (
-                segment.quote(session?.messageId!) +
+                (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
                 `未知错误：\n(1) ${err1}\n(2) ${err2}`
               )
             }
@@ -74,13 +84,17 @@ export function enableBind(
             arcname: accountInfo.name,
           })
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             `已为您绑定 Arcaea 账号 ${accountInfo.name} (${rating})`
           )
         }
       } else {
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           '请输入正确格式的 ArcaeaID\n（9位数字，无空格）'
         )
       }

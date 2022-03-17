@@ -21,6 +21,12 @@ const defaultAppConfig = {
 
 const app = new App(Object.assign(defaultAppConfig, config.app))
 
+declare module 'koishi' {
+  interface User {
+    qqguild: string
+  }
+}
+
 app
   .plugin('adapter-onebot', config.plugins['adapter-onebot'])
   .plugin('adapter-telegram', config.plugins['adapter-telegram'])

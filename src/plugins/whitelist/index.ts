@@ -27,16 +27,22 @@ export default {
       })
       .action(async ({ session }, groupid) => {
         if (!groupid) {
-          return segment.quote(session?.messageId!) + '请输入退出的群号'
+          return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '请输入退出的群号'
         }
         try {
           await (session?.bot.internal as OneBot.Internal).setGroupLeave(
             groupid,
             true
           )
-          return segment.quote(session?.messageId!) + `退出群 ${groupid} 成功！`
+          return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + `退出群 ${groupid} 成功！`
         } catch {
-          return segment.quote(session?.messageId!) + `退出群 ${groupid} 失败！`
+          return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + `退出群 ${groupid} 失败！`
         }
       })
   },

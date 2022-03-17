@@ -18,12 +18,16 @@ export function enableUnbind(rootCmd: Command, ctx: Context, logger: Logger) {
           userid: session?.userId,
         })
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           `已为您取消绑定 Arcaea 账号 ${result[0].arcname}`
         )
       } else {
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           `数据库中没有您的绑定信息，请使用 /arc bind <你的ArcaeaID> 绑定你的账号`
         )
       }

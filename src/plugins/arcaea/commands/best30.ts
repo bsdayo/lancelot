@@ -41,12 +41,16 @@ export function enableBest30(
         usercode = usercode.toString().padStart(9, '0')
         if (parseInt(usercode) === 1)
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             '查询该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
           )
         else if (parseInt(usercode) === 2)
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             '查询该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
           )
       }
@@ -65,19 +69,23 @@ export function enableBest30(
           arcObj.name = result[0].arcname
         } else
           return (
-            segment.quote(session?.messageId!) +
+            (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
             `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /help arc.b30 查看）`
           )
       }
       logger.info(
-        `正在${options?.official || officialFlag ? '使用 LimitedAPI ' : ''}查询${
-          arcObj.name ? ' ' + arcObj.name : ''
-        } [${arcObj.id}] 的 Best30 成绩`
+        `正在${
+          options?.official || officialFlag ? '使用 LimitedAPI ' : ''
+        }查询${arcObj.name ? ' ' + arcObj.name : ''} [${
+          arcObj.id
+        }] 的 Best30 成绩`
       )
       await session?.send(
-        `正在${options?.official || officialFlag ? '使用官方 LimitedAPI ' : ''}查询${
-          arcObj.name ? ' ' + arcObj.name + ' 的' : ''
-        } Best30 成绩...`
+        `正在${
+          options?.official || officialFlag ? '使用官方 LimitedAPI ' : ''
+        }查询${arcObj.name ? ' ' + arcObj.name + ' 的' : ''} Best30 成绩...`
       )
       try {
         let best30Data: BotArcApiUserbest30 & {
@@ -124,13 +132,18 @@ export function enableBest30(
         )
         const imgPath = options?.simple
           ? await generateSimpleBest30Image(best30Data)
-          : await generateBest30Image(best30Data, options?.official || officialFlag)
+          : await generateBest30Image(
+              best30Data,
+              options?.official || officialFlag
+            )
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`
         )
 
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) +
           segment.image(await fs.readFile(imgPath))
         )
       } catch (err) {

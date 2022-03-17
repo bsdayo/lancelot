@@ -22,7 +22,9 @@ export function enableRecommend(
       const result = await getUserBinding(ctx, session!)
       if (result.length === 0)
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           `请先使用 /arc bind <你的ArcaeaID> 绑定你的账号`
         )
 
@@ -76,7 +78,9 @@ export function enableRecommend(
           ']'
 
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           `Hello, ${result[0].arcname}\n当前为您推荐的曲目是：\n` +
           segment.image(
             await fs.readFile(
@@ -86,7 +90,9 @@ export function enableRecommend(
           str
         )
       } catch (err) {
-        return segment.quote(session?.messageId!) + `发生错误：${err}`
+        return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + `发生错误：${err}`
       }
     })
 }

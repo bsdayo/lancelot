@@ -41,7 +41,9 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
         }
 
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           segment.image(
             await fs.readFile(await getSongCoverPath(songinfo.id))
           ) +
@@ -54,7 +56,9 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
         )
       } catch (err) {
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           `查询失败，可能是关键词过于模糊。(${err})`
         )
       }

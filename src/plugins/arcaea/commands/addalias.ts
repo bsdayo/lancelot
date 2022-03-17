@@ -13,14 +13,20 @@ export function enableAddAlias(rootCmd: Command) {
     })
     .action(({ session }, songname, alias) => {
       if (!songname || !alias)
-        return segment.quote(session?.messageId!) + '参数缺失。'
+        return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '参数缺失。'
       const sid = getSongIdFuzzy(songname)
-      if (sid === '') return segment.quote(session?.messageId!) + '未找到曲目。'
+      if (sid === '') return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '未找到曲目。'
       songdb
         .prepare('INSERT INTO alias (sid, alias) VALUES (?, ?)')
         .run(sid, alias)
       return (
-        segment.quote(session?.messageId!) +
+        (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
         `已为曲目 ${sid} 录入别名 ${alias}。`
       )
     })

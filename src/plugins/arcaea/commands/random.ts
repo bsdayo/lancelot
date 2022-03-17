@@ -50,7 +50,9 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
             parseFloat(start) > 11.5 ||
             parseFloat(start) < 1
           )
-            return segment.quote(session?.messageId!) + '请输入正确的起始难度'
+            return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '请输入正确的起始难度'
           else start = parseFloat(start).toFixed(1)
         }
       }
@@ -62,7 +64,9 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
             parseFloat(end) > 11.5 ||
             parseFloat(end) < 1
           )
-            return segment.quote(session?.messageId!) + '请输入正确的最高难度'
+            return (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) + '请输入正确的最高难度'
           else end = parseFloat(end).toFixed(1)
         }
       }
@@ -94,7 +98,9 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
           ']'
 
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+              ? segment.at(session?.userId!)
+              : segment.quote(session?.messageId!)) +
           '随机推荐曲目：\n' +
           segment.image(
             await fs.readFile(

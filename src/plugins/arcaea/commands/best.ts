@@ -23,7 +23,11 @@ export function enableBest(
     .example('/arc best heavensdoor byd')
     .action(async ({ session }, ...songname: string[]) => {
       if (songname.length === 0)
-        return segment.quote(session?.messageId!) + '请输入需要查询的曲名'
+        return (
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) + '请输入需要查询的曲名'
+        )
 
       let haveDifficultyParam = false
 
@@ -46,7 +50,9 @@ export function enableBest(
         arcObj.name = result[0].arcname
       } else
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) +
           `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /help arc.best 查看）`
         )
 
@@ -70,14 +76,21 @@ export function enableBest(
           `用户 ${arcObj.name} [${arcObj.id}] 的最高成绩图片生成成功，文件为 ${imgPath}`
         )
         return (
-          segment.quote(session?.messageId!) +
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) +
           segment.image(await fs.readFile(imgPath))
         )
       } catch (err) {
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的最高成绩查询失败：${err}`
         )
-        return segment.quote(session?.messageId!) + `发生错误，可能是你还没有打过这首歌。\n(${err})`
+        return (
+          (session?.platform === 'qqguild'
+            ? segment.at(session?.userId!)
+            : segment.quote(session?.messageId!)) +
+          `发生错误，可能是你还没有打过这首歌。\n(${err})`
+        )
       }
     })
 }
