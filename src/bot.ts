@@ -26,6 +26,9 @@ declare module 'koishi' {
     qqguild: string
   }
 }
+app.model.extend('user', {
+  qqguild: 'text'
+})
 
 app.before('command/execute', ({session}) => {
   if (
