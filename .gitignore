@@ -13,6 +13,7 @@ dist/
 
 # Database
 *.db
+database.db*
 
 # Node
 node_modules

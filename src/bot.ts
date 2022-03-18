@@ -27,6 +27,14 @@ declare module 'koishi' {
   }
 }
 
+app.before('command/execute', ({session}) => {
+  if (
+    session?.platform === 'qqguild' &&
+    session?.guildId === config.qqguild.mainGuild &&
+    session?.channelId !== config.qqguild.mainChannel
+  ) return ''
+})
+
 app
   .plugin('adapter-onebot', config.plugins['adapter-onebot'])
   .plugin('adapter-telegram', config.plugins['adapter-telegram'])
