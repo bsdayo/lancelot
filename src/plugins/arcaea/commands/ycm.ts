@@ -7,6 +7,7 @@ export function enableYCM(rootCmd: Command, ycmApi: YCMAPI) {
     .subcommand('.ycm [roomId] [description]', '查询/添加 Link Play 车车')
     .shortcut('有车嘛')
     .shortcut('有车吗')
+    .shortcut('ycm')
     .alias('ycm')
     .usage('/arc ycm [房间号] [描述]')
     .example('/arc ycm 6Ec2P9 红框休闲车')
