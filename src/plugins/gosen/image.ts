@@ -1,6 +1,6 @@
 import { createCanvas, registerFont } from 'canvas'
 import { GosenConfig } from '.'
-import { getTempFilePath } from '../../utils'
+import { getAssetFilePath, getTempFilePath } from '../../utils'
 import fs from 'fs/promises'
 
 export default async function generateGosenImage(
@@ -11,22 +11,28 @@ export default async function generateGosenImage(
   config.offsetWidth = config.offsetWidth ?? 0
 
   // Fonts
-  registerFont(config.font.upper, {
-    family: 'UpperFont',
-  })
-  registerFont(config.font.lower, {
-    family: 'LowerFont',
-  })
+  registerFont(
+    config.font?.upper ?? getAssetFilePath('gosen', 'SourceHanSans-Heavy.otf'),
+    {
+      family: 'UpperFont',
+    }
+  )
+  registerFont(
+    config.font?.lower ?? getAssetFilePath('gosen', 'SourceHanSerif-Heavy.otf'),
+    {
+      family: 'LowerFont',
+    }
+  )
 
   // Settings
-  const upperFont = `UpperFont 100px`
+  const upperFont = `100px UpperFont`
   const upperPosX = 70
   const upperPosY = 100
 
-  const lowerFont = `LowerFont 100px`
+  const lowerFont = `100px LowerFont`
   const lowerOffsetX = config.offsetWidth
   const lowerOffsetY = 130
-  const lowerPosX = lowerOffsetX + 130
+  const lowerPosX = lowerOffsetX + 330
   const lowerPosY = lowerOffsetY + 100
 
   // Measure Text
@@ -39,7 +45,7 @@ export default async function generateGosenImage(
   const lowerWidth = tempCtx.measureText(lower).width
 
   const canvas = createCanvas(
-    Math.max(upperWidth + 80, lowerWidth + config.offsetWidth + 90),
+    Math.max(upperWidth + 90, lowerWidth + lowerPosX - 20),
     270
   )
   const ctx = canvas.getContext('2d')
@@ -176,7 +182,6 @@ export default async function generateGosenImage(
   grad.addColorStop(1.0, 'rgb(255, 255, 255)')
   ctx.fillStyle = grad
   ctx.fillText(lower, lowerPosX, lowerPosY - 3)
-
 
   // Generate Image
   const filepath = getTempFilePath('gosen', 'jpg')
