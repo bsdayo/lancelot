@@ -15,8 +15,9 @@ export default {
   name: 'gosen',
   apply(ctx: Context, config: GosenConfig) {
     ctx
-      .command('5k <upper> <lower>', '生成五千兆円风格图片')
+      .command('5k <upper> <lower>', '生成五千兆円图片')
       .alias('gosen')
+      .shortcut('五千兆', { fuzzy: true })
       .usage('/5k <上文本> <下文本>')
       .example('/5k 我现在就想玩 Arcaea')
       .action(async ({ session }, upper: string, lower: string) => {
