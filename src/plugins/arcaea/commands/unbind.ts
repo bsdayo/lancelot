@@ -1,4 +1,5 @@
 import { Command, Context, Logger, segment } from 'koishi'
+import { reply } from '../../../utils'
 import { getUserBinding } from '../utils'
 
 export function enableUnbind(rootCmd: Command, ctx: Context, logger: Logger) {
@@ -18,16 +19,11 @@ export function enableUnbind(rootCmd: Command, ctx: Context, logger: Logger) {
           userid: session?.userId,
         })
         return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
-          `已为您取消绑定 Arcaea 账号 ${result[0].arcname}`
+          reply(session) + `已为您取消绑定 Arcaea 账号 ${result[0].arcname}`
         )
       } else {
         return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+          reply(session) +
           `数据库中没有您的绑定信息，请使用 /arc bind <你的ArcaeaID> 绑定你的账号`
         )
       }

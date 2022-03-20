@@ -8,6 +8,7 @@ import poke from './plugins/poke'
 import { initDir } from './utils'
 import utils from './plugins/utils'
 import Database from 'better-sqlite3'
+import gosen from './plugins/gosen'
 
 export const VERSION = '1.3.0'
 
@@ -53,6 +54,7 @@ app
   .plugin(status)
   .plugin(utils)
   .plugin(arcaea, config.plugins.arcaea)
+  .plugin(gosen, config.plugins.gosen)
   .plugin(poke)
   .plugin('echo')
   .start()

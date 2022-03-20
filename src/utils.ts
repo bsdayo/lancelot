@@ -1,16 +1,12 @@
 import path from 'path'
 import fsSync from 'fs'
 import fs from 'fs/promises'
-import { Logger } from 'koishi'
+import { Logger, segment, Session } from 'koishi'
 
 const logger = new Logger('utils')
 
 export function getTempFilePath(namespace: string, ext: string) {
-  return path.resolve(
-    __dirname,
-    '../temp',
-    `${namespace}-${Date.now()}.${ext}`
-  )
+  return path.resolve(__dirname, '../temp', `${namespace}-${Date.now()}.${ext}`)
 }
 
 export function initDir(name: string) {
@@ -72,4 +68,10 @@ export function getPastMinutes(timestamp: number) {
 
 export function randomInt(low: number, high: number) {
   return Math.round(Math.random() * (high - low) + low)
+}
+
+export function reply(session?: Session) {
+  return session?.platform === 'qqguild'
+    ? segment.at(session?.userId!)
+    : segment.quote(session?.messageId!)
 }

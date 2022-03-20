@@ -7,6 +7,7 @@ import {
 } from '../utils'
 import fs from 'fs/promises'
 import { convertToArcaeaRange, getRandomSong } from './random'
+import { reply } from '../../../utils'
 
 export function enableRecommend(
   rootCmd: Command,
@@ -21,12 +22,7 @@ export function enableRecommend(
     .action(async ({ session }) => {
       const result = await getUserBinding(ctx, session!)
       if (result.length === 0)
-        return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
-          `请先使用 /arc bind <你的ArcaeaID> 绑定你的账号`
-        )
+        return reply(session) + `请先使用 /arc bind <你的ArcaeaID> 绑定你的账号`
 
       try {
         const userinfo = await api.user.info(result[0].arcid, false)
@@ -78,9 +74,7 @@ export function enableRecommend(
           ']'
 
         return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+          reply(session) +
           `Hello, ${result[0].arcname}\n当前为您推荐的曲目是：\n` +
           segment.image(
             await fs.readFile(
@@ -90,9 +84,7 @@ export function enableRecommend(
           str
         )
       } catch (err) {
-        return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + `发生错误：${err}`
+        return reply(session) + `发生错误：${err}`
       }
     })
 }

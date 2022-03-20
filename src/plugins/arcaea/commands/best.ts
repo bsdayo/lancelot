@@ -7,6 +7,7 @@ import {
   getUserBinding,
 } from '../utils'
 import fs from 'fs/promises'
+import { reply } from '../../../utils'
 
 export function enableBest(
   rootCmd: Command,
@@ -22,12 +23,7 @@ export function enableBest(
     .example('/arc best xanatos')
     .example('/arc best heavensdoor byd')
     .action(async ({ session }, ...songname: string[]) => {
-      if (songname.length === 0)
-        return (
-          (session?.platform === 'qqguild'
-            ? segment.at(session?.userId!)
-            : segment.quote(session?.messageId!)) + '请输入需要查询的曲名'
-        )
+      if (songname.length === 0) return reply(session) + '请输入需要查询的曲名'
 
       let haveDifficultyParam = false
 
@@ -50,9 +46,7 @@ export function enableBest(
         arcObj.name = result[0].arcname
       } else
         return (
-          (session?.platform === 'qqguild'
-            ? segment.at(session?.userId!)
-            : segment.quote(session?.messageId!)) +
+          reply(session) +
           `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /help arc.best 查看）`
         )
 
@@ -75,22 +69,12 @@ export function enableBest(
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的最高成绩图片生成成功，文件为 ${imgPath}`
         )
-        return (
-          (session?.platform === 'qqguild'
-            ? segment.at(session?.userId!)
-            : segment.quote(session?.messageId!)) +
-          segment.image(await fs.readFile(imgPath))
-        )
+        return reply(session) + segment.image(await fs.readFile(imgPath))
       } catch (err) {
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的最高成绩查询失败：${err}`
         )
-        return (
-          (session?.platform === 'qqguild'
-            ? segment.at(session?.userId!)
-            : segment.quote(session?.messageId!)) +
-          `发生错误，可能是你还没有打过这首歌。\n(${err})`
-        )
+        return reply(session) + `发生错误，可能是你还没有打过这首歌。\n(${err})`
       }
     })
 }

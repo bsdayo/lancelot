@@ -1,5 +1,6 @@
 import { OneBot } from '@koishijs/plugin-adapter-onebot'
 import { Context, segment } from 'koishi'
+import { reply } from '../../utils'
 
 export default {
   name: 'whitelist',
@@ -27,22 +28,16 @@ export default {
       })
       .action(async ({ session }, groupid) => {
         if (!groupid) {
-          return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + '请输入退出的群号'
+          return reply(session) + '请输入退出的群号'
         }
         try {
           await (session?.bot.internal as OneBot.Internal).setGroupLeave(
             groupid,
             true
           )
-          return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + `退出群 ${groupid} 成功！`
+          return reply(session) + `退出群 ${groupid} 成功！`
         } catch {
-          return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + `退出群 ${groupid} 失败！`
+          return reply(session) + `退出群 ${groupid} 失败！`
         }
       })
   },

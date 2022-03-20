@@ -1,7 +1,7 @@
-import { Command, segment } from 'koishi'
+import { Command } from 'koishi'
 import Database from 'better-sqlite3'
 import { getSongIdFuzzy } from '../utils'
-import { getAssetFilePath } from '../../../utils'
+import { getAssetFilePath, reply } from '../../../utils'
 
 const songdb = new Database(getAssetFilePath('arcaea', 'arcsong.db'))
 
@@ -12,22 +12,12 @@ export function enableAddAlias(rootCmd: Command) {
       hidden: true,
     })
     .action(({ session }, songname, alias) => {
-      if (!songname || !alias)
-        return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + '参数缺失。'
+      if (!songname || !alias) return reply(session) + '参数缺失。'
       const sid = getSongIdFuzzy(songname)
-      if (sid === '') return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + '未找到曲目。'
+      if (sid === '') return reply(session) + '未找到曲目。'
       songdb
         .prepare('INSERT INTO alias (sid, alias) VALUES (?, ?)')
         .run(sid, alias)
-      return (
-        (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
-        `已为曲目 ${sid} 录入别名 ${alias}。`
-      )
+      return reply(session) + `已为曲目 ${sid} 录入别名 ${alias}。`
     })
 }

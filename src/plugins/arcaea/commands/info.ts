@@ -7,6 +7,7 @@ import {
   getSongIdFuzzy,
   getSongInfoFromDatabase,
 } from '../utils'
+import { reply } from '../../../utils'
 
 export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
   rootCmd
@@ -41,9 +42,7 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
         }
 
         return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+          reply(session) +
           segment.image(
             await fs.readFile(await getSongCoverPath(songinfo.id))
           ) +
@@ -55,12 +54,7 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
           str
         )
       } catch (err) {
-        return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
-          `查询失败，可能是关键词过于模糊。(${err})`
-        )
+        return reply(session) + `查询失败，可能是关键词过于模糊。(${err})`
       }
     })
 }

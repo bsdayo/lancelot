@@ -16,6 +16,7 @@ import {
   BotArcApiV5,
 } from 'botarcapi_lib'
 import ArcaeaLimitedAPI from '../limitedapi'
+import { reply } from '../../../utils'
 
 export function enableBest30(
   rootCmd: Command,
@@ -41,16 +42,12 @@ export function enableBest30(
         usercode = usercode.toString().padStart(9, '0')
         if (parseInt(usercode) === 1)
           return (
-            (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+            reply(session) +
             '查询该用户需要理论 Fracture Ray [FTR]，请继续加油哦'
           )
         else if (parseInt(usercode) === 2)
           return (
-            (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+            reply(session) +
             '查询该用户需要理论 Grievous Lady [FTR]，请继续加油哦'
           )
       }
@@ -69,9 +66,7 @@ export function enableBest30(
           arcObj.name = result[0].arcname
         } else
           return (
-            (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+            reply(session) +
             `请使用 /arc bind <你的ArcaeaID> 绑定你的账号，或在命令后接需要查询用户的ID\n（更多信息请使用 /help arc.b30 查看）`
           )
       }
@@ -140,12 +135,7 @@ export function enableBest30(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`
         )
 
-        return (
-          (session?.platform === 'qqguild'
-            ? segment.at(session?.userId!)
-            : segment.quote(session?.messageId!)) +
-          segment.image(await fs.readFile(imgPath))
-        )
+        return reply(session) + segment.image(await fs.readFile(imgPath))
       } catch (err) {
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的 Best30 成绩查询失败：${err}`

@@ -1,6 +1,7 @@
 import { Context, segment } from 'koishi'
 import { VERSION } from '../../bot'
 import os from 'os'
+import { reply } from '../../utils'
 
 export default {
   name: 'status',
@@ -19,18 +20,21 @@ export default {
         if (uptimeMinutes) uptimeStr += (uptimeMinutes % 60) + 'm'
         uptimeStr += (uptimeSeconds % 60) + 's'
 
-        const totalFreememMb = (os.freemem() / 1024 / 1024)
-        const totalmemMb = (os.totalmem() / 1024 / 1024)
+        const totalFreememMb = os.freemem() / 1024 / 1024
+        const totalmemMb = os.totalmem() / 1024 / 1024
 
         const totalUsedmemMb = totalmemMb - totalFreememMb
-        const totalUsedMemRate = ((totalUsedmemMb / totalmemMb) * 100).toFixed(2)
-        const processUsedmemMb = (process.memoryUsage.rss() / 1024 / 1024)
-        const processUsedMemRate = ((processUsedmemMb / totalmemMb) * 100).toFixed(2)
+        const totalUsedMemRate = ((totalUsedmemMb / totalmemMb) * 100).toFixed(
+          2
+        )
+        const processUsedmemMb = process.memoryUsage.rss() / 1024 / 1024
+        const processUsedMemRate = (
+          (processUsedmemMb / totalmemMb) *
+          100
+        ).toFixed(2)
 
         return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+          reply(session) +
           `lancelot.bot ver.${VERSION}\n` +
           'Powered by Koishi.js v4\n\n' +
           //
@@ -39,7 +43,7 @@ export default {
           `进程内存：${processUsedmemMb.toFixed()}M (${processUsedMemRate}%)\n` +
           `系统内存：${totalUsedmemMb.toFixed()}M / ${totalmemMb.toFixed()}M (${totalUsedMemRate}%)\n` +
           `Node版本：${process.version}\n\n` +
-          // 
+          //
           `Bot反馈群：883632773`
         )
       })

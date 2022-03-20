@@ -10,7 +10,7 @@ import {
   getSongInfoFromDatabase,
 } from '../utils'
 import fs from 'fs/promises'
-import { getAssetFilePath, randomInt } from '../../../utils'
+import { getAssetFilePath, randomInt, reply } from '../../../utils'
 import Database from 'better-sqlite3'
 
 const songdb = new Database(getAssetFilePath('arcaea', 'arcsong.db'))
@@ -50,9 +50,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
             parseFloat(start) > 11.5 ||
             parseFloat(start) < 1
           )
-            return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + '请输入正确的起始难度'
+            return reply(session) + '请输入正确的起始难度'
           else start = parseFloat(start).toFixed(1)
         }
       }
@@ -64,9 +62,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
             parseFloat(end) > 11.5 ||
             parseFloat(end) < 1
           )
-            return (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) + '请输入正确的最高难度'
+            return reply(session) + '请输入正确的最高难度'
           else end = parseFloat(end).toFixed(1)
         }
       }
@@ -79,7 +75,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         // )
 
         const lowerlimit = convertToArcaeaRange(start ?? '1.0')
-        const upperlimit = convertToArcaeaRange(end ?? (start ?? '11.5'))
+        const upperlimit = convertToArcaeaRange(end ?? start ?? '11.5')
         const random = getRandomSong(lowerlimit[0], upperlimit[1])
 
         let str = random.songinfo.title_localized.en + '\n'
@@ -98,9 +94,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
           ']'
 
         return (
-          (session?.platform === 'qqguild'
-              ? segment.at(session?.userId!)
-              : segment.quote(session?.messageId!)) +
+          reply(session) +
           '随机推荐曲目：\n' +
           segment.image(
             await fs.readFile(
