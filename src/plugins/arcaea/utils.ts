@@ -241,6 +241,7 @@ export function getAbbreviation(source: string) {
 }
 
 export function getSongIdFuzzy(source: string): string {
+  source = source.toString()
   if (source.trim() === '') return ''
 
   source = source.replaceAll(' ', '').toLowerCase()
