@@ -10,7 +10,7 @@ import utils from './plugins/utils'
 import Database from 'better-sqlite3'
 import gosen from './plugins/gosen'
 
-export const VERSION = '1.3.0'
+export const VERSION = '1.3.1'
 
 export const botdb = new Database(path.resolve(__dirname, '../database.db'))
 

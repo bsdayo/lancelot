@@ -1,5 +1,19 @@
 # 更新日志 / Changelog
 
+## 1.3.1 - 2022.3.20
+## plugin/arcaea
+- 添加 `/a ptt` 指令，用于根据得分计算单曲潜力值
+
+## plugin/gosen
+- 添加 `/5k` 指令，用于生成五千兆风格的图片
+
+## plugin/utils
+- 新增 `/mainbot` 指令，可用于群内有多个 lancelot 系列的 bot 时切换主 bot。使用需要 at bot 发送，如 `@[Bot] Galahad /mainbot`
+- 新增 `/choose` 指令，用于随机推荐
+
+新增指令的具体使用说明可前往[文档](https://docs.blacksoil.top/lancelot/)查看。
+
+
 ## 1.3.0 - 2022.3.12
 ### plugin/arcaea
 - 将部分依赖 AUA 的指令 `alias`, `info`, `random` 转为本地处理，反应速度应有所改善，同时降低了 AUA 服务器的压力。`recommend` 由于需要查询潜力值，所以只部分本地化。
