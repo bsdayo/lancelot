@@ -54,7 +54,7 @@ export function enableBind(
                 await officialApi.userinfo(usercode)
               )
             } catch (err2) {
-              return reply(session) + `未知错误：\n(1) ${err1}\n(2) ${err2}`
+              return reply(session) + `发生错误，请检查好友码是否有误。\n(1) ${err1}\n(2) ${err2}`
             }
           }
 
