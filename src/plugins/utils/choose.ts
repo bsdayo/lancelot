@@ -10,10 +10,14 @@ export default function enableChoose(ctx: Context) {
       if (!args || args.length < 2)
         return reply(session) + '请输入至少两个选项！'
 
+      if (options?.template.toString().replaceAll('#', '') === '')
+        return reply(session) + '模板中仅存在占位符，请检查后重试。'
+
+      if (!options?.template.toString().includes('#'))
+        return reply(session) + '模板中不存在占位符，请检查后重试。'
+
       const random = args[randomInt(0, args.length - 1)]
-      
-      return options?.template
-        .toString()
-        .replaceAll('#', random)
+
+      return options?.template.toString().replaceAll('#', random)
     })
 }
