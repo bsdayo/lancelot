@@ -95,5 +95,6 @@ export default {
     commands.enableYCM(rootCmd, ycmApi)
     // commands.enableTest(rootCmd)
     commands.enableAddAlias(rootCmd)
+    commands.enablePtt(rootCmd)
   },
 }
