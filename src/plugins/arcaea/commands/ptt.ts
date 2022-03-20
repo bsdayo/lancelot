@@ -28,6 +28,8 @@ export function enablePtt(rootCmd: Command) {
       if (diffIndex === 4) return reply(session) + '请输入正确的难度'
 
       const songinfo = getSongInfoFromDatabase(sid)
+      if (diffIndex === 3 && songinfo.difficulties.length < 4) return reply(session) + '请输入正确的难度'
+
       const rating = songinfo.difficulties[diffIndex].realrating / 10
       let ptt = 0
 
