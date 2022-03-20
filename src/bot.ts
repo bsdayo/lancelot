@@ -6,8 +6,12 @@ import status from './plugins/status'
 import whitelist from './plugins/whitelist'
 import poke from './plugins/poke'
 import { initDir } from './utils'
+import utils from './plugins/utils'
+import Database from 'better-sqlite3'
 
 export const VERSION = '1.3.0'
+
+export const botdb = new Database(path.resolve(__dirname, '../database.db'))
 
 // 创建目录
 initDir('temp')
@@ -27,15 +31,16 @@ declare module 'koishi' {
   }
 }
 app.model.extend('user', {
-  qqguild: 'text'
+  qqguild: 'text',
 })
 
-app.before('command/execute', ({session}) => {
+app.before('command/execute', ({ session }) => {
   if (
     session?.platform === 'qqguild' &&
     session?.guildId === config.qqguild.mainGuild &&
     session?.channelId !== config.qqguild.mainChannel
-  ) return ''
+  )
+    return ''
 })
 
 app
@@ -46,6 +51,7 @@ app
   })
   .plugin(whitelist)
   .plugin(status)
+  .plugin(utils)
   .plugin(arcaea, config.plugins.arcaea)
   .plugin(poke)
   .plugin('echo')
