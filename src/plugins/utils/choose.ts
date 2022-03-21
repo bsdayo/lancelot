@@ -15,7 +15,7 @@ export default function enableChoose(ctx: Context) {
       if (template.toString().replaceAll(' ', '').replaceAll('#', '') === '')
         return reply(session) + '模板中仅存在占位符，请检查后重试。'
 
-      if (template.toString().includes('#'))
+      if (!template.toString().includes('#'))
         return reply(session) + '模板中不存在占位符，请检查后重试。'
 
       const random = args[randomInt(0, args.length - 1)]
