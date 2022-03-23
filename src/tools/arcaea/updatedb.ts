@@ -13,9 +13,9 @@ const olddb = new Database(getAssetFilePath('arcaea', 'arcsong.db'))
 olddb.exec('PRAGMA foreign_keys = OFF')
 
 olddb.prepare("ATTACH DATABASE ? AS 'newdb'").run(dbfile)
-olddb.exec('INSERT OR IGNORE INTO main.alias (sid, alias) SELECT * FROM newdb.alias')
+olddb.exec('INSERT OR REPLACE INTO main.alias (sid, alias) SELECT * FROM newdb.alias')
 
-olddb.exec(`INSERT OR IGNORE INTO main.songs (
+olddb.exec(`INSERT OR REPLACE INTO main.songs (
   sid, name_en, name_jp,
   bpm, bpm_base,
   pakset, artist, time, side,
@@ -30,7 +30,7 @@ olddb.exec(`INSERT OR IGNORE INTO main.songs (
   jacket_override_ftr, jacket_override_byn
 ) SELECT * FROM newdb.songs`)
 
-olddb.exec('INSERT OR IGNORE INTO main.packages (id, name) SELECT * FROM newdb.packages')
+olddb.exec('INSERT OR REPLACE INTO main.packages (id, name) SELECT * FROM newdb.packages')
 olddb.exec('DETACH newdb')
 olddb.close()
 
