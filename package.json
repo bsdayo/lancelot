@@ -9,7 +9,7 @@
     "dev": "ts-node ./src/bot.ts",
     "build": "tsc",
     "prod": "tsc && node ./dist/bot.js",
-    "tools:arcsongassets": "ts-node ./src/tools/arcsongassets.ts"
+    "tools:arcaea/updatedb": "ts-node ./src/tools/arcaea/updatedb.ts"
   },
   "dependencies": {
     "@koishijs/plugin-adapter-onebot": "^4.0.0",
