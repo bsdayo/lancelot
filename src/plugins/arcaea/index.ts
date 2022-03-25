@@ -8,9 +8,10 @@ import YCMAPI from './ycm'
 export interface ArcaeaConfig {
   baseURL: string
   userAgent: string
-  timeout: number
+  timeout?: number
   limitedAPIToken: string
   ycmToken: string
+  ignoreSelfId: string[]
 }
 
 // 数据表结构
@@ -56,7 +57,7 @@ export default {
     // BotArcAPI配置
     const api = new BotArcApiV5({
       baseURL: config.baseURL,
-      timeout: config.timeout,
+      timeout: config.timeout ?? 120000,
       headers: {
         'User-Agent': config.userAgent,
       },
@@ -65,13 +66,19 @@ export default {
     // OfficialAPI配置
     const officialApi = new ArcaeaLimitedAPI({
       token: config.limitedAPIToken,
-      timeout: config.timeout,
+      timeout: config.timeout ?? 120000,
     })
 
     // YCM API 配置
     const ycmApi = new YCMAPI({
       token: config.ycmToken,
-      timeout: config.timeout,
+      timeout: config.timeout ?? 120000,
+    })
+
+    ctx.before('command/execute', ({ session }) => {
+      if (config.ignoreSelfId?.includes(session?.selfId!)) {
+        return '由于冻结过于频繁，本bot已停止提供Arcaea相关查询服务。\n您可以选择加入频道使用，详请进群744362693。'
+      }
     })
 
     // 根命令
