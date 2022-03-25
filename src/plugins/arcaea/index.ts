@@ -75,7 +75,8 @@ export default {
       timeout: config.timeout ?? 120000,
     })
 
-    ctx.before('command/execute', ({ session }) => {
+    ctx.before('command/execute', ({ session, args }) => {
+      console.log(args)
       if (config.ignoreSelfId?.includes(session?.selfId!)) {
         return '由于冻结过于频繁，本bot已停止提供Arcaea相关查询服务。\n您可以选择加入频道使用，详请进群744362693。'
       }
