@@ -78,7 +78,8 @@ export default {
     ctx.before('command/execute', ({ session, command }) => {
       if (
         config.ignoreSelfId?.includes(session?.selfId!) &&
-        command?.name.split('.')[0] === 'arc'
+        command?.name.split('.')[0] === 'arc' &&
+        ['b30', 'recent', 'best'].includes(command?.name.split('.')[1])
       ) {
         return '由于冻结过于频繁，本bot已停止提供Arcaea相关查询服务。\n您可以选择加入频道使用，详请进群744362693。'
       }
