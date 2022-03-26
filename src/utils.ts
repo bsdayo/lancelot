@@ -67,7 +67,7 @@ export function getPastMinutes(timestamp: number) {
 }
 
 export function randomInt(low: number, high: number) {
-  return Math.round(Math.random() * (high - low) + low)
+  return Math.floor(Math.random() * (high - low + 1)) + low
 }
 
 export function reply(session?: Session) {
