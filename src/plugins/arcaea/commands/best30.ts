@@ -30,6 +30,7 @@ export function enableBest30(
     .subcommand('.b30 [usercode:string]', '查询用户Best30成绩')
     .option('simple', '-s')
     .option('official', '-o')
+    .option('highQuality', '-q')
     .shortcut('查b30', { fuzzy: true })
     .alias('b30')
     .usage('/arc b30 [要查询的ArcaeaID]')
@@ -126,10 +127,15 @@ export function enableBest30(
           `正在为用户 ${arcObj.name} [${arcObj.id}] 生成 Best30 图片...`
         )
         const imgPath = options?.simple
-          ? await generateSimpleBest30Image(best30Data)
+          ? await generateSimpleBest30Image(
+              best30Data,
+              options?.official || officialFlag,
+              options?.highQuality
+            )
           : await generateBest30Image(
               best30Data,
-              options?.official || officialFlag
+              options?.official || officialFlag,
+              options?.highQuality
             )
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`

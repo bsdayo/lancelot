@@ -1,5 +1,4 @@
 import { createCanvas, loadImage, registerFont } from 'canvas'
-import path from 'path'
 import fs from 'fs/promises'
 import {
   drawScoreCard,
@@ -24,6 +23,7 @@ import {
   getDifficultyClassName,
   getSongCoverPath,
 } from './utils'
+import jimp from 'jimp'
 
 registerFont(getAssetFilePath('arcaea', 'TitilliumWeb-SemiBold.ttf'), {
   family: 'Titillium Web SemiBold',
@@ -47,13 +47,16 @@ export async function generateBest30Image(
     best30_songinfo: BotArcApiSonginfoV5[]
     best30_overflow_songinfo: BotArcApiSonginfoV5[]
   },
-  official?: boolean
+  official?: boolean,
+  highQuality?: boolean
 ) {
+  const imgWidth = 3400
+  const imgHeight = 6600
   // 背景图
   const backgroundImage = await loadImage(
     getAssetFilePath('arcaea', 'best30Background.jpg')
   )
-  const canvas = createCanvas(3400, 6600)
+  const canvas = createCanvas(imgWidth, imgHeight)
   const ctx = canvas.getContext('2d')
   ctx.drawImage(backgroundImage, 0, -60)
 
@@ -192,7 +195,15 @@ export async function generateBest30Image(
   }
 
   const filepath = getTempFilePath('arcaea-best30', 'jpg')
-  await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
+  const buffer = canvas.toBuffer('image/jpeg')
+  if (highQuality) {
+    await fs.writeFile(filepath, buffer)
+  } else {
+    await (await jimp.read(buffer))
+      .resize(Math.floor(imgWidth / 2), jimp.AUTO)
+      .quality(90)
+      .writeAsync(filepath)
+  }
 
   return filepath
 }
@@ -202,9 +213,13 @@ export async function generateSimpleBest30Image(
     account_info: BotArcApiUserinfoV5
     best30_songinfo: BotArcApiSonginfoV5[]
     best30_overflow_songinfo: BotArcApiSonginfoV5[]
-  }
+  },
+  official?: boolean, // TODO
+  highQuality?: boolean
 ) {
-  const canvas = createCanvas(2530, 6100)
+  const imgWidth = 2530
+  const imgHeight = 6100
+  const canvas = createCanvas(imgWidth, imgHeight)
   const ctx = canvas.getContext('2d')
   ctx.fillStyle = '#fff'
   ctx.fillRect(0, 0, 3400, 6700)
@@ -341,7 +356,15 @@ export async function generateSimpleBest30Image(
   await Promise.all(drawTask)
 
   const filepath = getTempFilePath('arcaea-best30-simple', 'jpg')
-  await fs.writeFile(filepath, canvas.toBuffer('image/jpeg'))
+  const buffer = canvas.toBuffer('image/jpeg')
+  if (highQuality) {
+    await fs.writeFile(filepath, buffer)
+  } else {
+    await (await jimp.read(buffer))
+      .resize(Math.floor(imgWidth / 2), jimp.AUTO)
+      .quality(90)
+      .writeAsync(filepath)
+  }
 
   return filepath
 }
