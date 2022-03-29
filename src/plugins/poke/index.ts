@@ -107,7 +107,7 @@ export default {
             return user.guildId === session?.guildId
           })
           .sort((a, b) => {
-            return a.pokeTimes - b.pokeTimes
+            return b.pokeTimes - a.pokeTimes
           })
         const userStatusIndex = guildStatus.findIndex((user) => {
           return user.userId === session?.userId
