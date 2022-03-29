@@ -1,6 +1,7 @@
 import { Context, Session } from 'koishi'
 import config from '../../config'
 import {
+  ArcaeaDifficulty,
   BotArcApiScore,
   BotArcApiSonginfoV5,
   BotArcApiUserbest30,
@@ -279,4 +280,23 @@ export function getAlias(songid: string) {
   for (let aliasRow of aliasRows)
     alias.push(aliasRow.alias)
   return alias
+}
+
+export function fixBydSongTitle(songtitle: string, difficulty: ArcaeaDifficulty) {
+  if (difficulty === 3) {
+    switch (songtitle) {
+      case 'Ignotus':
+        return 'Ignotus Afterburn'
+      case 'Red and Blue':
+        return 'Red and Blue and Green'
+      case 'Singularity':
+        return 'Singularity VVVIP'
+      case 'dropdead':
+        return 'overdead.'
+      case 'PRAGMATISM':
+        return 'PRAGMATISM -RESURRECTION-'
+      default:
+        return songtitle
+    }
+  } else return songtitle
 }
