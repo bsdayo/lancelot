@@ -17,6 +17,7 @@ import {
 import { getTempFilePath, getDateTime, getAssetFilePath } from '../../utils'
 import {
   calculateMaxPtt,
+  fixBydSongTitle,
   formatPtt,
   getCharPath,
   getDifficultyByRating,
@@ -397,7 +398,7 @@ export async function generateBestImage(bestData: {
   )
 
   ctx.font = 'normal 79px "Titillium Web SemiBold",sans-serif'
-  ctx.fillText(bestData.songinfo[0].title_localized.en, 124, 330)
+  ctx.fillText(fixBydSongTitle(bestData.songinfo[0].title_localized.en, bestData.record.difficulty), 124, 330)
 
   // 立绘
   const charPath = await getCharPath(

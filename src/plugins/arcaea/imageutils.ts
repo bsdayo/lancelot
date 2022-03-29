@@ -5,6 +5,7 @@ import {
   getSongCoverPath,
   getDifficultyClassName,
   getDifficultyByRating,
+  fixBydSongTitle,
 } from './utils'
 
 export const colorPST = '#51a9c8'
@@ -124,7 +125,7 @@ export async function drawScoreCard(
   // 曲名
   ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
   ctx.fillStyle = '#333'
-  ctx.fillText(songInfo.title_localized.en, x + 320 + 15, y + 15 + 46 + 75, 635)
+  ctx.fillText(fixBydSongTitle(songInfo.title_localized.en, scoreData.difficulty), x + 320 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
   ctx.font = '97px "Titillium Web Regular"'
@@ -198,7 +199,7 @@ export async function drawSimpleScoreCard(
 
   // 曲名
   ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
-  ctx.fillText(songInfo.title_localized.en, x + 30 + 15, y + 15 + 46 + 75, 635)
+  ctx.fillText(fixBydSongTitle(songInfo.title_localized.en, scoreData.difficulty), x + 30 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
   ctx.font = '97px "Titillium Web Regular"'
