@@ -1,4 +1,6 @@
-import { randomInt } from '../../utils'
+import { segment } from 'koishi'
+import { getAssetFilePath, randomInt } from '../../utils'
+import fs from 'fs/promises'
 
 const replies: string[] = [
   '唔...啊？嗯！',
@@ -9,9 +11,13 @@ const replies: string[] = [
   '猜猜你要多久才能再看见这一条戳一戳',
   '有笨蛋！',
   'zzz',
-  '戳我就要给我买冰淇淋吃！'
+  '戳我就要给我买冰淇淋吃！',
+  'face1.jpg',
+  'face2.jpg'
 ]
 
-export default function getRandomReply(): string {
-  return replies[randomInt(0, replies.length - 1)]
+export default async function getRandomReply(): Promise<string> {
+  const rpl = replies[randomInt(0, replies.length - 1)]
+  if (rpl.startsWith('face')) return segment.image(await fs.readFile(getAssetFilePath('poke', rpl)))
+  else return rpl
 }

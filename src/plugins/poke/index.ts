@@ -3,6 +3,19 @@ import { getAssetFilePath, randomInt, reply } from '../../utils'
 import fs from 'fs/promises'
 import getRandomReply from './replies'
 
+interface PokeRecordTable {
+  userId: string
+  targetId: string
+  pokeTimes: number
+  recorder: string
+}
+
+declare module 'koishi' {
+  interface Tables {
+    poke: PokeRecordTable
+  }
+}
+
 interface UserPokeStatus {
   userId: string
   guildId: string
@@ -24,7 +37,18 @@ const pokeReplies = ['戳你！', '戳戳！']
 export default {
   name: 'poke',
   apply(ctx: Context) {
+    ctx.model.extend(
+      'poke',
+      {
+        userId: 'text',
+        targetId: 'text',
+        pokeTimes: 'integer',
+        recorder: 'text'
+      },
+    )
+
     ctx.on('notice/poke', async (session) => {
+      await ctx.database.upsert('poke', [{}])
       if (!session.channelId || session.targetId !== session.selfId) return
 
       totalPokeTimes++
@@ -44,14 +68,14 @@ export default {
           pokeTimes: 1,
           status: 1,
         })
-        return await session.send(getRandomReply())
+        return await session.send(await getRandomReply())
       } else {
         userStatus.pokeTimes++
         if (Date.now() - userStatus.lastPoke > 120000) {
           // 若距离上次戳的时间大于 2 分钟则重置状态
           userStatus.lastPoke = Date.now()
           userStatus.status = 1
-          return await session.send(getRandomReply())
+          return await session.send(await getRandomReply())
         } else {
           // 若已戳完五次则不理会
           if (userStatus.status === 6) return
@@ -62,7 +86,7 @@ export default {
           switch (userStatus.status) {
             case 1: // 随机回复
             case 2:
-              return await session.send(getRandomReply())
+              return await session.send(await getRandomReply())
             case 3: // 警告咬人
               return await session.send('呜呜...再戳...再戳我就咬你！')
             case 4: // 发送咬人表情
