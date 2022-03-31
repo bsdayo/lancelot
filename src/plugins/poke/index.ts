@@ -4,6 +4,7 @@ import fs from 'fs/promises'
 import getRandomReply from './replies'
 
 interface PokeRecordTable {
+  id: number
   userId: string
   targetId: string
   pokeTimes: number
@@ -40,6 +41,7 @@ export default {
     ctx.model.extend(
       'poke',
       {
+        id: 'integer',
         userId: 'text',
         targetId: 'text',
         pokeTimes: 'integer',
@@ -48,7 +50,7 @@ export default {
     )
 
     ctx.on('notice/poke', async (session) => {
-      await ctx.database.upsert('poke', [{}])
+      // await ctx.database.upsert('poke', [{}])
       if (!session.channelId || session.targetId !== session.selfId) return
 
       totalPokeTimes++
