@@ -10,6 +10,7 @@ interface PokeRecordTable {
   targetId: string
   guildId: string
   pokeTimes: number
+  recorder: string
 }
 
 declare module 'koishi' {
@@ -46,23 +47,29 @@ export default {
         userId: 'text',
         targetId: 'text',
         guildId: 'text',
-        pokeTimes: 'integer'
+        pokeTimes: 'integer',
+        recorder: 'text'
       },
       { autoInc: true }
     )
 
     ctx.on('notice/poke', async (session) => {
       const prevRecord = botdb
-        .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
-        .get(session.userId, session.targetId, session.guildId)
+        .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ? AND recorder = ?')
+        .get(session.userId, session.targetId, session.guildId, session.selfId)
       if (!prevRecord) {
         botdb
-          .prepare('INSERT INTO poke (userId, targetId, guildId, pokeTimes) VALUES (?, ?, ?, 1)')
-          .run(session.userId, session.targetId, session.guildId)
+          .prepare('INSERT INTO poke (userId, targetId, guildId, recorder, pokeTimes) VALUES (?, ?, ?, ?, 1)')
+          .run(session.userId, session.targetId, session.guildId, session?.selfId)
       } else {
+        const times: number[] = []
+        const allRecords = botdb
+          .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
+          .all(session.userId, session.targetId, session.guildId)
+        for (let rec of allRecords) times.push(rec.pokeTimes)
         botdb
           .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
-          .run(prevRecord.pokeTimes + 1, session.userId, session.targetId, session.guildId)
+          .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
       }
 
 
