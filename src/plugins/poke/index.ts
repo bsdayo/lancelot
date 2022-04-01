@@ -54,7 +54,7 @@ export default {
       )
 
     ctx.on('notice/poke', async (session) => {
-      if (!session.channelId || session.targetId !== session.selfId) return
+      if (!session.channelId) return
       
       const prevRecord = botdb
         .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ? AND recorder = ?')
@@ -73,6 +73,8 @@ export default {
           .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
           .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
       }
+
+      if (session.targetId !== session.selfId) return
 
       totalPokeTimes++
 
@@ -193,7 +195,7 @@ export default {
         
         str += activeRecords.length === 0
           ? '你在群里还没有戳过人！'
-          : '你在群里最喜欢戳' + (await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, (activeRecords[0].targetId)))?.card + '，' +
+          : '你在群里最喜欢戳' + (await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, activeRecords[0].targetId))?.card + '，' +
             '一共戳了Ta ' + activeRecords[0].pokeTimes + '次。'
         str += passiveRecords.length === 0
           ? '\n群里还没有人戳过你！'
