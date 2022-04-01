@@ -195,15 +195,15 @@ export default {
         
         str += activeRecords.length === 0
           ? '你在群里还没有戳过人！'
-          : '你在群里最喜欢戳' + (await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, activeRecords[0].targetId))?.card + '，' +
+          : '你在群里最喜欢戳' + (await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, activeRecords[0].targetId, true))?.card + '，' +
             '一共戳了Ta ' + activeRecords[0].pokeTimes + '次。'
         str += passiveRecords.length === 0
           ? '\n群里还没有人戳过你！'
-          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(passiveRecords[0].guildId, passiveRecords[0].userId))?.card + '最喜欢戳你，' +
+          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(passiveRecords[0].guildId, passiveRecords[0].userId, true))?.card + '最喜欢戳你，' +
             '一共戳了你' + passiveRecords[0].pokeTimes + '次。'
         str += pokeselfRecords.length === 0
           ? ''
-          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(pokeselfRecords[0].guildId, pokeselfRecords[0].userId))?.card + 
+          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(pokeselfRecords[0].guildId, pokeselfRecords[0].userId, true))?.card + 
             '有够无聊的，闲着没事戳了自己' + pokeselfRecords[0].pokeTimes + '次！'
         str += pokebotRecords
           ? '\n你在群里一共戳了我' + pokebotRecords.pokeTimes + '次，哼哼！'
