@@ -192,19 +192,28 @@ export default {
           .get(session?.userId, session?.selfId, session?.guildId)
 
         let str = ''
-        
-        str += activeRecords.length === 0
-          ? '你在群里还没有戳过人！'
-          : '你在群里最喜欢戳' + (await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, activeRecords[0].targetId, true))?.card + '，' +
-            '一共戳了Ta ' + activeRecords[0].pokeTimes + '次。'
-        str += passiveRecords.length === 0
-          ? '\n群里还没有人戳过你！'
-          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(passiveRecords[0].guildId, passiveRecords[0].userId, true))?.card + '最喜欢戳你，' +
-            '一共戳了你' + passiveRecords[0].pokeTimes + '次。'
-        str += pokeselfRecords.length === 0
-          ? ''
-          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(pokeselfRecords[0].guildId, pokeselfRecords[0].userId, true))?.card + 
-            '有够无聊的，闲着没事戳了自己' + pokeselfRecords[0].pokeTimes + '次！'
+
+        if (activeRecords.length === 0) str += '你在群里还没有戳过人！'
+        else {
+          const targetUser = await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, activeRecords[0].targetId)
+          str += '你在群里最喜欢戳' + targetUser?.card ?? targetUser?.nickname + '，' +
+                  '一共戳了Ta ' + activeRecords[0].pokeTimes + '次。'
+        }
+
+        if (passiveRecords.length === 0) str += '\n群里还没有人戳过你！'
+        else {
+          const sourceUser = await session?.onebot?.getGroupMemberInfo(passiveRecords[0].guildId, passiveRecords[0].userId)
+          str += '\n群里' + sourceUser?.card ?? sourceUser?.nickname + '最喜欢戳你，' +
+                  '一共戳了你' + passiveRecords[0].pokeTimes + '次。'
+        }
+
+        if (pokeselfRecords.length === 0) str += ''
+        else {
+          const pokeselfUser = await session?.onebot?.getGroupMemberInfo(pokeselfRecords[0].guildId, pokeselfRecords[0].userId)
+          str += '\n群里' + pokeselfUser?.card ?? pokeselfUser?.nickname + 
+                  '有够无聊的，闲着没事戳了自己' + pokeselfRecords[0].pokeTimes + '次！'
+        }
+
         str += pokebotRecords
           ? '\n你在群里一共戳了我' + pokebotRecords.pokeTimes + '次，哼哼！'
           : ''
