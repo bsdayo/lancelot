@@ -173,7 +173,7 @@ export default {
           .sort((recA, recB) => recB.pokeTimes - recA.pokeTimes)
         const passiveRecords: PokeRecordTable[] = botdb
           .prepare('SELECT * FROM poke WHERE targetId = ? AND guildId = ?')
-          .all(session?.targetId, session?.guildId)
+          .all(session?.userId, session?.guildId)
           .sort((recA, recB) => recB.pokeTimes - recA.pokeTimes)
         const pokeselfRecords: PokeRecordTable[] = botdb
           .prepare('SELECT * FROM poke WHERE userId = targetId AND guildId = ?')
