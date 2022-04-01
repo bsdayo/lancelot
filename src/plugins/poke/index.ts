@@ -2,13 +2,14 @@ import { Context, segment } from 'koishi'
 import { getAssetFilePath, randomInt, reply } from '../../utils'
 import fs from 'fs/promises'
 import getRandomReply from './replies'
+import { botdb } from '../../bot'
 
 interface PokeRecordTable {
   id: number
   userId: string
   targetId: string
+  guildId: string
   pokeTimes: number
-  recorder: string
 }
 
 declare module 'koishi' {
@@ -44,21 +45,33 @@ export default {
         id: 'integer',
         userId: 'text',
         targetId: 'text',
-        pokeTimes: 'integer',
-        recorder: 'text'
+        guildId: 'text',
+        pokeTimes: 'integer'
       },
+      { autoInc: true }
     )
 
     ctx.on('notice/poke', async (session) => {
-      // await ctx.database.upsert('poke', [{}])
+      const prevRecord = botdb
+        .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
+        .get(session.userId, session.targetId, session.guildId)
+      if (!prevRecord) {
+        botdb
+          .prepare('INSERT INTO poke (userId, targetId, guildId, pokeTimes) VALUES (?, ?, ?, 1)')
+          .run(session.userId, session.targetId, session.guildId)
+      } else {
+        botdb
+          .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
+          .run(prevRecord.pokeTimes + 1, session.userId, session.targetId, session.guildId)
+      }
+
+
       if (!session.channelId || session.targetId !== session.selfId) return
 
       totalPokeTimes++
 
       const userStatus = pokeStatus.find((user) => {
-        return (
-          user.userId === session.userId && user.guildId === session.guildId
-        )
+        return user.userId === session.userId && user.guildId === session.guildId
       })
 
       if (!userStatus) {
@@ -106,9 +119,7 @@ export default {
       .action(async ({ session }, subcmd?: string) => {
         if (subcmd) return session?.execute('poke.' + subcmd)
         const userStatus = pokeStatus.find((user) => {
-          return (
-            user.userId === session?.userId && user.guildId === session?.guildId
-          )
+          return user.userId === session?.userId && user.guildId === session?.guildId
         })
         if (userStatus && Date.now() - userStatus.lastPoke > 120000) {
           // 若距离上次戳的时间大于 2 分钟则重置状态
@@ -126,24 +137,19 @@ export default {
     rootCmd
       .subcommand('.info', '获取戳一戳信息')
       .shortcut('本群戳一戳信息')
+      .shortcut('群内戳一戳信息')
       .shortcut('戳一戳信息')
       .action(({ session }) => {
         const guildStatus = pokeStatus
-          .filter((user) => {
-            return user.guildId === session?.guildId
-          })
-          .sort((a, b) => {
-            return b.pokeTimes - a.pokeTimes
-          })
+          .filter((user) => user.guildId === session?.guildId)
+          .sort((a, b) => b.pokeTimes - a.pokeTimes)
         const userStatusIndex = guildStatus.findIndex((user) => {
           return user.userId === session?.userId
         })
         const userStatus = userStatusIndex === -1 ? null : guildStatus[userStatusIndex]
 
         let guildPokeSum = 0
-        for (let user of guildStatus) {
-          guildPokeSum += user.pokeTimes
-        }
+        for (let user of guildStatus) guildPokeSum += user.pokeTimes
 
         const percent = guildPokeSum / totalPokeTimes * 100
         let str = '自从上次重启以来，'
@@ -151,6 +157,49 @@ export default {
         else str += `本群有${guildStatus.length}人戳了我共${guildPokeSum}次，占全局总数的${percent.toFixed(1)}%！`
         if (userStatus) str += `其中你戳了我${userStatus.pokeTimes}次，是本群的第${userStatusIndex + 1}名！`
         if (userStatusIndex === 0) str += '\n这么会戳快去玩Cytus！qwq'
+
+        return reply(session) + str
+      })
+
+    rootCmd
+      .subcommand('.record', '查看自己戳一戳记录')
+      .shortcut('本群戳一戳记录')
+      .shortcut('群内戳一戳记录')
+      .shortcut('戳一戳记录')
+      .action(async ({ session }) => {
+        const activeRecords: PokeRecordTable[] = botdb
+          .prepare('SELECT * FROM poke WHERE userId = ? AND guildId = ?')
+          .all(session?.userId, session?.guildId)
+          .sort((recA, recB) => recB.pokeTimes - recA.pokeTimes)
+        const passiveRecords: PokeRecordTable[] = botdb
+          .prepare('SELECT * FROM poke WHERE targetId = ? AND guildId = ?')
+          .all(session?.targetId, session?.guildId)
+          .sort((recA, recB) => recB.pokeTimes - recA.pokeTimes)
+        const pokeselfRecords: PokeRecordTable[] = botdb
+          .prepare('SELECT * FROM poke WHERE userId = targetId AND guildId = ?')
+          .all(session?.guildId)
+          .sort((recA, recB) => recB.pokeTimes - recA.pokeTimes)
+        const pokebotRecords: PokeRecordTable = botdb
+          .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
+          .get(session?.userId, session?.selfId, session?.guildId)
+
+        let str = ''
+        
+        str += activeRecords.length === 0
+          ? '你在群里还没有戳过人！'
+          : '你在群里最喜欢戳' + (await session?.onebot?.getGroupMemberInfo(activeRecords[0].guildId, (activeRecords[0].targetId)))?.nickname + '，' +
+            '一共戳了Ta ' + activeRecords[0].pokeTimes + '次。'
+        str += passiveRecords.length === 0
+          ? '\n群里还没有人戳过你！'
+          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(passiveRecords[0].guildId, passiveRecords[0].userId))?.nickname + '最喜欢戳你，' +
+            '一共戳了你' + passiveRecords[0].pokeTimes + '次。'
+        str += pokeselfRecords.length === 0
+          ? ''
+          : '\n群里' + (await session?.onebot?.getGroupMemberInfo(pokeselfRecords[0].guildId, pokeselfRecords[0].userId))?.nickname + 
+            '有够无聊的，闲着没事戳了自己' + pokeselfRecords[0].pokeTimes + '次！'
+        str += pokebotRecords
+          ? '\n你在群里一共戳了我' + pokebotRecords.pokeTimes + '次，哼哼！'
+          : ''
 
         return reply(session) + str
       })
