@@ -51,9 +51,11 @@ export default {
         recorder: 'text'
       },
       { autoInc: true }
-    )
+      )
 
     ctx.on('notice/poke', async (session) => {
+      if (!session.channelId || session.targetId !== session.selfId) return
+      
       const prevRecord = botdb
         .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ? AND recorder = ?')
         .get(session.userId, session.targetId, session.guildId, session.selfId)
@@ -71,9 +73,6 @@ export default {
           .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
           .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
       }
-
-
-      if (!session.channelId || session.targetId !== session.selfId) return
 
       totalPokeTimes++
 
