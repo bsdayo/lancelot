@@ -8,6 +8,9 @@ temp/
 cache/
 test/
 
+# Database Backup
+database-backups/
+
 # Dist
 dist/
 
