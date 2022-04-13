@@ -54,26 +54,37 @@ export default {
       )
 
     ctx.on('notice/poke', async (session) => {
+      // 不在群内则不记录
       if (!session.channelId) return
+
+      // ===== 数据库记录 =====
+
+      // 获取所有符合条件的记录
+      const allRecords = botdb
+        .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
+        .all(session.userId, session.targetId, session.guildId)
       
-      const prevRecord = botdb
-        .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ? AND recorder = ?')
-        .get(session.userId, session.targetId, session.guildId, session.selfId)
-      if (!prevRecord) {
+      // 检查是否有记录者为自身的记录，若没有则新建
+      const prevRecord = allRecords.find((rec) => rec.recorder === session.selfId)
+      if (!prevRecord) 
         botdb
           .prepare('INSERT INTO poke (userId, targetId, guildId, recorder, pokeTimes) VALUES (?, ?, ?, ?, 1)')
           .run(session.userId, session.targetId, session.guildId, session?.selfId)
-      } else {
+      
+      // 若记录者数量大于一，获取所有记录者的最高次数并更新
+      if (allRecords.length > 1) {
         const times: number[] = []
-        const allRecords = botdb
-          .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
-          .all(session.userId, session.targetId, session.guildId)
-        for (let rec of allRecords) times.push(rec.pokeTimes)
+        for (let rec of allRecords) {
+          times.push(rec.pokeTimes)
+        }
         botdb
           .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
           .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
       }
 
+      // ===== 内存记录 =====
+      
+      // 戳的不是自己则不记录
       if (session.targetId !== session.selfId) return
 
       totalPokeTimes++
