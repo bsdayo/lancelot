@@ -36,7 +36,6 @@ app.model.extend('user', {
 })
 
 app.before('command/execute', ({ session }) => {
-  console.log(session?.guildId, session?.channelId)
   if (
     session?.platform === 'qqguild' &&
     session?.guildId !== config.qqguild.mainGuild
