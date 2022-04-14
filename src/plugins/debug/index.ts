@@ -4,7 +4,10 @@ import { reply } from '../../utils';
 export default {
   name: 'debug',
   apply(ctx: Context) {
-    const rootCmd = ctx.command('debug', '调试功能', { authority: 3 })
+    const rootCmd = ctx.command('debug', '调试功能', {
+      authority: 3,
+      hidden: true
+    })
 
     rootCmd
       .subcommand('.envinfo', '当前环境信息')
