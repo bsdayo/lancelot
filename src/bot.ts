@@ -10,6 +10,7 @@ import utils from './plugins/utils'
 import Database from 'better-sqlite3'
 import gosen from './plugins/gosen'
 import gacha from './plugins/gacha'
+import debug from './plugins/debug'
 
 export const VERSION = '1.3.1'
 
@@ -58,5 +59,6 @@ app
   .plugin(gosen, config.plugins.gosen)
   .plugin(poke)
   .plugin(gacha)
+  .plugin(debug)
   .plugin('echo')
   .start()
