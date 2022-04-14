@@ -17,7 +17,7 @@ export default {
         if (deckName === 'list')
           return await session?.execute('gacha.list')
         if (deckName === 'info')
-          return await session?.execute('gacha.info ' + deckName)
+          return await session?.execute('gacha.info ' + count)
           
         count = count ?? 1
 
