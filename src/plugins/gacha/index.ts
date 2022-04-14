@@ -9,22 +9,22 @@ export default {
     ctx
       .command('gacha <deck> [count]', '抽卡模拟器')
       .alias('draw')
-      .shortcut('抽卡')
-      .action(async ({ session }, deckName: string | undefined, count: string | undefined) => {
+      .shortcut('抽卡', { fuzzy: true })
+      .action(async ({ session }, deckName: string | undefined, count: string | number | undefined) => {
         if (!deckName || typeof deckName !== 'string')
           return reply(session) + '请输入牌堆名！'
 
         if (deckName === 'list')
           return await session?.execute('gacha.list')
+        if (deckName === 'info')
+          return await session?.execute('gacha.info ' + deckName)
+          
+        count = count ?? 1
 
         if (!Object.keys(decks).includes(deckName))
           return reply(session) + `牌堆 ${deckName} 不存在！`
-
-        if (deckName === 'info')
-          return await session?.execute('gacha.info ' + deckName)
-
-        if (typeof count !== 'number' || count < 1 || count > 10)
-          return reply(session) + '请输入正确格式的数量！(1 - 10)'
+        if (typeof count !== 'number' || count < 1 || count > 3)
+          return reply(session) + '请输入正确格式的数量！(1 - 3)'
 
 
         const deck = decks[deckName as keyof typeof decks]
@@ -66,6 +66,11 @@ export default {
       .subcommand('.info <deck>', '查看牌堆信息')
       .shortcut('牌堆信息')
       .action(({ session }, deckName: string | undefined) => {
+        if (!deckName || typeof deckName !== 'string')
+          return reply(session) + '请输入牌堆名！'
+        if (!Object.keys(decks).includes(deckName))
+          return reply(session) + `牌堆 ${deckName} 不存在！`
+
         const deck = decks[deckName as keyof typeof decks]
         let rpl = deck.name + ' - ' + deck.description + '\n'
         rpl += '牌堆容量：' + deck.volume + '\n'
