@@ -43,7 +43,9 @@ export default {
             rpl.push(card.rarity.name + ' ' + card.name)
           }
         
-        return reply(session) + `${count}次抽卡结果：\n` + rpl.join('\n')
+        return reply(session) +
+          (count === 1 ? '' : `${count}次`) +
+          '抽卡结果：\n' + rpl.join('\n')
       })
 
 
