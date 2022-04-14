@@ -40,8 +40,8 @@ app.model.extend('user', {
 app.before('command/execute', ({ session }) => {
   if (
     session?.platform === 'qqguild' &&
-    session?.guildId !== config.qqguild.mainGuild
-    // && session?.channelId !== config.qqguild.mainChannel
+    (session?.guildId !== config.qqguild.mainGuild ||
+    !config.qqguild.mainChannel.includes(session?.channelId!))
   )
     return ''
 })
