@@ -78,7 +78,7 @@ export default {
         const noRarity: boolean = deck.rarities.length === 1 && deck.rarities[0].weight === 1
 
         let rpl = deck.name + ' - ' + deck.description + '\n'
-        rpl += '别名：' + deck.alias.join('、')
+        rpl += '别名：' + deck.alias.join('、') + '\n'
         rpl += '牌堆容量：' + deck.volume + '\n'
         rpl += '单次最大抽取数：' + deck.maxCount
         if (!noRarity) {

@@ -52,5 +52,5 @@ for (let f of [
 export default new Deck<TarotCard>('tarot', cards, {
   alias: ['塔罗牌', '塔罗'],
   description: '塔罗牌',
-  maxCount: 1
+  maxCount: 3
 })
