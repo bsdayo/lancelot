@@ -6,7 +6,7 @@ import { Card } from './decks/deck'
 export default {
   name: 'gacha',
   apply(ctx: Context) {
-    ctx
+    const rootCmd = ctx
       .command('gacha <deck> [count]', '抽卡模拟器')
       .alias('draw')
       .shortcut('抽卡', { fuzzy: true })
@@ -47,6 +47,7 @@ export default {
       })
 
 
+    rootCmd
       .subcommand('.list', '查看牌堆列表')
       .shortcut('牌堆列表')
       .action(({ session }) => {
@@ -64,6 +65,7 @@ export default {
       })
 
 
+    rootCmd
       .subcommand('.info <deck>', '查看牌堆信息')
       .shortcut('牌堆信息')
       .action(({ session }, deckName: string | undefined) => {
