@@ -1,16 +1,23 @@
 import { randomInt } from '../../../utils'
 
+interface DeckExtraConfig {
+  alias?: string[]
+  description?: string
+}
+
 export class Deck<CardT extends Card> {
   public readonly name: string
+  public readonly alias: string[]
   public readonly description: string
   public readonly rarities: CardRarity[] = []
   public readonly volume: number
   private readonly _deck: CardT[] = []
   private readonly _intervals: number[] = [0]
 
-  public constructor(name: string, source?: CardT[], description?: string) {
+  public constructor(name: string, source?: CardT[], extraConfig?: DeckExtraConfig) {
     this.name = name
-    this.description = description ?? ''
+    this.description = extraConfig?.description ?? ''
+    this.alias = extraConfig?.alias ?? []
     this.update(source)
     this.volume = source?.length ?? 0
 

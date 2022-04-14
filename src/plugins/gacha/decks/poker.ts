@@ -44,4 +44,7 @@ for (let i = 1; i <= 13; i++) {
 cards.push(new PokerCard('大王'))
 cards.push(new PokerCard('小王'))
 
-export default new Deck<PokerCard>('poker', cards, '扑克牌')
+export default new Deck<PokerCard>('poker', cards, {
+  alias: ['扑克', '扑克牌'],
+  description: '扑克牌'
+})
