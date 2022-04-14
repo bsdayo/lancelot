@@ -67,7 +67,7 @@ export default {
 
     rootCmd
       .subcommand('.info <deck>', '查看牌堆信息')
-      .shortcut('牌堆信息')
+      .shortcut('牌堆信息', { fuzzy: true })
       .action(({ session }, deckName: string | undefined) => {
         if (!deckName || typeof deckName !== 'string')
           return reply(session) + '请输入牌堆名！'
@@ -79,9 +79,9 @@ export default {
 
         let rpl = deck.name + ' - ' + deck.description + '\n'
         rpl += '牌堆容量：' + deck.volume + '\n'
-        rpl += '单次最大抽取数：' + deck.maxCount + '\n'
+        rpl += '单次最大抽取数：' + deck.maxCount
         if (!noRarity) {
-          rpl += '稀有度：\n'
+          rpl += '\n稀有度：\n'
           for (let rarity of deck.rarities) {
             rpl += '  ' + rarity.name + '  权重：' + rarity.weight
           }
