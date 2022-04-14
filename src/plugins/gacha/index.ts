@@ -75,12 +75,16 @@ export default {
           return reply(session) + `牌堆 ${deckName} 不存在！`
 
         const deck = decks[deckName as keyof typeof decks]
+        const noRarity: boolean = deck.rarities.length === 1 && deck.rarities[0].weight === 1
+
         let rpl = deck.name + ' - ' + deck.description + '\n'
         rpl += '牌堆容量：' + deck.volume + '\n'
         rpl += '单次最大抽取数：' + deck.maxCount + '\n'
-        rpl += '稀有度：\n'
-        for (let rarity of deck.rarities) {
-          rpl += '  ' + rarity.name + '  权重：' + rarity.weight
+        if (!noRarity) {
+          rpl += '稀有度：\n'
+          for (let rarity of deck.rarities) {
+            rpl += '  ' + rarity.name + '  权重：' + rarity.weight
+          }
         }
         
         return reply(session) + rpl
