@@ -3,6 +3,7 @@ import { randomInt } from '../../../utils'
 interface DeckExtraConfig {
   alias?: string[]
   description?: string
+  maxCount?: number
 }
 
 export class Deck<CardT extends Card> {
@@ -11,6 +12,7 @@ export class Deck<CardT extends Card> {
   public readonly description: string
   public readonly rarities: CardRarity[] = []
   public readonly volume: number
+  public readonly maxCount: number
   private readonly _deck: CardT[] = []
   private readonly _intervals: number[] = [0]
 
@@ -20,7 +22,8 @@ export class Deck<CardT extends Card> {
     this.alias = extraConfig?.alias ?? []
     this.update(source)
     this.volume = source?.length ?? 0
-
+    this.maxCount = extraConfig?.maxCount ?? 3
+    
     for (let card of this._deck) {
       if (!this.rarities.find((rarity) => rarity.name === card.rarity.name))
         this.rarities.push(card.rarity)

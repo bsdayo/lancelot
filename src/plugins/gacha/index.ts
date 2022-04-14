@@ -23,11 +23,12 @@ export default {
 
         if (!Object.keys(decks).includes(deckName))
           return reply(session) + `牌堆 ${deckName} 不存在！`
-        if (typeof count !== 'number' || count < 1 || count > 3)
-          return reply(session) + '请输入正确格式的数量！(1 - 3)'
-
-
+          
         const deck = decks[deckName as keyof typeof decks]
+          
+        if (typeof count !== 'number' || count < 1 || count > deck.maxCount)
+          return reply(session) + `请输入正确格式的数量！(1 - ${deck.maxCount})`
+
         const noRarity: boolean = deck.rarities.length === 1 && deck.rarities[0].weight === 1
         const result: Card[] = deck.draw(Math.floor(count))
 
