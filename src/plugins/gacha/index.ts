@@ -75,6 +75,7 @@ export default {
         const deck = decks[deckName as keyof typeof decks]
         let rpl = deck.name + ' - ' + deck.description + '\n'
         rpl += '牌堆容量：' + deck.volume + '\n'
+        rpl += '单次最大抽取数：' + deck.maxCount + '\n'
         rpl += '稀有度：\n'
         for (let rarity of deck.rarities) {
           rpl += '  ' + rarity.name + '  权重：' + rarity.weight
