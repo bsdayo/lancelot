@@ -9,6 +9,7 @@ import { initDir } from './utils'
 import utils from './plugins/utils'
 import Database from 'better-sqlite3'
 import gosen from './plugins/gosen'
+import gacha from './plugins/gacha'
 
 export const VERSION = '1.3.1'
 
@@ -56,5 +57,6 @@ app
   .plugin(arcaea, config.plugins.arcaea)
   .plugin(gosen, config.plugins.gosen)
   .plugin(poke)
+  .plugin(gacha)
   .plugin('echo')
   .start()
