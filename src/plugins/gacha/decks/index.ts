@@ -1,8 +1,10 @@
 import { Card, Deck } from './deck'
 import pokerDeck from './poker'
+import tarotDeck from './tarot'
 
 const _decks = {
-  poker: pokerDeck
+  poker: pokerDeck,
+  tarot: tarotDeck,
 }
 
 const decks: Record<string, Deck<Card>> = _decks

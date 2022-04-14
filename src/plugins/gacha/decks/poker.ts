@@ -35,10 +35,11 @@ for (let i = 1; i <= 13; i++) {
       break
   }
 
-  cards.push(new PokerCard('红桃', n as PokerRank))
-  cards.push(new PokerCard('方块', n as PokerRank))
-  cards.push(new PokerCard('梅花', n as PokerRank))
-  cards.push(new PokerCard('黑桃', n as PokerRank))
+  for (let s of ['红桃', '方块', '梅花', '黑桃']) {
+    cards.push(new PokerCard(
+      s as PokerSuit, n as PokerRank
+    ))
+  }
 }
 
 cards.push(new PokerCard('大王'))
