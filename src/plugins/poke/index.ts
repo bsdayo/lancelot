@@ -72,15 +72,13 @@ export default {
           .run(session.userId, session.targetId, session.guildId, session?.selfId)
       
       // 若记录者数量大于一，获取所有记录者的最高次数并更新
-      if (allRecords.length > 1) {
-        const times: number[] = []
-        for (let rec of allRecords) {
-          times.push(rec.pokeTimes)
-        }
-        botdb
-          .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
-          .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
+      const times: number[] = []
+      for (let rec of allRecords) {
+        times.push(rec.pokeTimes)
       }
+      botdb
+        .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
+        .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
 
       // ===== 内存记录 =====
       
