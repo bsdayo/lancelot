@@ -55,7 +55,7 @@ const langs = {
 
 export default function enableTrans(ctx: Context, config: TransConfig) {
   ctx
-    .command('trans <query>', '文本翻译')
+    .command('trans <query:text>', '文本翻译')
     .alias('translate', 'fanyi')
     .shortcut('翻译', { fuzzy: true })
     .option('from', '-f <lang:string>')
