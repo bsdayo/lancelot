@@ -63,6 +63,9 @@ export default function enableTrans(ctx: Context, config: TransConfig) {
     .action(async ({ session, options }, query?: string) => {
       if (!query)
         return reply(session) + '请输入需要翻译的文本'
+
+      if (query.includes('[CQ:'))
+        return reply(session) + '翻译文本中有非法字符，请检查重试'
           
       if (options?.from && !getLangCode(options?.from))
         return reply(session) + '不支持的源语言：'   + options?.from
