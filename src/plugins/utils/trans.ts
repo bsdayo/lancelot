@@ -3,7 +3,7 @@ import axios from 'axios'
 import md5 from 'md5'
 import { randomInt, reply } from '../../utils'
 
-interface TransConfig {
+export interface TransConfig {
   appid: string
   token: string
 }

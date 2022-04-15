@@ -54,7 +54,7 @@ app
   })
   .plugin(whitelist)
   .plugin(status)
-  .plugin(utils)
+  .plugin(utils, config.plugins.utils)
   .plugin(arcaea, config.plugins.arcaea)
   .plugin(gosen, config.plugins.gosen)
   .plugin(poke)
