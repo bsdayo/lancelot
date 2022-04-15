@@ -142,5 +142,5 @@ function getLangCode(source: string): string | undefined {
 }
 
 function getLangName(langCode: keyof typeof langs) {
-  return langs[langCode][1]
+  return langs[langCode] ? langs[langCode][1] : langCode
 }
