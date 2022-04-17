@@ -62,6 +62,11 @@ export async function generateBest30Image(
   const ctx = canvas.getContext('2d')
   ctx.drawImage(backgroundImage, 0, -60)
 
+  if (darkMode) {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'
+    ctx.fillRect(0, 0, imgWidth, imgHeight)
+  }
+
   // 账号信息
   ctx.font = '128px "Titillium Web SemiBold"'
   ctx.fillStyle = '#333'
