@@ -31,8 +31,9 @@ export function enableBest30(
     .option('simple', '-s')
     .option('official', '-o')
     .option('highQuality', '-q')
+    .option('dark', '-d')
     .shortcut('查b30', { fuzzy: true })
-    .alias('b30')
+    .alias('b30', 'best30')
     .usage('/arc b30 [要查询的ArcaeaID]')
     .example('/arc b30 114514191')
     .example('查b30 191981011')
@@ -135,7 +136,8 @@ export function enableBest30(
           : await generateBest30Image(
               best30Data,
               options?.official || officialFlag,
-              options?.highQuality
+              options?.highQuality,
+              options?.dark
             )
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`

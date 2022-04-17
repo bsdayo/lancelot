@@ -59,7 +59,8 @@ export async function drawScoreCard(
   y: number,
   scoreData: BotArcApiScore,
   songInfo: BotArcApiSonginfoV5,
-  rank?: number // 排名
+  rank?: number, // 排名
+  dark?: boolean // 黑暗模式
 ) {
   const songCoverPath = await getSongCoverPath(
     scoreData.song_id,
@@ -68,21 +69,22 @@ export async function drawScoreCard(
   const songCoverImage = await loadImage(songCoverPath)
   const { color, colorDark } = getColorByDifficulty(scoreData.difficulty)
   // 卡片主体
-  drawFilledRoundedRect(ctx, x, y, 1000, 320, 20, '#fff', true)
+  drawFilledRoundedRect(ctx, x, y, 1000, 320, 20, dark ? '#202020' : '#fff', true)
   ctx.drawImage(songCoverImage, x + 15, y + 15, 290, 290)
 
   // 若传递 rank 参数则绘制排名
   if (typeof rank === 'number') {
     ctx.font = '45px "Titillium Web SemiBold"'
-    let rectColor = '#ddd'
-    let textColor = '#333'
+    let rectColor =  dark ? '#333' : '#ddd'
+    let textColor = dark ? '#ddd' :'#333'
+    if ([0, 1, 2].includes(rank)) textColor = '#333'
     if (rank === 0) {
       rectColor = '#ffcc00'
     } else if (rank === 1) {
       rectColor = '#c0c0c0'
     } else if (rank === 2) {
       rectColor = '#a57c50'
-      textColor = '#fff'
+      if (!dark) textColor = '#fff'
     }
     drawFilledRoundedRect(ctx, x + 320, y + 15, 665, 60, 10, rectColor)
     ctx.fillStyle = textColor
@@ -102,7 +104,7 @@ export async function drawScoreCard(
   const realrating = songInfo.difficulties.find((val) => {
     return val.ratingClass === scoreData.difficulty
   })!.realrating // 定数
-  ctx.fillStyle = '#fff'
+  ctx.fillStyle = dark ? '#ddd' : '#fff'
   ctx.font = '45px "Titillium Web Regular"'
   const difficultyText =
     getDifficultyClassName(scoreData.difficulty) +
@@ -119,12 +121,12 @@ export async function drawScoreCard(
   // 获得 ptt
   drawFilledRoundedRect(ctx, x + 320, y + 15, 191, 60, 10, color)
   ctx.font = '45px "Titillium Web SemiBold"'
-  ctx.fillStyle = '#fff'
+  ctx.fillStyle = dark ? '#ddd' : '#fff'
   ctx.fillText(scoreData.rating.toFixed(4), x + 320 + 15, y + 15 + 46)
 
   // 曲名
   ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
-  ctx.fillStyle = '#333'
+  ctx.fillStyle = dark ? '#ddd' : '#333'
   ctx.fillText(fixBydSongTitle(songInfo.title_localized.en, scoreData.difficulty), x + 320 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
@@ -143,7 +145,7 @@ export async function drawScoreCard(
       635
     )
   }
-  ctx.fillStyle = '#333'
+  ctx.fillStyle = dark ? '#ddd' : '#333'
   ctx.fillText(
     formatScore(scoreData.score),
     x + 320 + 15,

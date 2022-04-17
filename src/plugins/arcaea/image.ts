@@ -49,7 +49,8 @@ export async function generateBest30Image(
     best30_overflow_songinfo: BotArcApiSonginfoV5[]
   },
   official?: boolean,
-  highQuality?: boolean
+  highQuality?: boolean,
+  darkMode?: boolean
 ) {
   const imgWidth = 3400
   const imgHeight = 6600
@@ -104,7 +105,8 @@ export async function generateBest30Image(
           765 + i * 400,
           best30Data.best30_list[i],
           best30Data.best30_songinfo[i],
-          i
+          i,
+          darkMode
         )
       )
     } else if (i >= 10 && i < 20) {
@@ -117,7 +119,8 @@ export async function generateBest30Image(
           765 + (i - 10) * 400,
           best30Data.best30_list[i],
           best30Data.best30_songinfo[i],
-          i
+          i,
+          darkMode
         )
       )
     } else if (i >= 20 && i < 30) {
@@ -130,7 +133,8 @@ export async function generateBest30Image(
           765 + (i - 20) * 400,
           best30Data.best30_list[i],
           best30Data.best30_songinfo[i],
-          i
+          i,
+          darkMode
         )
       )
     } else if (i >= 30 && i < 39) {
@@ -148,7 +152,8 @@ export async function generateBest30Image(
             5165 + (i - 30) * 400,
             best30Data.best30_overflow[i - 30],
             best30Data.best30_overflow_songinfo[i - 30],
-            i
+            i,
+            darkMode
           )
         )
       } else if (i >= 33 && i < 36) {
@@ -164,7 +169,8 @@ export async function generateBest30Image(
             5165 + (i - 33) * 400,
             best30Data.best30_overflow[i - 30],
             best30Data.best30_overflow_songinfo[i - 30],
-            i
+            i,
+            darkMode
           )
         )
       } else if (i >= 36) {
@@ -180,7 +186,8 @@ export async function generateBest30Image(
             5165 + (i - 36) * 400,
             best30Data.best30_overflow[i - 30],
             best30Data.best30_overflow_songinfo[i - 30],
-            i
+            i,
+            darkMode
           )
         )
       }
