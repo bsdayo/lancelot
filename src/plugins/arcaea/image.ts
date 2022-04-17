@@ -62,6 +62,11 @@ export async function generateBest30Image(
   const ctx = canvas.getContext('2d')
   ctx.drawImage(backgroundImage, 0, -60)
 
+  // 底部时间
+  ctx.font = '121px "Titillium Web SemiBold"'
+  ctx.fillStyle = '#fff'
+  ctx.fillText(getDateTime(), 383, 6522)
+
   if (darkMode) {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'
     ctx.fillRect(0, 0, imgWidth, imgHeight)
@@ -91,11 +96,6 @@ export async function generateBest30Image(
     295,
     315
   )
-
-  // 底部时间
-  ctx.font = '121px "Titillium Web SemiBold"'
-  ctx.fillStyle = '#fff'
-  ctx.fillText(getDateTime(), 383, 6522)
 
   const drawTask = []
 
