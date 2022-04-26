@@ -56,7 +56,7 @@ export async function generateBest30Image(
   const imgHeight = 6600
   // 背景图
   const backgroundImage = await loadImage(
-    getAssetFilePath('arcaea', 'best30Background.jpg')
+    getAssetFilePath('arcaea', darkMode ? 'best30BackgroundDark.png' : 'best30Background.jpg')
   )
   const canvas = createCanvas(imgWidth, imgHeight)
   const ctx = canvas.getContext('2d')
@@ -67,14 +67,9 @@ export async function generateBest30Image(
   ctx.fillStyle = '#fff'
   ctx.fillText(getDateTime(), 383, 6522)
 
-  if (darkMode) {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'
-    ctx.fillRect(0, 0, imgWidth, imgHeight)
-  }
-
   // 账号信息
   ctx.font = '128px "Titillium Web SemiBold"'
-  ctx.fillStyle = '#333'
+  ctx.fillStyle = darkMode ? '#fff' : '#333'
   ctx.fillText(
     `${best30Data.account_info.name} (${
       best30Data.account_info.rating < 0
@@ -88,11 +83,13 @@ export async function generateBest30Image(
   // Best30/Recent10 均值  最大ptt
   ctx.font = '62px "Titillium Web SemiBold"'
   ctx.fillText(
-    `B30Avg / ${best30Data.best30_avg.toFixed(
-      4
-    )}   R10Avg / ${best30Data.recent10_avg.toFixed(
-      4
-    )}   MaxPtt / ${calculateMaxPtt(best30Data)}`,
+    `B30Avg / ${
+      best30Data.best30_avg.toFixed(4)
+    }   R10Avg / ${
+      best30Data.recent10_avg >= 0
+        ? best30Data.recent10_avg.toFixed(4)
+        : '--'
+    }   MaxPtt / ${calculateMaxPtt(best30Data)}`,
     295,
     315
   )

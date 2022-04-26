@@ -76,7 +76,7 @@ export async function drawScoreCard(
   if (typeof rank === 'number') {
     ctx.font = '45px "Titillium Web SemiBold"'
     let rectColor =  dark ? '#333' : '#ddd'
-    let textColor = dark ? '#ddd' :'#333'
+    let textColor = dark ? '#fff' :'#333'
     if ([0, 1, 2].includes(rank)) textColor = '#333'
     if (rank === 0) {
       rectColor = '#ffcc00'
@@ -84,7 +84,7 @@ export async function drawScoreCard(
       rectColor = '#c0c0c0'
     } else if (rank === 2) {
       rectColor = '#a57c50'
-      if (!dark) textColor = '#fff'
+      textColor = '#fff'
     }
     drawFilledRoundedRect(ctx, x + 320, y + 15, 665, 60, 10, rectColor)
     ctx.fillStyle = textColor
@@ -121,12 +121,12 @@ export async function drawScoreCard(
   // 获得 ptt
   drawFilledRoundedRect(ctx, x + 320, y + 15, 191, 60, 10, color)
   ctx.font = '45px "Titillium Web SemiBold"'
-  ctx.fillStyle = dark ? '#ddd' : '#fff'
+  ctx.fillStyle = '#fff'
   ctx.fillText(scoreData.rating.toFixed(4), x + 320 + 15, y + 15 + 46)
 
   // 曲名
   ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
-  ctx.fillStyle = dark ? '#ddd' : '#333'
+  ctx.fillStyle = dark ? '#fff' : '#333'
   ctx.fillText(fixBydSongTitle(songInfo.title_localized.en, scoreData.difficulty), x + 320 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
@@ -145,7 +145,7 @@ export async function drawScoreCard(
       635
     )
   }
-  ctx.fillStyle = dark ? '#ddd' : '#333'
+  ctx.fillStyle = dark ? '#fff' : '#333'
   ctx.fillText(
     formatScore(scoreData.score),
     x + 320 + 15,
