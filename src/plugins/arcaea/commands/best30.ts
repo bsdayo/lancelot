@@ -97,7 +97,7 @@ export function enableBest30(
           let best30Ptt = 0
           for (let score of best30) {
             best30Score.push(convertALAScoreToBAA(score))
-            best30SongInfo.push(getSongInfoFromDatabase(score.song_id))
+            best30SongInfo.push(getSongInfoFromDatabase(score.song_id)[score.difficulty])
             best30Ptt += score.potential_value
           }
           const best30Avg = best30Ptt / 30
@@ -112,6 +112,10 @@ export function enableBest30(
             best30_songinfo: best30SongInfo,
             account_info: best30UserInfo,
             best30_overflow_songinfo: [],
+
+            // 以下数据没有用上 2022.4.28
+            recent_score: best30Score[0],
+            recent_songinfo: []
           }
         } else {
           best30Data = await api.user.best30(arcObj.id, false, true, 9)
