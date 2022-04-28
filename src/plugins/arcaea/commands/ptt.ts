@@ -28,9 +28,9 @@ export function enablePtt(rootCmd: Command) {
       if (diffIndex === 4) return reply(session) + '请输入正确的难度'
 
       const songinfo = getSongInfoFromDatabase(sid)
-      if (diffIndex === 3 && songinfo.difficulties.length < 4) return reply(session) + '请输入正确的难度'
+      if (diffIndex === 3 && songinfo.length < 4) return reply(session) + '请输入正确的难度'
 
-      const rating = songinfo.difficulties[diffIndex].realrating / 10
+      const rating = songinfo[diffIndex].rating / 10
       let ptt = 0
 
       if (_score >= 10000000) ptt = rating + 2
@@ -43,9 +43,7 @@ export function enablePtt(rootCmd: Command) {
 
       return (
         reply(session) +
-        `在曲目 ${
-          songinfo.title_localized.en
-        }[${diffText}] 中，得分 ${_score} 的单曲潜力值为 ${ptt.toFixed(4)}`
+        `在曲目 ${songinfo[0].name_en}[${diffText}] 中，得分 ${_score} 的单曲潜力值为 ${ptt.toFixed(4)}`
       )
     })
 }

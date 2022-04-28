@@ -78,19 +78,19 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         const upperlimit = convertToArcaeaRange(end ?? start ?? '11.5')
         const random = getRandomSong(lowerlimit[0], upperlimit[1])
 
-        let str = random.songinfo.title_localized.en + '\n'
-        if (random.songinfo.set_friendly) {
-          str += `(${random.songinfo.set_friendly})\n`
+        let str = random.songinfo[0].name_en + '\n'
+        if (random.songinfo[0].set_friendly) {
+          str += `(${random.songinfo[0].set_friendly})\n`
         }
 
-        const diff = random.songinfo.difficulties[random.ratingClass ?? 2]
+        const diff = random.songinfo[random.ratingClass ?? 2]
 
         str +=
           ['Past', 'Present', 'Future', 'Beyond'][random.ratingClass ?? 2] +
           ' ' +
-          getDifficultyByRating(diff.realrating) +
+          getDifficultyByRating(diff.rating) +
           ' [' +
-          (diff.realrating / 10).toFixed(1) +
+          (diff.rating / 10).toFixed(1) +
           ']'
 
         return (

@@ -10,10 +10,11 @@ import {
 import fs from 'fs/promises'
 import {
   BotArcApiScore,
-  BotArcApiSonginfoV5,
+  BotArcApiContentV5,
   BotArcApiUserbest30,
   BotArcApiUserinfoV5,
   BotArcApiV5,
+  BotArcApiDifficultyInfoV5,
 } from 'botarcapi_lib'
 import ArcaeaLimitedAPI from '../limitedapi'
 import { reply } from '../../../utils'
@@ -85,19 +86,14 @@ export function enableBest30(
         }查询${arcObj.name ? ' ' + arcObj.name + ' 的' : ''} Best30 成绩...`
       )
       try {
-        let best30Data: BotArcApiUserbest30 & {
-          account_info: BotArcApiUserinfoV5
-          best30_songinfo: BotArcApiSonginfoV5[]
-          best30_overflow_songinfo: BotArcApiSonginfoV5[]
-        }
-
+        let best30Data: BotArcApiContentV5.User.Best30
         if (options?.official || officialFlag) {
           const best30 = await officialApi.best30(arcObj.id)
           const best30UserInfo = convertALAUserInfoToBAA(
             await officialApi.userinfo(arcObj.id)
           )
           let best30Score: BotArcApiScore[] = []
-          let best30SongInfo: BotArcApiSonginfoV5[] = []
+          let best30SongInfo: BotArcApiDifficultyInfoV5[] = []
           let best30Ptt = 0
           for (let score of best30) {
             best30Score.push(convertALAScoreToBAA(score))

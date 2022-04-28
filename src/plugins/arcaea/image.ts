@@ -10,9 +10,10 @@ import {
 import {
   BotArcApiUserbest30,
   BotArcApiUserinfoV5,
-  BotArcApiSonginfoV5,
+  BotArcApiContentV5,
   BotArcApiScore,
   formatScore,
+  BotArcApiDifficultyInfoV5,
 } from 'botarcapi_lib'
 import { getTempFilePath, getDateTime, getAssetFilePath } from '../../utils'
 import {
@@ -43,11 +44,7 @@ const clearImages = [
 ]
 
 export async function generateBest30Image(
-  best30Data: BotArcApiUserbest30 & {
-    account_info: BotArcApiUserinfoV5
-    best30_songinfo: BotArcApiSonginfoV5[]
-    best30_overflow_songinfo: BotArcApiSonginfoV5[]
-  },
+  best30Data: BotArcApiContentV5.User.Best30,
   official?: boolean,
   highQuality?: boolean,
   darkMode?: boolean
@@ -99,7 +96,7 @@ export async function generateBest30Image(
   for (let i = 0; i < 39; i++) {
     if (i < 10) {
       // Top
-      if (!best30Data.best30_list[i] && !best30Data.best30_songinfo[i]) break
+      if (!best30Data.best30_list[i] || !best30Data.best30_songinfo[i]) break
       drawTask.push(
         drawScoreCard(
           ctx,
@@ -219,11 +216,7 @@ export async function generateBest30Image(
 }
 
 export async function generateSimpleBest30Image(
-  best30Data: BotArcApiUserbest30 & {
-    account_info: BotArcApiUserinfoV5
-    best30_songinfo: BotArcApiSonginfoV5[]
-    best30_overflow_songinfo: BotArcApiSonginfoV5[]
-  },
+  best30Data: BotArcApiContentV5.User.Best30,
   official?: boolean, // TODO
   highQuality?: boolean
 ) {
@@ -382,7 +375,7 @@ export async function generateSimpleBest30Image(
 export async function generateBestImage(bestData: {
   account_info: BotArcApiUserinfoV5
   record: BotArcApiScore
-  songinfo: BotArcApiSonginfoV5[]
+  songinfo: BotArcApiDifficultyInfoV5[]
 }) {
   // 背景图
   const backgroundImage = await loadImage(
@@ -407,7 +400,7 @@ export async function generateBestImage(bestData: {
   )
 
   ctx.font = 'normal 79px "Titillium Web SemiBold",sans-serif'
-  ctx.fillText(fixBydSongTitle(bestData.songinfo[0].title_localized.en, bestData.record.difficulty), 124, 330)
+  ctx.fillText(fixBydSongTitle(bestData.songinfo[0].name_en, bestData.record.difficulty), 124, 330)
 
   // 立绘
   const charPath = await getCharPath(
@@ -468,9 +461,7 @@ export async function generateBestImage(bestData: {
   const { color, colorDark } = getColorByDifficulty(bestData.record.difficulty)
   drawFilledRoundedRect(ctx, 663, 799, 561, 52, 10, colorDark)
 
-  const realrating = bestData.songinfo[0].difficulties.find((val) => {
-    return val.ratingClass === bestData.record.difficulty
-  })!.realrating // 定数
+  const realrating = bestData.record.rating // 定数
   ctx.fillStyle = '#fff'
   const difficultyText =
     getDifficultyClassName(bestData.record.difficulty) +
@@ -502,7 +493,7 @@ export async function generateBestImage(bestData: {
 export async function generateRecentScoreImage(recentData: {
   account_info: BotArcApiUserinfoV5
   recent_score: BotArcApiScore[]
-  songinfo: BotArcApiSonginfoV5[]
+  songinfo: BotArcApiDifficultyInfoV5[]
 }) {
   const num = recentData.recent_score.length
 

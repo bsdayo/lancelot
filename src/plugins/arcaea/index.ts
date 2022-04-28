@@ -30,13 +30,6 @@ declare module 'koishi' {
   }
 }
 
-// 修复
-declare module 'botarcapi_lib' {
-  interface BotArcApiSonginfoV5 {
-    set_friendly: string
-  }
-}
-
 export default {
   name: 'arcaea',
   apply(ctx: Context, config: ArcaeaConfig) {

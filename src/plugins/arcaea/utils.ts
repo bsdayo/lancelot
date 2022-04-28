@@ -3,7 +3,8 @@ import config from '../../config'
 import {
   ArcaeaDifficulty,
   BotArcApiScore,
-  BotArcApiSonginfoV5,
+  BotArcApiDifficultyInfoV5,
+  BotArcApiContentV5,
   BotArcApiUserbest30,
   BotArcApiUserinfoV5,
   BotArcApiV5,
@@ -100,13 +101,7 @@ export function getDifficultyByRating(rating: number) {
   } else return str.split('.')[0]
 }
 
-export function calculateMaxPtt(
-  best30Data: BotArcApiUserbest30 & {
-    account_info: BotArcApiUserinfoV5
-    best30_songinfo: BotArcApiSonginfoV5[]
-    best30_overflow_songinfo: BotArcApiSonginfoV5[]
-  }
-) {
+export function calculateMaxPtt(best30Data: BotArcApiContentV5.User.Best30) {
   let best10Total = 0
   for (let i = 0; i < 10; i++) {
     if (best30Data.best30_list[i])
@@ -116,62 +111,40 @@ export function calculateMaxPtt(
   return ((best10Total + 30 * best30Data.best30_avg) / 40).toFixed(4)
 }
 
-export function getSongInfoFromDatabase(songid: string): BotArcApiSonginfoV5 {
-  const songRow = songdb
-    .prepare('SELECT * FROM songs WHERE sid = ?')
-    .get(songid)
+export function getSongInfoFromDatabase(songid: string): BotArcApiDifficultyInfoV5[] {
+  const songRows = songdb
+    .prepare('SELECT * FROM charts WHERE song_id = ?')
+    .all(songid)
   const packageRow = songdb
     .prepare('SELECT name FROM packages WHERE id = ?')
-    .get(songRow.pakset)
+    .get(songRows[0].set)
 
-  const data: BotArcApiSonginfoV5 = {
-    id: songRow.sid,
-    title_localized: {
-      en: songRow.name_en,
-    },
-    artist: songRow.artist,
-    bpm: songRow.bpm,
-    bpm_base: songRow.bpm_base,
-    set: songRow.pakset,
-    set_friendly: packageRow.name,
-    side: songRow.side,
-    remote_dl: JSON.parse(songRow.remote_download),
-    world_unlock: JSON.parse(songRow.world_unlock),
-    date: songRow.date,
-    version: songRow.version,
-    difficulties: [
-      {
-        ratingClass: 0,
-        chartDesigner: songRow.chart_designer_pst,
-        jacketDesigner: songRow.jacket_designer_pst,
-        jacketOverride: JSON.parse(songRow.jacket_override_pst),
-        realrating: songRow.rating_pst,
-      },
-      {
-        ratingClass: 1,
-        chartDesigner: songRow.chart_designer_prs,
-        jacketDesigner: songRow.jacket_designer_prs,
-        jacketOverride: JSON.parse(songRow.jacket_override_prs),
-        realrating: songRow.rating_prs,
-      },
-      {
-        ratingClass: 2,
-        chartDesigner: songRow.chart_designer_ftr,
-        jacketDesigner: songRow.jacket_designer_ftr,
-        jacketOverride: JSON.parse(songRow.jacket_override_ftr),
-        realrating: songRow.rating_ftr,
-      },
-    ],
-  }
-
-  if (songRow.rating_byn !== -1)
-    data.difficulties.push({
-      ratingClass: 3,
-      chartDesigner: songRow.chart_designer_byn,
-      jacketDesigner: songRow.jacket_designer_byn,
-      jacketOverride: JSON.parse(songRow.jacket_override_byn),
-      realrating: songRow.rating_byn,
+  const data: BotArcApiDifficultyInfoV5[] = []
+  for (let row of songRows) {
+    data.push({
+      name_en: row.name_en,
+      name_jp: row.name_jp,
+      artist: row.artist,
+      bpm: row.bpm,
+      bpm_base: row.bpm_base,
+      set: row.set,
+      set_friendly: packageRow.name,
+      side: row.side,
+      time: row.time,
+      remote_download: JSON.parse(row.remote_download),
+      world_unlock: JSON.parse(row.world_unlock),
+      date: row.date,
+      version: row.version,
+      bg: row.bg,
+      difficulty: row.difficulty,
+      rating: row.rating,
+      note: row.note,
+      chart_designer: row.chart_designer,
+      jacket_designer: row.jacket_designer,
+      jacket_override: row.jacket_override,
+      audio_override: row.audio_override,
     })
+  }
 
   return data
 }

@@ -23,32 +23,29 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
         const songinfo = getSongInfoFromDatabase(sid)
         // const songinfo = await api.song.info(songname, true)
 
-        let str = songinfo.title_localized.en
-        if (songinfo.set_friendly) {
-          str += `\n(${songinfo.set_friendly})`
+        let str = songinfo[0].name_en
+        if (songinfo[0].set_friendly) {
+          str += `\n(${songinfo[0].set_friendly})`
         }
 
-        let isHaveBeyond = false
+        let isHaveBeyond = songinfo.length === 3
 
-        for (let diff of songinfo.difficulties) {
-          let diffClass = ['Past', 'Present', 'Future', 'Beyond'][
-            diff.ratingClass
-          ]
-          if (diff.ratingClass === 3) isHaveBeyond = true
-          let rating = (diff.realrating / 10).toFixed(1)
+        for (let i = 0; i < songinfo.length; i++) {
+          let diffClass = ['Past', 'Present', 'Future', 'Beyond'][i]
+          let rating = (songinfo[i].rating / 10).toFixed(1)
           str += `\n${diffClass} ${getDifficultyByRating(
-            diff.realrating
+            songinfo[i].rating
           )} [${rating}]`
         }
 
         return (
           reply(session) +
           segment.image(
-            await fs.readFile(await getSongCoverPath(songinfo.id))
+            await fs.readFile(await getSongCoverPath(sid))
           ) +
           (isHaveBeyond
             ? segment.image(
-                await fs.readFile(await getSongCoverPath(songinfo.id, true))
+                await fs.readFile(await getSongCoverPath(sid, true))
               )
             : '') +
           str

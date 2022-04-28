@@ -1,4 +1,4 @@
-import { BotArcApiScore, BotArcApiSonginfoV5, formatScore } from 'botarcapi_lib'
+import { BotArcApiScore, BotArcApiContentV5, formatScore, BotArcApiDifficulty, BotArcApiDifficultyInfoV5 } from 'botarcapi_lib'
 import { CanvasRenderingContext2D, loadImage } from 'canvas'
 import { getDateTime, getPastDays } from '../../utils'
 import {
@@ -58,7 +58,7 @@ export async function drawScoreCard(
   x: number,
   y: number,
   scoreData: BotArcApiScore,
-  songInfo: BotArcApiSonginfoV5,
+  songInfo: BotArcApiDifficultyInfoV5,
   rank?: number, // 排名
   dark?: boolean // 黑暗模式
 ) {
@@ -101,9 +101,7 @@ export async function drawScoreCard(
     10,
     colorDark
   )
-  const realrating = songInfo.difficulties.find((val) => {
-    return val.ratingClass === scoreData.difficulty
-  })!.realrating // 定数
+  const realrating = songInfo.rating // 定数
   ctx.fillStyle = dark ? '#ddd' : '#fff'
   ctx.font = '45px "Titillium Web Regular"'
   const difficultyText =
@@ -127,7 +125,7 @@ export async function drawScoreCard(
   // 曲名
   ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
   ctx.fillStyle = dark ? '#fff' : '#333'
-  ctx.fillText(fixBydSongTitle(songInfo.title_localized.en, scoreData.difficulty), x + 320 + 15, y + 15 + 46 + 75, 635)
+  ctx.fillText(fixBydSongTitle(songInfo.name_en, scoreData.difficulty), x + 320 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
   ctx.font = '97px "Titillium Web Regular"'
@@ -168,7 +166,7 @@ export async function drawSimpleScoreCard(
   x: number,
   y: number,
   scoreData: BotArcApiScore,
-  songInfo: BotArcApiSonginfoV5,
+  songInfo: BotArcApiDifficultyInfoV5,
   rank?: number // 排名
 ) {
   ctx.fillStyle = '#000'
@@ -179,9 +177,7 @@ export async function drawSimpleScoreCard(
   }
 
   // 难度条
-  const realrating = songInfo.difficulties.find((val) => {
-    return val.ratingClass === scoreData.difficulty
-  })!.realrating // 定数
+  const realrating = songInfo.rating // 定数
   ctx.font = '45px "Titillium Web Regular"'
   const difficultyText =
     getDifficultyClassName(scoreData.difficulty) +
@@ -201,7 +197,7 @@ export async function drawSimpleScoreCard(
 
   // 曲名
   ctx.font = 'normal 60px "Titillium Web SemiBold",sans-serif'
-  ctx.fillText(fixBydSongTitle(songInfo.title_localized.en, scoreData.difficulty), x + 30 + 15, y + 15 + 46 + 75, 635)
+  ctx.fillText(fixBydSongTitle(songInfo.name_en, scoreData.difficulty), x + 30 + 15, y + 15 + 46 + 75, 635)
 
   // 得分
   ctx.font = '97px "Titillium Web Regular"'
@@ -242,7 +238,7 @@ export async function drawRecentScoreCard(
   x: number,
   y: number,
   scoreData: BotArcApiScore,
-  songInfo: BotArcApiSonginfoV5
+  songInfo: BotArcApiDifficultyInfoV5
 ) {
   drawFilledRoundedRect(ctx, x, y, 1000, 380, 20, '#ddd')
   await drawScoreCard(ctx, x, y, scoreData, songInfo)
