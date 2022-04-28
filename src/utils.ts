@@ -41,7 +41,7 @@ export async function createCache(
   filename = `${namespace}-${filename}`
   logger.info('创建缓存文件 ' + filename)
   const filepath = path.resolve(__dirname, '..', 'cache', filename)
-  await fs.writeFile(filepath, file)
+  await fs.writeFile(filepath, Buffer.from(file))
   return filepath
 }
 

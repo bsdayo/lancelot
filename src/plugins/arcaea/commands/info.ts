@@ -28,7 +28,7 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
           str += `\n(${songinfo[0].set_friendly})`
         }
 
-        let isHaveBeyond = songinfo.length === 3
+        let isHaveBeyond = songinfo.length === 4
 
         for (let i = 0; i < songinfo.length; i++) {
           let diffClass = ['Past', 'Present', 'Future', 'Beyond'][i]
@@ -40,13 +40,9 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
 
         return (
           reply(session) +
-          segment.image(
-            await fs.readFile(await getSongCoverPath(sid))
-          ) +
+          segment.image(await fs.readFile(await getSongCoverPath(sid))) +
           (isHaveBeyond
-            ? segment.image(
-                await fs.readFile(await getSongCoverPath(sid, true))
-              )
+            ? segment.image(await fs.readFile(await getSongCoverPath(sid, true)))
             : '') +
           str
         )

@@ -226,7 +226,7 @@ export function getSongIdFuzzy(source: string): string {
     .get(source)
   if (aliasRow) return aliasRow.sid
 
-  const songRow = songdb.prepare('SELECT sid, name_en FROM songs').all()
+  const songRow = songdb.prepare('SELECT song_id, name_en, name_jp FROM charts').all()
 
   // 数据库查找（优先级从上往下依次增大）
   // 曲名包含
@@ -244,14 +244,14 @@ export function getSongIdFuzzy(source: string): string {
   song = songRow.find((s) => {
     return (
       s.name_en.replaceAll(' ', '').toLowerCase() === source ||
-      s.name_jp?.replaceAll(' ', '').toLowerCase() === source
+      s.name_jp.replaceAll(' ', '').toLowerCase() === source
     )
   })
 
   // 曲目id
-  song = songRow.find((s) => s.sid === source)
+  song = songRow.find((s) => s.song_id === source)
 
-  if (song) return song.sid
+  if (song) return song.song_id
 
   return ''
 }
