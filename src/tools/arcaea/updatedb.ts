@@ -54,12 +54,12 @@ olddb.prepare("ATTACH DATABASE ? AS 'newdb'").run(dbfile)
 olddb.exec('INSERT OR REPLACE INTO main.alias (sid, alias) SELECT * FROM newdb.alias')
 
 olddb.exec(`INSERT OR REPLACE INTO main.charts (
-  song_id, rating_class, name_en, name_jp,
-  artist, bpm, bpm_base, set, time, side,
-  world_unlock, remote_download, bg,
-  date, version, difficulty, rating,
-  note, chart_designer, jacket_designer,
-  jacket_override, audio_override
+  [song_id], [rating_class], [name_en], [name_jp],
+  [artist], [bpm], [bpm_base], [set], [time], [side],
+  [world_unlock], [remote_download], [bg],
+  [date], [version], [difficulty], [rating],
+  [note], [chart_designer], [jacket_designer],
+  [jacket_override], [audio_override]
 ) SELECT * FROM newdb.charts`)
 
 olddb.exec('INSERT OR REPLACE INTO main.packages (id, name) SELECT * FROM newdb.packages')
