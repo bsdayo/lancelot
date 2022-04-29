@@ -63,22 +63,30 @@ export default {
       const allRecords = botdb
         .prepare('SELECT * FROM poke WHERE userId = ? AND targetId = ? AND guildId = ?')
         .all(session.userId, session.targetId, session.guildId)
+
+      const times: number[] = []
       
       // 检查是否有记录者为自身的记录，若没有则新建
       const prevRecord = allRecords.find((rec) => rec.recorder === session.selfId)
-      if (!prevRecord) 
+      if (prevRecord) {
+        // 若存在记录者，获取所有记录者的最高次数并更新
+        for (let rec of allRecords) {
+          times.push(rec.pokeTimes)
+        }
+      } else {
         botdb
           .prepare('INSERT INTO poke (userId, targetId, guildId, recorder, pokeTimes) VALUES (?, ?, ?, ?, 1)')
           .run(session.userId, session.targetId, session.guildId, session?.selfId)
-      
-      // 若记录者数量大于一，获取所有记录者的最高次数并更新
-      const times: number[] = []
-      for (let rec of allRecords) {
-        times.push(rec.pokeTimes)
+        times.push(0)
       }
+
       botdb
         .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
-        .run(Math.max(...times) + 1, session.userId, session.targetId, session.guildId)
+        .run(
+          // 坑：Math.max() === -Infinity
+          times.length > 0 ? Math.max(...times) + 1 : 1,
+            session.userId, session.targetId, session.guildId
+          )
 
       // ===== 内存记录 =====
       
