@@ -23,14 +23,20 @@ export default {
     ctx
       .platform('onebot')
       .command('dismiss <groupid>', '使bot退出群聊', {
-        authority: 3,
         hidden: true,
       })
       .action(async ({ session }, groupid) => {
         if (!groupid) {
-          return reply(session) + '请输入退出的群号'
+          if (!session?.guildId) return
+          await (session?.bot.internal as OneBot.Internal).setGroupLeave(
+            session.guildId,
+            true
+          )
         }
         try {
+          const userAuthority = (await session?.getUser())?.authority
+          if (!userAuthority || userAuthority < 3)
+            return '权限不足。'
           await (session?.bot.internal as OneBot.Internal).setGroupLeave(
             groupid,
             true
