@@ -88,7 +88,7 @@ export default {
       const maxPokeNew =
         botdb
           .prepare('SELECT pokeTimes FROM poke WHERE userId = ? AND targetId = ? AND guildId = ? ORDER BY -pokeTimes LIMIT 1')
-          .get()
+          .get(session.userId, session.targetId, session.guildId)
           .pokeTimes
 
       if ((maxPoke <= 0) ? (maxPoke + 1 === maxPokeNew) : (maxPoke === maxPokeNew))
