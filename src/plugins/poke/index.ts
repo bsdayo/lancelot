@@ -68,16 +68,16 @@ export default {
       
       // 检查是否有记录者为自身的记录，若没有则新建
       const prevRecord = allRecords.find((rec) => rec.recorder === session.selfId)
-      if (prevRecord) {
-        // 若存在记录者，获取所有记录者的最高次数并更新
-        for (let rec of allRecords) {
-          times.push(rec.pokeTimes)
-        }
-      } else {
+      if (!prevRecord) {
         botdb
           .prepare('INSERT INTO poke (userId, targetId, guildId, recorder, pokeTimes) VALUES (?, ?, ?, ?, 1)')
           .run(session.userId, session.targetId, session.guildId, session?.selfId)
         times.push(0)
+      }
+
+      // 若存在记录者，获取所有记录者的最高次数并更新
+      for (let rec of allRecords) {
+        times.push(rec.pokeTimes)
       }
 
       botdb
