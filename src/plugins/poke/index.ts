@@ -1,5 +1,5 @@
 import { Context, segment } from 'koishi'
-import { getAssetFilePath, randomInt, reply } from '../../utils'
+import { delay, getAssetFilePath, randomInt, reply } from '../../utils'
 import fs from 'fs/promises'
 import getRandomReply from './replies'
 import { botdb } from '../../bot'
@@ -65,6 +65,7 @@ export default {
         .all(session.userId, session.targetId, session.guildId)
 
       const times: number[] = []
+      const timesNew: number[] = []
       
       // 检查是否有记录者为自身的记录，若没有则新建
       const prevRecord = allRecords.find((rec) => rec.recorder === session.selfId)
@@ -80,13 +81,24 @@ export default {
         times.push(rec.pokeTimes)
       }
 
-      botdb
-        .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
-        .run(
-          // 坑：Math.max() === -Infinity
-          times.length > 0 ? Math.max(...times) + 1 : 1,
-            session.userId, session.targetId, session.guildId
-          )
+      // 坑：Math.max() === -Infinity
+      const maxPoke = times.length > 0 ? Math.max(...times) : 0
+      await delay(randomInt(100, 2000))
+
+      const maxPokeNew =
+        botdb
+          .prepare('SELECT pokeTimes FROM poke WHERE userId = ? AND targetId = ? AND guildId = ? ORDER BY -pokeTimes LIMIT 1')
+          .get()
+          .pokeTimes
+
+      if ((maxPoke <= 0) ? (maxPoke + 1 === maxPokeNew) : (maxPoke === maxPokeNew))
+        botdb
+          .prepare('UPDATE poke SET pokeTimes = ? WHERE userId = ? AND targetId = ? AND guildId = ?')
+          .run(
+              maxPoke + 1,
+              session.userId, session.targetId, session.guildId
+            )
+
 
       // ===== 内存记录 =====
       
