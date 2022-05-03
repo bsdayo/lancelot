@@ -461,7 +461,7 @@ export async function generateBestImage(bestData: {
   const { color, colorDark } = getColorByDifficulty(bestData.record.difficulty)
   drawFilledRoundedRect(ctx, 663, 799, 561, 52, 10, colorDark)
 
-  const realrating = bestData.record.rating // 定数
+  const realrating = bestData.songinfo[0].rating // 定数
   ctx.fillStyle = '#fff'
   const difficultyText =
     getDifficultyClassName(bestData.record.difficulty) +
