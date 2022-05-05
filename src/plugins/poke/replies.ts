@@ -12,6 +12,7 @@ const replies: string[] = [
   '有笨蛋！',
   'zzz',
   '戳我就要给我买冰淇淋吃！',
+  '今天要去哪里玩呢？',
   'face1.jpg',
   'face2.jpg'
 ]

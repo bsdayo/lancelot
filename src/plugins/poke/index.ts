@@ -140,7 +140,7 @@ export default {
             case 2:
               return await session.send(await getRandomReply())
             case 3: // 警告咬人
-              return await session.send('呜呜...再戳...再戳我就咬你！')
+              return await session.send(['呜呜...再戳...再戳我就咬你！', '还戳！咬你哦！'][randomInt(0, 1)])
             case 4: // 发送咬人表情
               return await session.send(segment.image(await fs.readFile(getAssetFilePath('poke', 'bite.jpg'))))
             case 5: // 发送两分钟不理
