@@ -7,7 +7,7 @@ import {
   getSongIdFuzzy,
   getSongInfoFromDatabase,
 } from '../utils'
-import { reply } from '../../../utils'
+import { getCacheFilePath, reply } from '../../../utils'
 
 export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
   rootCmd
@@ -38,7 +38,7 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
           )} [${rating}]`
         }
 
-        return (
+        await session?.send(
           reply(session) +
           segment.image(await fs.readFile(await getSongCoverPath(sid))) +
           (isHaveBeyond
@@ -46,6 +46,9 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
             : '') +
           str
         )
+        const audiopath = getCacheFilePath('arcaea-preview', `${sid}.ogg`)
+        if (audiopath)
+          return segment.audio(await fs.readFile(audiopath))
       } catch (err) {
         return reply(session) + `查询失败，可能是关键词过于模糊。(${err})`
       }

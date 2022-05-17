@@ -9,7 +9,8 @@
     "dev": "ts-node ./src/bot.ts",
     "build": "tsc",
     "prod": "tsc && node ./dist/bot.js",
-    "tools:arcaea/updatedb": "ts-node ./src/tools/arcaea/updatedb.ts"
+    "tools:arcaea/updatedb": "ts-node ./src/tools/arcaea/updatedb.ts",
+    "tools:arcaea/unpackassets": "ts-node ./src/tools/arcaea/unpackassets.ts"
   },
   "dependencies": {
     "@koishijs/plugin-adapter-onebot": "^4.0.0",
@@ -22,7 +23,8 @@
     "canvas": "^2.9.0",
     "jimp": "^0.16.1",
     "koishi": "^4.4.2",
-    "md5": "^2.3.0"
+    "md5": "^2.3.0",
+    "node-stream-zip": "^1.15.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.4.2",
