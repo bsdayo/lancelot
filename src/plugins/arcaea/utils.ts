@@ -229,27 +229,28 @@ export function getSongIdFuzzy(source: string): string {
   const songRow = songdb.prepare('SELECT song_id, name_en, name_jp FROM charts').all()
 
   // 数据库查找（优先级从上往下依次增大）
-  // 曲名包含
-  let song = songRow.find((s) => {
-    const songname: string = s.name_en.replaceAll(' ', '').toLowerCase()
-    return source.length > 4 && songname.includes(source)
-  })
-
-  // 曲名缩写
-  song = songRow.find((s) => {
-    return getAbbreviation(s.name_en.toLowerCase()) === source
-  })
+  
+  // 曲目id
+  let song = songRow.find((s) => s.song_id === source)
 
   // 曲名
-  song = songRow.find((s) => {
+  if (!song) song = songRow.find((s) => {
     return (
       s.name_en.replaceAll(' ', '').toLowerCase() === source ||
       s.name_jp.replaceAll(' ', '').toLowerCase() === source
     )
   })
 
-  // 曲目id
-  song = songRow.find((s) => s.song_id === source)
+  // 曲名缩写
+  if (!song) song = songRow.find((s) => {
+    return getAbbreviation(s.name_en.toLowerCase()) === source
+  })
+
+  // 曲名包含
+  if (!song) song = songRow.find((s) => {
+    const songname: string = s.name_en.replaceAll(' ', '').toLowerCase()
+    return source.length > 4 && songname.includes(source)
+  })
 
   if (song) return song.song_id
 
