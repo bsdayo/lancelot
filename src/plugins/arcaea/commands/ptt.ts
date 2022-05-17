@@ -43,7 +43,7 @@ export function enablePtt(rootCmd: Command) {
 
       return (
         reply(session) +
-        `在曲目 ${songinfo[0].name_en}[${diffText}] 中，得分 ${_score} 的单曲潜力值为 ${ptt.toFixed(4)}`
+        `在曲目 ${songinfo[0].name_en} [${diffText}] 中，得分 ${_score} 的单曲潜力值为 ${ptt.toFixed(4)}`
       )
     })
 }
