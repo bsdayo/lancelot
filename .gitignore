@@ -1,5 +1,9 @@
 *.log
 
+# Editor
+.idea/
+.vscode/
+
 # Config file
 config.ts
 
