@@ -8,7 +8,6 @@ import {
   getColorByDifficulty,
 } from './imageutils'
 import {
-  BotArcApiUserbest30,
   BotArcApiUserinfoV5,
   BotArcApiContentV5,
   BotArcApiScore,

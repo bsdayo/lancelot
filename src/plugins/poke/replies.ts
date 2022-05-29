@@ -14,11 +14,13 @@ const replies: string[] = [
   '戳我就要给我买冰淇淋吃！',
   '今天要去哪里玩呢？',
   'face1.jpg',
-  'face2.jpg'
+  'face2.jpg',
+  '没事就别戳了（恼）',
+  '来点涩图'
 ]
 
 export default async function getRandomReply(): Promise<string> {
   const rpl = replies[randomInt(0, replies.length - 1)]
-  if (rpl.startsWith('face')) return segment.image(await fs.readFile(getAssetFilePath('poke', rpl)))
+  if (rpl.endsWith('.jpg')) return segment.image(await fs.readFile(getAssetFilePath('poke', rpl)))
   else return rpl
 }

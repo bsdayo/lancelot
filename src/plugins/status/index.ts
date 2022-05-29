@@ -1,4 +1,4 @@
-import { Context, segment } from 'koishi'
+import { Context } from 'koishi'
 import { VERSION } from '../../bot'
 import os from 'os'
 import { reply } from '../../utils'
@@ -24,14 +24,9 @@ export default {
         const totalmemMb = os.totalmem() / 1024 / 1024
 
         const totalUsedmemMb = totalmemMb - totalFreememMb
-        const totalUsedMemRate = ((totalUsedmemMb / totalmemMb) * 100).toFixed(
-          2
-        )
+        const totalUsedMemRate = ((totalUsedmemMb / totalmemMb) * 100).toFixed(2)
         const processUsedmemMb = process.memoryUsage.rss() / 1024 / 1024
-        const processUsedMemRate = (
-          (processUsedmemMb / totalmemMb) *
-          100
-        ).toFixed(2)
+        const processUsedMemRate = ((processUsedmemMb / totalmemMb) * 100).toFixed(2)
 
         return (
           reply(session) +

@@ -1,4 +1,4 @@
-import { BotArcApiScore, BotArcApiContentV5, formatScore, BotArcApiDifficulty, BotArcApiDifficultyInfoV5 } from 'botarcapi_lib'
+import { BotArcApiScore, formatScore, BotArcApiDifficultyInfoV5 } from 'botarcapi_lib'
 import { CanvasRenderingContext2D, loadImage } from 'canvas'
 import { getDateTime, getPastDays } from '../../utils'
 import {
