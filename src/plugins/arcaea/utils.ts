@@ -5,7 +5,6 @@ import {
   BotArcApiScore,
   BotArcApiDifficultyInfoV5,
   BotArcApiContentV5,
-  BotArcApiUserbest30,
   BotArcApiUserinfoV5,
   BotArcApiV5,
 } from 'botarcapi_lib'

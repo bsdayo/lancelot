@@ -100,5 +100,6 @@ export default {
     // commands.enableTest(rootCmd)
     commands.enableAddAlias(rootCmd)
     commands.enablePtt(rootCmd)
+    commands.enablePreview(rootCmd, config)
   },
 }
