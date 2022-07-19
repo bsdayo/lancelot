@@ -111,6 +111,10 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
 
 export function convertToArcaeaRange(rawdata: string): number[] {
   switch (rawdata) {
+    case '12':
+      return [120, 126]
+    case '11p':
+      return [117, 119]
     case '11':
       return [110, 116]
     case '10p':
@@ -149,55 +153,20 @@ export function getRandomSong(
   upperlimit: number
 ): BotArcApiRandomSong {
   const songRows = songdb
-    .prepare(
-      `SELECT * FROM songs WHERE 
-                (rating_pst BETWEEN ? AND ?) OR
-                (rating_prs BETWEEN ? AND ?) OR
-                (rating_ftr BETWEEN ? AND ?) OR
-                (rating_byn BETWEEN ? AND ?)`
-    )
-    .all(
-      lowerlimit,
-      upperlimit,
-      lowerlimit,
-      upperlimit,
-      lowerlimit,
-      upperlimit,
-      lowerlimit,
-      upperlimit
-    )
+    .prepare(`SELECT * FROM charts`)
+    .all()
+    .filter((row) => row.rating >= lowerlimit && row.rating <= upperlimit)
 
   const randomSongRow = songRows[randomInt(0, songRows.length - 1)]
-  const randomDifficulties = []
-  if (
-    lowerlimit <= randomSongRow.rating_pst &&
-    randomSongRow.rating_pst <= upperlimit
-  )
-    randomDifficulties.push(0)
-  if (
-    lowerlimit <= randomSongRow.rating_prs &&
-    randomSongRow.rating_prs <= upperlimit
-  )
-    randomDifficulties.push(1)
-  if (
-    lowerlimit <= randomSongRow.rating_ftr &&
-    randomSongRow.rating_ftr <= upperlimit
-  )
-    randomDifficulties.push(2)
-  if (
-    lowerlimit <= randomSongRow.rating_byn &&
-    randomSongRow.rating_byn <= upperlimit
-  )
-    randomDifficulties.push(3)
 
-  const songinfo = getSongInfoFromDatabase(randomSongRow.sid)
+  const songinfo = getSongInfoFromDatabase(randomSongRow.song_id)
 
   return {
-    id: randomSongRow.sid,
+    id: randomSongRow.song_id,
     ratingClass:
       lowerlimit === 10 && upperlimit === 115
         ? 2
-        : randomDifficulties[randomInt(0, randomDifficulties.length - 1)],
+        : randomSongRow.rating_class,
     songinfo,
   }
 }

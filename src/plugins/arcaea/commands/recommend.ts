@@ -1,4 +1,4 @@
-import { BotArcApiDifficultyRange, BotArcApiV5 } from 'botarcapi_lib'
+import { BotArcApiV5 } from 'botarcapi_lib'
 import { Command, Context, segment } from 'koishi'
 import {
   getDifficultyByRating,
