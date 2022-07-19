@@ -47,7 +47,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         if (!difficultyRange.includes(start)) {
           if (
             Number.isNaN(parseFloat(start)) ||
-            parseFloat(start) > 11.5 ||
+            parseFloat(start) > 12.0 ||
             parseFloat(start) < 1
           )
             return reply(session) + '请输入正确的起始难度'
@@ -59,7 +59,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         if (!difficultyRange.includes(end)) {
           if (
             Number.isNaN(parseFloat(end)) ||
-            parseFloat(end) > 11.5 ||
+            parseFloat(end) > 12.0 ||
             parseFloat(end) < 1
           )
             return reply(session) + '请输入正确的最高难度'
@@ -75,7 +75,7 @@ export function enableRandom(rootCmd: Command, api: BotArcApiV5) {
         // )
 
         const lowerlimit = convertToArcaeaRange(start ?? '1.0')
-        const upperlimit = convertToArcaeaRange(end ?? start ?? '11.5')
+        const upperlimit = convertToArcaeaRange(end ?? start ?? '12.0')
         const random = getRandomSong(lowerlimit[0], upperlimit[1])
 
         let str = random.songinfo[0].name_en + '\n'
@@ -163,10 +163,7 @@ export function getRandomSong(
 
   return {
     id: randomSongRow.song_id,
-    ratingClass:
-      lowerlimit === 10 && upperlimit === 115
-        ? 2
-        : randomSongRow.rating_class,
+    ratingClass: randomSongRow.rating_class,
     songinfo,
   }
 }
