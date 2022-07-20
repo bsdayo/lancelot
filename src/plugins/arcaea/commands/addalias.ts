@@ -4,6 +4,7 @@ import { getSongIdFuzzy } from '../utils'
 import { getAssetFilePath, reply } from '../../../utils'
 
 const songdb = new Database(getAssetFilePath('arcaea', 'arcsong.db'))
+    .exec('PRAGMA foreign_keys = OFF')
 
 export function enableAddAlias(rootCmd: Command) {
   rootCmd
