@@ -10,7 +10,6 @@ export function enableAddAlias(rootCmd: Command) {
   rootCmd
     .subcommand('.addalias <songname> <alias>', '添加曲目别名', {
       authority: 3,
-      hidden: true,
     })
     .action(({ session }, songname, alias) => {
       if (!songname || !alias) return reply(session) + '参数缺失。'

@@ -22,9 +22,7 @@ export default {
 
     ctx
       .platform('onebot')
-      .command('dismiss <groupid>', '使bot退出群聊', {
-        hidden: true,
-      })
+      .command('dismiss <groupid>', '使bot退出群聊')
       .action(async ({ session }, groupid) => {
         if (!groupid) {
           if (!session?.guildId) return

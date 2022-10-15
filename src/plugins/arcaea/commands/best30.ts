@@ -93,11 +93,11 @@ export function enableBest30(
             await officialApi.userinfo(arcObj.id)
           )
           let best30Score: BotArcApiScore[] = []
-          let best30SongInfo: BotArcApiDifficultyInfoV5[] = []
+          let best30SongInfo: BotArcApiDifficultyInfoV5[][] = []
           let best30Ptt = 0
           for (let score of best30) {
             best30Score.push(convertALAScoreToBAA(score))
-            best30SongInfo.push(getSongInfoFromDatabase(score.song_id)[score.difficulty])
+            best30SongInfo.push(getSongInfoFromDatabase(score.song_id))
             best30Ptt += score.potential_value
           }
           const best30Avg = best30Ptt / 30
@@ -143,7 +143,7 @@ export function enableBest30(
           `用户 ${arcObj.name} [${arcObj.id}] 的 Best30 图片生成成功，文件为 ${imgPath}`
         )
 
-        return reply(session) + segment.image(await fs.readFile(imgPath))
+        return reply(session) + segment.image(await fs.readFile(imgPath)).toString()
       } catch (err) {
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的 Best30 成绩查询失败：${err}`

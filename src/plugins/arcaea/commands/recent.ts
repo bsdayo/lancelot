@@ -58,7 +58,7 @@ export function enableRecent(
             `用户 ${result[0].arcname} [${result[0].arcid}] 的 Recent 图片生成成功，文件为 ${imgPath}`
           )
 
-          return reply(session) + segment.image(await fs.readFile(imgPath))
+          return reply(session) + segment.image(await fs.readFile(imgPath)).toString()
         } catch (err) {
           logger.error(
             `用户 ${session?.platform}:${result[0].arcname} [${result[0].arcid}] 的 Recent 成绩查询失败：${err}`

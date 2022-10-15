@@ -6,7 +6,6 @@ export default {
   apply(ctx: Context) {
     const rootCmd = ctx.command('debug', '调试功能', {
       authority: 3,
-      hidden: true
     })
 
     rootCmd

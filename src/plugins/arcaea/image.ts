@@ -102,7 +102,7 @@ export async function generateBest30Image(
           100,
           765 + i * 400,
           best30Data.best30_list[i],
-          best30Data.best30_songinfo[i],
+          best30Data.best30_songinfo[i][best30Data.best30_list[i].difficulty],
           i,
           darkMode
         )
@@ -116,7 +116,7 @@ export async function generateBest30Image(
           100 + 1000 + 100,
           765 + (i - 10) * 400,
           best30Data.best30_list[i],
-          best30Data.best30_songinfo[i],
+          best30Data.best30_songinfo[i][best30Data.best30_list[i].difficulty],
           i,
           darkMode
         )
@@ -130,7 +130,7 @@ export async function generateBest30Image(
           100 + 2 * (1000 + 100),
           765 + (i - 20) * 400,
           best30Data.best30_list[i],
-          best30Data.best30_songinfo[i],
+          best30Data.best30_songinfo[i][best30Data.best30_list[i].difficulty],
           i,
           darkMode
         )
@@ -149,7 +149,7 @@ export async function generateBest30Image(
             100,
             5165 + (i - 30) * 400,
             best30Data.best30_overflow[i - 30],
-            best30Data.best30_overflow_songinfo[i - 30],
+            best30Data.best30_overflow_songinfo[i - 30][best30Data.best30_overflow[i].difficulty],
             i,
             darkMode
           )
@@ -166,7 +166,7 @@ export async function generateBest30Image(
             100 + 1000 + 100,
             5165 + (i - 33) * 400,
             best30Data.best30_overflow[i - 30],
-            best30Data.best30_overflow_songinfo[i - 30],
+            best30Data.best30_overflow_songinfo[i - 30][best30Data.best30_overflow[i].difficulty],
             i,
             darkMode
           )
@@ -183,7 +183,7 @@ export async function generateBest30Image(
             100 + 1000 + 100 + 1000 + 100,
             5165 + (i - 36) * 400,
             best30Data.best30_overflow[i - 30],
-            best30Data.best30_overflow_songinfo[i - 30],
+            best30Data.best30_overflow_songinfo[i - 30][best30Data.best30_overflow[i].difficulty],
             i,
             darkMode
           )
@@ -272,7 +272,7 @@ export async function generateSimpleBest30Image(
           100,
           625 + i * 400,
           best30Data.best30_list[i],
-          best30Data.best30_songinfo[i],
+          best30Data.best30_songinfo[i][best30Data.best30_list[i].difficulty],
           i
         )
       )
@@ -285,7 +285,7 @@ export async function generateSimpleBest30Image(
           100 + 710 + 100,
           625 + (i - 10) * 400,
           best30Data.best30_list[i],
-          best30Data.best30_songinfo[i],
+          best30Data.best30_songinfo[i][best30Data.best30_list[i].difficulty],
           i
         )
       )
@@ -298,7 +298,7 @@ export async function generateSimpleBest30Image(
           100 + 2 * (710 + 100),
           625 + (i - 20) * 400,
           best30Data.best30_list[i],
-          best30Data.best30_songinfo[i],
+          best30Data.best30_songinfo[i][best30Data.best30_list[i].difficulty],
           i
         )
       )
@@ -316,7 +316,7 @@ export async function generateSimpleBest30Image(
             100,
             4725 + (i - 30) * 400,
             best30Data.best30_overflow[i - 30],
-            best30Data.best30_overflow_songinfo[i - 30],
+            best30Data.best30_overflow_songinfo[i - 30][best30Data.best30_overflow[i].difficulty],
             i
           )
         )
@@ -332,7 +332,7 @@ export async function generateSimpleBest30Image(
             100 + 710 + 100,
             4725 + (i - 33) * 400,
             best30Data.best30_overflow[i - 30],
-            best30Data.best30_overflow_songinfo[i - 30],
+            best30Data.best30_overflow_songinfo[i - 30][best30Data.best30_overflow[i].difficulty],
             i
           )
         )
@@ -348,7 +348,7 @@ export async function generateSimpleBest30Image(
             100 + 2 * (710 + 100),
             4725 + (i - 36) * 400,
             best30Data.best30_overflow[i - 30],
-            best30Data.best30_overflow_songinfo[i - 30],
+            best30Data.best30_overflow_songinfo[i - 30][best30Data.best30_overflow[i].difficulty],
             i
           )
         )

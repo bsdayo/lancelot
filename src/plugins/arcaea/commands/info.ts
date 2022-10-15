@@ -40,7 +40,7 @@ export function enableInfo(rootCmd: Command, api: BotArcApiV5) {
 
         await session?.send(
           reply(session) +
-          segment.image(await fs.readFile(await getSongCoverPath(sid))) +
+          segment.image(await fs.readFile(await getSongCoverPath(sid))).toString() +
           (isHaveBeyond
             ? segment.image(await fs.readFile(await getSongCoverPath(sid, true)))
             : '') +

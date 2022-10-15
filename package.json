@@ -22,7 +22,7 @@
     "botarcapi_lib": "^1.1.9",
     "canvas": "^2.9.0",
     "jimp": "^0.16.1",
-    "koishi": "^4.7.2",
+    "koishi": "^4.9.5",
     "md5": "^2.3.0",
     "node-stream-zip": "^1.15.0"
   },

@@ -21,6 +21,6 @@ const replies: string[] = [
 
 export default async function getRandomReply(): Promise<string> {
   const rpl = replies[randomInt(0, replies.length - 1)]
-  if (rpl.endsWith('.jpg')) return segment.image(await fs.readFile(getAssetFilePath('poke', rpl)))
+  if (rpl.endsWith('.jpg')) return segment.image(await fs.readFile(getAssetFilePath('poke', rpl))).toString()
   else return rpl
 }

@@ -69,7 +69,7 @@ export function enableBest(
         logger.success(
           `用户 ${arcObj.name} [${arcObj.id}] 的最高成绩图片生成成功，文件为 ${imgPath}`
         )
-        return reply(session) + segment.image(await fs.readFile(imgPath))
+        return reply(session) + segment.image(await fs.readFile(imgPath)).toString();
       } catch (err) {
         logger.error(
           `用户 ${session?.platform}:${arcObj.name} [${arcObj.id}] 的最高成绩查询失败：${err}`

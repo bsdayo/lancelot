@@ -48,9 +48,9 @@ export function enablePreview(rootCmd: Command, config: ArcaeaConfig) {
           })
 
           await createCache('arcaea-chart', `${songid}.jpg`, resp.data)
-          return reply(session) + segment.image(resp.data)
+          return reply(session) + segment.image(resp.data).toString()
         } else {
-          return reply(session) + segment.image(await fs.readFile(cachePath))
+          return reply(session) + segment.image(await fs.readFile(cachePath)).toString()
         }
       } catch (e) {
         return `发生错误：${e}`
