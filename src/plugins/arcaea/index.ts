@@ -52,7 +52,7 @@ export default {
       baseURL: config.baseURL,
       timeout: config.timeout ?? 120000,
       headers: {
-        'User-Agent': config.userAgent,
+        'Authorization': 'Bearer ' + config.userAgent
       },
     })
 
